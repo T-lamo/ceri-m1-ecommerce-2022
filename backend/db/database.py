@@ -25,7 +25,7 @@ class DatabaseSingletonMeta(type):
 class Database(metaclass=DatabaseSingletonMeta):
 
     def __init__(self):
-        self.db = "rasa_demo_db"
+        self.db = "vinyl"
         self.user = 'postgres'
         self.password = 'password'
         self.port = '5432'
@@ -44,31 +44,56 @@ class Database(metaclass=DatabaseSingletonMeta):
         return psycopg2.connect(
             database=self.db, user=self.user, password=self.password, host=self.host, port=self.port
         )
-
-    def select(self):
+    
+    def select(self, table_name):
         conn = self.open_connexion()
         cursor = conn.cursor()
-        # Executing an MYSQL function using the execute() method
-        cursor.execute("select * from agenda")
-        # Fetch a single row using fetchone() method.
+        cursor.execute('''select * from {};'''.format(table_name))
         res_tuple = cursor.fetchall()
         conn.close()
         return res_tuple
-        # Closing the connection
+
+    def select_one(self, table_name, id):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        cursor.execute('''select * from {} where _id ={};'''.format(table_name,id))
+        res_tuple = cursor.fetchall()
+        conn.close()
+        return res_tuple
+
+
+    def delete_one(self, table_name, id):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        query = '''delete from {} where _id ={};'''.format(table_name,id)
+        res=cursor.execute(query)
+        conn.commit()
+        conn.close()
+        return res
+
         
     def insert(self,data):
         conn = self.open_connexion()
-        #Setting auto commit false
         conn.autocommit = True
-        #Creating a cursor object using the cursor() method
         cursor = conn.cursor()
-        query = '''INSERT INTO {} ({}) VALUES {};'''.format(data['name'],data['columns'],data['values'])
-        # Preparing SQL queries to INSERT a record into the database.
-        print(query)
+        query = '''INSERT INTO {} ({}) VALUES {} RETURNING _id;'''.format(data['name'],data['columns'],data['values'])
         cursor.execute(query)
-        # Commit your changes in the database
+        last_row_id = cursor.fetchone()
         conn.commit()
         conn.close()
+        return last_row_id
+
+
+    def update_one(self,data, new_val, id):
+        conn = self.open_connexion()
+        conn.autocommit = True
+        cursor = conn.cursor()
+        query = '''UPDATE {} SET {}  where _id = {} RETURNING _id , {} ;'''.format(data['name'],new_val,id,data['columns'])
+        cursor.execute(query)
+        last_row_update = cursor.fetchone()
+        conn.commit()
+        conn.close()
+        return last_row_update
 
     def get_schedule(self,item,data):
         if(item[0]==data[0] and item[1]==data[1]):
@@ -79,11 +104,15 @@ class Database(metaclass=DatabaseSingletonMeta):
 
 if __name__ == "__main__":
     # The client code.
-    print(Database().select())
     def convert_to_dict(item):
         return {"section":item[0], "group":item[1], "subject":item[2], "class": item[3], "time": item[4]}
     result=list(filter(lambda item:Database().get_schedule(item, ("M1","alternant")),Database().select()))
-    print(list(map(convert_to_dict, result)))
-    print(result)
+    
 
    
+
+#create table album (_id SERIAL PRIMARY KEY ,category varchar(50),  titre varchar(50),realease_date varchar(50), cover TEXT, artist_id INTEGER, CONSTRAINT fk_artist FOREIGN KEY(artist_id) REFERENCES artist(_id));
+#insert into artist(firstname, lastname, date_of_birth, cover) VALUES ('Amos', 'DORCEUS', '01/01/2010', 'URL');
+#create table artist (_id SERIAL PRIMARY KEY ,firstname varchar(50), lastname varchar(50), date_of_birth varchar(50), cover TEXT);
+#insert into album (category, titre, realease_date, cover, artist_id) values ('Love', 'You are beautiful','date', 'url', 1);
+#create table song (_id SERIAL PRIMARY KEY , titre varchar(50), realease_date varchar(50), like_qty INTEGER, cover TEXT, album_id INTEGER, CONSTRAINT fk_album FOREIGN KEY (album_id) REFERENCES album(_id));
