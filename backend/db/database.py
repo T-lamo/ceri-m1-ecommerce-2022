@@ -1,5 +1,9 @@
-from asyncio import open_connection
+from functools import reduce
 import psycopg2
+
+from models import Artist, Song, Album, Artist, Promo, User
+
+
 
 
 class DatabaseSingletonMeta(type):
@@ -25,58 +29,206 @@ class DatabaseSingletonMeta(type):
 class Database(metaclass=DatabaseSingletonMeta):
 
     def __init__(self):
-        self.db = "vinyl"
-        self.user = 'postgres'
-        self.password = 'password'
+        self.db = "uapv2201069"
+        self.user = 'uapv2201069'
+        self.password = '1MG7oE'
         self.port = '5432'
-        self.host = '127.0.0.1'
-
-        data = {
-            'name': "agenda",
-            'columns':"section, grp, name, room, time",
-            'values': ('M1', 'classique', 'outils pour apprentis', 'S4', '13:00')
-        }
-        
-        # self.insert(data)
+        self.host = 'pedago.univ-avignon.fr'
+        # self.db = "vinyl_dev"
+        # self.user = 'postgres'
+        # self.password = 'password'
+        # self.port = '5432'
+        # self.host = '127.0.0.1'
 
     def open_connexion(self):
         # establishing the connection
         return psycopg2.connect(
             database=self.db, user=self.user, password=self.password, host=self.host, port=self.port
         )
-    
-    def select(self, table_name):
+
+    def select_artist(self):
         conn = self.open_connexion()
         cursor = conn.cursor()
-        cursor.execute('''select * from {};'''.format(table_name))
-        res_tuple = cursor.fetchall()
+        cursor.execute('''select * from artist;''')
+        artist = cursor.fetchall()
         conn.close()
-        return res_tuple
+        return artist
 
-    def select_one(self, table_name, id):
+    def select_one_artist(self, id):
         conn = self.open_connexion()
         cursor = conn.cursor()
-        cursor.execute('''select * from {} where _id ={};'''.format(table_name,id))
-        res_tuple = cursor.fetchall()
+        cursor.execute('''select * from artist where _id ={};'''.format(id))
+        res = cursor.fetchall()
         conn.close()
-        return res_tuple
+        return res
 
-
-    def delete_one(self, table_name, id):
+    def insert_artist(self, artist: Artist):
         conn = self.open_connexion()
+        conn.autocommit = True
         cursor = conn.cursor()
-        query = '''delete from {} where _id ={};'''.format(table_name,id)
-        res=cursor.execute(query)
+        query = ''' 
+        insert into artist (firstname , lastname , date_of_birth , cover)
+        VALUES ('{}','{}','{}','{}') RETURNING *;'''.format(artist['firstname'], artist['lastname'], artist['date_of_birth'], artist['cover'])
+        cursor.execute(query)
+        last_row_id = cursor.fetchone()
+        conn.commit()
+        conn.close()
+        return last_row_id
+
+    def update_artist(self, artist, id):
+        conn = self.open_connexion()
+        conn.autocommit = True
+        cursor = conn.cursor()
+        query = '''UPDATE artist SET firstname='{}', lastname='{}', date_of_birth='{}', cover='{}' 
+        where _id = '{}' RETURNING *  ;'''.format(artist['firstname'], artist['lastname'], artist['date_of_birth'], artist['cover'], id)
+        print("update query", query)
+        cursor.execute(query)
+        last_row_update = cursor.fetchone()
+        conn.commit()
+        conn.close()
+        return last_row_update
+
+    def delete_artist(self, id):
+        conn = self.open_connexion()
+        conn.autocommit = True
+        cursor = conn.cursor()
+        query = '''delete from artist  where _id ={} RETURNING *; '''.format(
+            id)
+        res = cursor.execute(query)
         conn.commit()
         conn.close()
         return res
 
-        
-    def insert(self,data):
+    # album
+    def select_album(self):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        cursor.execute('''select * from album;''')
+        album = cursor.fetchall()
+        conn.close()
+        return album
+
+    def select_one_album(self, id):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        cursor.execute('''select * from album where _id ={};'''.format(id))
+        res = cursor.fetchall()
+        conn.close()
+        return res
+
+    def insert_album(self, album: Album):
         conn = self.open_connexion()
         conn.autocommit = True
         cursor = conn.cursor()
-        query = '''INSERT INTO {} ({}) VALUES {} RETURNING _id;'''.format(data['name'],data['columns'],data['values'])
+        query = ''' 
+        insert into album ( title, release_date ,price , description , cover ,artist_id , category_id)
+        VALUES ('{}','{}','{}','{}','{}','{}','{}') RETURNING *;'''.format(album['title'], album['release_date'], album['price'], album['description'], album['cover'], album['artist_id'], album['category_id'])
+        cursor.execute(query)
+        last_row_id = cursor.fetchone()
+        conn.commit()
+        conn.close()
+        return last_row_id
+
+    def update_album(self, album, id):
+        conn = self.open_connexion()
+        conn.autocommit = True
+        cursor = conn.cursor()
+        query = '''UPDATE album SET title='{}', release_date='{}', price='{}', description='{}', cover='{}', artist_id='{}',category_id='{}' 
+        where _id = '{}' RETURNING *  ;'''.format(album['title'], album['release_date'], album['price'], album['description'], album['cover'], album['artist_id'], album['category_id'], id)
+        print("update query", query)
+        cursor.execute(query)
+        last_row_update = cursor.fetchone()
+        conn.commit()
+        conn.close()
+        return last_row_update
+
+    def delete_album(self, id):
+        conn = self.open_connexion()
+        conn.autocommit = True
+        cursor = conn.cursor()
+        query = '''delete from album where _id ={} RETURNING *; '''.format(id)
+        res = cursor.execute(query)
+        conn.commit()
+        conn.close()
+        return res
+
+    # song
+    def select_song(self):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        cursor.execute('''select * from song;''')
+        res = cursor.fetchall()
+        conn.close()
+        return res
+
+    def select_one_song(self, id):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        cursor.execute('''select * from song where _id ={};'''.format(id))
+        res = cursor.fetchall()
+        conn.close()
+        return res
+
+    def insert_song(self, song: Song):
+        conn = self.open_connexion()
+        conn.autocommit = True
+        cursor = conn.cursor()
+        query = ''' 
+        insert into song ( title, release_date ,like_qty , cover, album_id )
+        VALUES ('{}','{}','{}','{}','{}') RETURNING *;'''.format(song['title'], song['release_date'], song['like_qty'], song['cover'], song['album_id'])
+        cursor.execute(query)
+        last_row_id = cursor.fetchone()
+        conn.commit()
+        conn.close()
+        return last_row_id
+
+    def update_song(self, song, id):
+        conn = self.open_connexion()
+        conn.autocommit = True
+        cursor = conn.cursor()
+        query = '''UPDATE song SET title='{}', release_date='{}', like_qty='{}', cover='{}', album_id='{}' 
+        where _id = '{}' RETURNING *  ;'''.format(song['title'], song['release_date'], song['like_qty'], song['cover'], song['album_id'], id)
+        print("update query", query)
+        cursor.execute(query)
+        last_row_update = cursor.fetchone()
+        conn.commit()
+        conn.close()
+        return last_row_update
+
+    def delete_song(self, id):
+        conn = self.open_connexion()
+        conn.autocommit = True
+        cursor = conn.cursor()
+        query = '''delete from song where _id ={} RETURNING *; '''.format(id)
+        res = cursor.execute(query)
+        conn.commit()
+        conn.close()
+        return res
+
+    # promo
+    def select_promo(self):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        cursor.execute('''select * from promo;''')
+        res = cursor.fetchall()
+        conn.close()
+        return res
+
+    def select_one_promo(self, id):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        cursor.execute('''select * from promo where _id ={};'''.format(id))
+        res = cursor.fetchall()
+        conn.close()
+        return res
+
+    def insert_one_promo(self, promo: Promo):
+        conn = self.open_connexion()
+        conn.autocommit = True
+        cursor = conn.cursor()
+        query = ''' 
+        insert into promo ( start_date, end_date ,rate, album_id )
+        VALUES ('{}','{}','{}','{}') RETURNING *;'''.format(promo['start_date'], promo['end_date'], promo['rate'], promo['album_id'])
         cursor.execute(query)
         last_row_id = cursor.fetchone()
         conn.commit()
@@ -84,35 +236,60 @@ class Database(metaclass=DatabaseSingletonMeta):
         return last_row_id
 
 
-    def update_one(self,data, new_val, id):
+    def delete_promo(self, id):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        query = '''delete from promo where _id ={} RETURNING *; '''.format(id)
+        res = cursor.execute(query)
+        conn.commit()
+        conn.close()
+        return res
+
+
+
+     # user
+    def select_user(self):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        cursor.execute('''select * from user;''')
+        res = cursor.fetchall()
+        conn.close()
+        return res
+
+    def select_one_user(self, id):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        cursor.execute('''select * from user where _id ={};'''.format(id))
+        res = cursor.fetchall()
+        conn.close()
+        return res
+
+    def insert_one_user(self, user: User):
         conn = self.open_connexion()
         conn.autocommit = True
         cursor = conn.cursor()
-        query = '''UPDATE {} SET {}  where _id = {} RETURNING _id , {} ;'''.format(data['name'],new_val,id,data['columns'])
+        query = ''' 
+        insert into user ( username,email,password, is_admin)
+        VALUES ('{}','{}','{}','{}') RETURNING *;'''.format(user['username'], user['email'], user['password'], user['is_admin'])
         cursor.execute(query)
-        last_row_update = cursor.fetchone()
+        last_row_id = cursor.fetchone()
         conn.commit()
         conn.close()
-        return last_row_update
+        return last_row_id
 
-    def get_schedule(self,item,data):
-        if(item[0]==data[0] and item[1]==data[1]):
-            return True
-        else: 
-            return False
+    # category
+    def select_category(self):
+        conn = self.open_connexion()
+        cursor = conn.cursor()
+        cursor.execute('''select * from category;''')
+        category = cursor.fetchall()
+        conn.close()
+        return category
 
 
 if __name__ == "__main__":
     # The client code.
     def convert_to_dict(item):
-        return {"section":item[0], "group":item[1], "subject":item[2], "class": item[3], "time": item[4]}
-    result=list(filter(lambda item:Database().get_schedule(item, ("M1","alternant")),Database().select()))
-    
-
-   
-
-#create table album (_id SERIAL PRIMARY KEY ,category varchar(50),  titre varchar(50),realease_date varchar(50), cover TEXT, artist_id INTEGER, CONSTRAINT fk_artist FOREIGN KEY(artist_id) REFERENCES artist(_id));
-#insert into artist(firstname, lastname, date_of_birth, cover) VALUES ('Amos', 'DORCEUS', '01/01/2010', 'URL');
-#create table artist (_id SERIAL PRIMARY KEY ,firstname varchar(50), lastname varchar(50), date_of_birth varchar(50), cover TEXT);
-#insert into album (category, titre, realease_date, cover, artist_id) values ('Love', 'You are beautiful','date', 'url', 1);
-#create table song (_id SERIAL PRIMARY KEY , titre varchar(50), realease_date varchar(50), like_qty INTEGER, cover TEXT, album_id INTEGER, CONSTRAINT fk_album FOREIGN KEY (album_id) REFERENCES album(_id));
+        return {"section": item[0], "group": item[1], "subject": item[2], "class": item[3], "time": item[4]}
+    result = list(filter(lambda item: Database().get_schedule(
+        item, ("M1", "alternant")), Database().select()))
