@@ -1,12 +1,10 @@
 from functools import reduce
 from typing import Union
-from models import Promo, Category, Album, Song, Artist, User
+from models import Login, Promo, Category, Album, Song, Artist, User
 
 
 from db.database import Database
 
-
-from services.db_utils import generate_query_columns_value
 
 from fastapi import  FastAPI
 
@@ -40,16 +38,17 @@ def read_root():
 
 
 
-@app.get("/artist")
+@app.get("/artist",status_code=200)
 def read_artist():
     return db.select_artist()
 
 
 @app.get("/artist/{id}")
 def read_artist(id: int):
+    
      return db.select_one_artist( id)
 
-@app.post("/artist")
+@app.post("/artist",status_code=201)
 async def create_artist(artist: Artist):
     return db.insert_artist(dict(artist))
 
@@ -62,7 +61,7 @@ async def update(artist: Artist, id):
 
 @app.delete("/artist/{id}")
 def delete_artist(id: int):
-     return db.delete_one("artist", id)
+     return db.delete_artist( id)
 
 
 @app.get("/album")
@@ -75,6 +74,7 @@ def read_album(id: int):
 
 @app.post("/album")
 async def create_album(album: Album):
+    print("ialbum", album)
     return db.insert_album(dict(album))
 
 @app.put("/album/{id}")
@@ -113,37 +113,26 @@ def delete_song(id: int):
 def read_category():
     return db.select_category()
 
-
-@app.get("/category/{id}")
-def read_category(id: int):
-    return db.select_one("category",id)
-
 @app.post("/category")
 async def create_category(category: Category):
-    return db.insert(generate_query_columns_value(category))
+    return db.insert_one_category(category)
 
 
 @app.get("/promo")
 def read_promo():
     return db.select_promo()
 
-@app.get("/promo/{id}")
-def read_promo(id: int):
-    return db.select_one_promo(id)
-
 @app.post("/promo")
 async def create_promo(promo: Promo):
     return db.insert_one_promo(dict(promo))
-
-
 
 @app.get("/user")
 def read_user():
     return db.select_user()
 
-@app.get("/user/{id}")
-def read_user(id: int):
-    return db.select_one_user(id)
+@app.post("/login")
+def read_user(data: Login):
+    return db.login(data)
 
 @app.post("/user")
 async def create_user(user: User):

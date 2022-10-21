@@ -1,3 +1,4 @@
+import string
 from typing import Union
 from unicodedata import category
 from xmlrpc.client import Boolean
@@ -66,3 +67,7 @@ class User(BaseModel):
     email: str
     password: str = "password"
     is_admin: Boolean
+
+class Login(BaseModel):
+    username: str
+    password: str
