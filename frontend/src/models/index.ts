@@ -8,7 +8,7 @@ import type {
 } from "@/interfaces/index";
 
 export class Song implements ISong {
-  _id?: number;
+  id?: number;
   title!: string;
   release_date!: string;
   like_qty!: number;
@@ -21,7 +21,7 @@ export class Song implements ISong {
 }
 
 export class Album implements IAlbum {
-  _id?: number = -1;
+  id?: number;
   title!: string;
   release_date!: string;
   cover?: string = "default url";
@@ -36,12 +36,12 @@ export class Album implements IAlbum {
   }
 
   set_list_song(songs: Song[]) {
-    this.list_song = songs.filter((songs) => songs.album_id == this._id);
+    this.list_song = songs.filter((songs) => songs.album_id == this.id);
   }
 }
 
 export class Artist implements IArtist {
-  _id?: number = -1;
+  id?: number = -1;
   firstname: string;
   lastname: string;
   date_of_birth?: string = Date();
@@ -53,12 +53,12 @@ export class Artist implements IArtist {
   }
 
   set_list_album(albums: Album[]) {
-    this.list_album = albums.filter((album) => album._id == this._id);
+    this.list_album = albums.filter((album) => album.id == this.id);
   }
 }
 
 export class Promo implements IPromo {
-  _id?: number = -1;
+  id?: number = -1;
   start_date!: string;
   end_date!: string;
   rate!: number;
@@ -70,19 +70,19 @@ export class Promo implements IPromo {
 }
 
 export class Category implements ICategory {
-  _id?: number = -1;
+  id?: number = -1;
   label!: string;
   list_album?: Album[] = [];
   constructor(data: Partial<ICategory>) {
     Object.assign(this, data);
   }
   set_list_album(albums: Album[]) {
-    this.list_album = albums.filter((album) => album._id == this._id);
+    this.list_album = albums.filter((album) => album.id == this.id);
   }
 }
 
 export class User implements IUser {
-  _id?: number;
+  id?: number;
   username!: string;
   email!: string;
   password?: string | undefined = undefined;

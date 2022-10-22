@@ -1,5 +1,5 @@
 export interface IAlbum {
-  _id?: number;
+  id?: number;
   title: string;
   release_date: string;
   cover?: string;
@@ -10,7 +10,7 @@ export interface IAlbum {
 }
 
 export interface IArtist {
-  _id?: number;
+  id?: number;
   firstname: string;
   lastname: string;
   date_of_birth?: string;
@@ -18,7 +18,7 @@ export interface IArtist {
 }
 
 export interface ISong {
-  _id?: number;
+  id?: number;
   title: string;
   release_date: string;
   like_qty: number;
@@ -27,12 +27,12 @@ export interface ISong {
 }
 
 export interface ICategory {
-  _id?: number;
+  id?: number;
   label: string;
 }
 
 export interface IPromo {
-  _id?: number;
+  id?: number;
   start_date: string;
   end_date: string;
   rate: number;
@@ -40,7 +40,7 @@ export interface IPromo {
 }
 
 export interface IUser {
-  _id?: number;
+  id?: number;
   username: string;
   email: string;
   password?: string;

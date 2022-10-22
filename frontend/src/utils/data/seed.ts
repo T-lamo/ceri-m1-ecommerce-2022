@@ -1,5 +1,11 @@
 import { Album, Artist, Category, Promo, Song } from "@/models";
-import { create_album, create_artist, create_category, create_promo, create_song } from "@/services/crud";
+import {
+  create_album,
+  create_artist,
+  create_category,
+  create_promo,
+  create_song,
+} from "@/services/crud";
 
 export async function seed10artist(collection: string) {
   console.log("inside send messages", collection);
@@ -181,35 +187,39 @@ export async function seed20promo(collection: string) {
 }
 
 export function seed_db() {
-  //seed10artist("artist6");
-  // seed10category("category");
-  // seed40Album("album");
-  // seed20promo("promo");
-
+  //seed10artist("artist");
+  //seed10category("category");
+  //seed40Album("album");
+   //seed20promo("promo");
   //seed50song("song");
 }
 
 export function insert_seed_to_db() {
-  // fetch("https://restapi.fr/api/category").then(async (data) => {
-  //   const res = data.json().then((data) => {
-  //     console.log(data);
-  //     const arr: Category[] = data.map((data) => {
-  //       return new Category(data);
-  //     });
+  //   fetch("https://restapi.fr/api/category").then(async (data) => {
+  //     const res = data.json().then((data) => {
+  //       console.log(data);
+  //       const arr: Category[] = data.map((data) => {
+  //         return new Category({ label: data.label });
+  //       });
 
-  //     arr.map(async (data) => {
-  //       create_category(data);
+  //       arr.map(async (data) => {
+  //         create_category(data);
+  //       });
   //     });
   //   });
-  // });
 
-  // fetch("https://restapi.fr/api/artist6").then(async (data) => {
+  // fetch("https://restapi.fr/api/artist").then(async (data) => {
   //   const res = data.json().then((data) => {
   //     console.log(data);
   //     const arr: Artist[] = data.map((data) => {
-  //       return new Artist(data);
+  //       return new Artist({
+  //         firstname: data.firstname,
+  //         lastname: data.lastname,
+  //         date_of_birth: data.date_of_birth,
+  //         cover: data.cover,
+  //       });
   //     });
-
+  //     console.log("array artist", arr);
   //     arr.map(async (data) => {
   //       create_artist(data);
   //     });
@@ -220,7 +230,15 @@ export function insert_seed_to_db() {
   //   const res = data.json().then((data) => {
   //     console.log(data);
   //     const arr: Album[] = data.map((data) => {
-  //       return new Album(data);
+  //       return new Album({
+  //         title: data.title,
+  //         release_date: data.release_date,
+  //         price: data.price,
+  //         description: data.description,
+  //         artist_id: data.artist_id,
+  //         category_id: data.category_id,
+  //         cover: data.cover,
+  //       });
   //     });
 
   //     arr.map(async (data) => {
@@ -233,7 +251,13 @@ export function insert_seed_to_db() {
   //   const res = data.json().then((data) => {
   //     console.log(data);
   //     const arr: Song[] = data.map((data) => {
-  //       return new Song(data);
+  //       return new Song({
+  //         title: data.title,
+  //         release_date: data.release_date,
+  //         cover: data.cover,
+  //         like_qty: data.like_qty,
+  //         album_id: data.album_id
+  //       });
   //     });
 
   //     arr.map(async (data) => {

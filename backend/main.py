@@ -41,6 +41,7 @@ def read_artist():
 
 @app.get("/artist/{id}")
 def read_artist(id: int):
+    
      return db.select_one_artist( id)
 
 @app.post("/artist",status_code=201)
@@ -61,6 +62,7 @@ def read_album(id: int):
 
 @app.post("/album")
 async def create_album(album: Album):
+    print("ialbum", album)
     return db.insert_album(dict(album))
 
 @app.put("/album/{id}")

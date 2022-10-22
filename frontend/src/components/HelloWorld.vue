@@ -31,58 +31,58 @@ onMounted(async () => {
   const { list_artist, list_album, list_song, list_promo, list_category } =
     storeToRefs(useAppStore());
 
-  list_artist.value = (await read_artists()).map((res: any) => {
-    return new Artist({
-      _id: res[0],
-      firstname: res[1],
-      lastname: res[2],
-      date_of_birth: res[3],
-      cover: res[4],
-    });
-  });
+  // list_artist.value = (await read_artists()).map((res: any) => {
+  //   return new Artist({
+  //     id: res[0],
+  //     firstname: res[1],
+  //     lastname: res[2],
+  //     date_of_birth: res[3],
+  //     cover: res[4],
+  //   });
+  // });
 
-  list_album.value = (await read_albums()).map((res: any) => {
-    return new Album({
-      _id: res[0],
-      title: res[1],
-      price: res[2],
-      description: res[3],
-      cover: res[4],
-      artist_id: res[5],
-      category_id: res[6],
-    });
-  });
+  // list_album.value = (await read_albums()).map((res: any) => {
+  //   return new Album({
+  //     id: res[0],
+  //     title: res[1],
+  //     price: res[2],
+  //     description: res[3],
+  //     cover: res[4],
+  //     artist_id: res[5],
+  //     category_id: res[6],
+  //   });
+  // });
 
-  list_song.value = (await read_songs()).map((res: any) => {
-    return new Song({
-      _id: res[0],
-      title: res[1],
-      release_date: res[2],
-      like_qty: res[3],
-      cover: res[4],
-      album_id: res[5],
-    });
-  });
+  // list_song.value = (await read_songs()).map((res: any) => {
+  //   return new Song({
+  //     id: res[0],
+  //     title: res[1],
+  //     release_date: res[2],
+  //     like_qty: res[3],
+  //     cover: res[4],
+  //     album_id: res[5],
+  //   });
+  // });
 
-  list_promo.value = (await read_promos()).map((res: any) => {
-    return new Promo({
-      _id: res[0],
-      start_date: res[1],
-      end_date: res[2],
-      rate: res[3],
-      album_id: res[4],
-    });
-  });
+  // list_promo.value = (await read_promos()).map((res: any) => {
+  //   return new Promo({
+  //     id: res[0],
+  //     start_date: res[1],
+  //     end_date: res[2],
+  //     rate: res[3],
+  //     album_id: res[4],
+  //   });
+  // });
 
-  list_category.value = (await read_categories()).map((res: any) => {
-    return new Category({
-      _id: res[0],
-      label: res[1],
-    });
-  });
+  // list_category.value = (await read_categories()).map((res: any) => {
+  //   return new Category({
+  //     id: res[0],
+  //     label: res[1],
+  //   });
+  // });
 
-  //seed_db();
-  insert_seed_to_db();
+  seed_db();
+  insert_seed_to_db(); 
 });
 </script>
 
