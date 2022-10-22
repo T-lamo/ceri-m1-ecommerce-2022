@@ -81,8 +81,8 @@ onMounted(async () => {
   //   });
   // });
 
-  seed_db();
-  insert_seed_to_db(); 
+  // seed_db();
+  // insert_seed_to_db(); 
 });
 </script>
 
