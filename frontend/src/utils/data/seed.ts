@@ -190,7 +190,7 @@ export function seed_db() {
   //seed10artist("artist");
   //seed10category("category");
   //seed40Album("album");
-   //seed20promo("promo");
+  //seed20promo("promo");
   //seed50song("song");
 }
 
@@ -201,13 +201,11 @@ export function insert_seed_to_db() {
   //       const arr: Category[] = data.map((data) => {
   //         return new Category({ label: data.label });
   //       });
-
   //       arr.map(async (data) => {
   //         create_category(data);
   //       });
   //     });
   //   });
-
   // fetch("https://restapi.fr/api/artist").then(async (data) => {
   //   const res = data.json().then((data) => {
   //     console.log(data);
@@ -225,7 +223,6 @@ export function insert_seed_to_db() {
   //     });
   //   });
   // });
-
   // fetch("https://restapi.fr/api/album").then(async (data) => {
   //   const res = data.json().then((data) => {
   //     console.log(data);
@@ -240,13 +237,11 @@ export function insert_seed_to_db() {
   //         cover: data.cover,
   //       });
   //     });
-
   //     arr.map(async (data) => {
   //       create_album(data);
   //     });
   //   });
   // });
-
   // fetch("https://restapi.fr/api/song").then(async (data) => {
   //   const res = data.json().then((data) => {
   //     console.log(data);
@@ -259,25 +254,22 @@ export function insert_seed_to_db() {
   //         album_id: data.album_id
   //       });
   //     });
-
   //     arr.map(async (data) => {
   //       create_song(data);
   //     });
   //   });
   // });
-
-  fetch("https://restapi.fr/api/promo").then(async (data) => {
-    const res = data.json().then((data) => {
-      console.log(data);
-      const arr: Promo[] = data.map((data) => {
-        return new Promo(data);
-      });
-
-      arr.map(async (data) => {
-        create_promo(data);
-      });
-    });
-  });
+  //   fetch("https://restapi.fr/api/promo").then(async (data: any) => {
+  //     const res = data.json().then((data) => {
+  //       console.log(data);
+  //       const arr: Promo[] = data.map((data) => {
+  //         return new Promo(data);
+  //       });
+  //       arr.map(async (data) => {
+  //         create_promo(data);
+  //       });
+  //     });
+  //   });
 }
 
 // statut: {

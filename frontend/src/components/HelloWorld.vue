@@ -23,10 +23,6 @@ import { onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useAppStore } from "@/stores";
 
-defineProps<{
-  msg: string;
-}>();
-
 onMounted(async () => {
   const { list_artist, list_album, list_song, list_promo, list_category } =
     storeToRefs(useAppStore());
@@ -53,16 +49,16 @@ onMounted(async () => {
   //   });
   // });
 
-  // list_song.value = (await read_songs()).map((res: any) => {
-  //   return new Song({
-  //     id: res[0],
-  //     title: res[1],
-  //     release_date: res[2],
-  //     like_qty: res[3],
-  //     cover: res[4],
-  //     album_id: res[5],
-  //   });
-  // });
+  list_song.value = (await read_songs()).map((res: any) => {
+    return new Song({
+      id: res.id,
+      title: res.title,
+      release_date: res.release_date,
+      like_qty: res.like_qty,
+      cover: res.cover,
+      album_id: res.album_id,
+    });
+  });
 
   // list_promo.value = (await read_promos()).map((res: any) => {
   //   return new Promo({
@@ -75,15 +71,16 @@ onMounted(async () => {
   // });
 
   // list_category.value = (await read_categories()).map((res: any) => {
-  //   return new Category({
-  //     id: res[0],
-  //     label: res[1],
-  //   });
+  //   console.log(res);
+  //   return res;
   // });
 
+  console.log("list category", list_song.value);
+
   // seed_db();
-  // insert_seed_to_db(); 
+  // insert_seed_to_db();
 });
 </script>
+
 
 <style scoped></style>

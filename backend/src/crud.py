@@ -35,6 +35,13 @@ class Database(metaclass=DatabaseSingletonMeta):
         self.user = 'uapv2201069'
         self.password = 'WmAsN1'
         self.host = 'pedago.univ-avignon.fr'
+        print("test")
+        # self.db = 'ecom_db'
+        # self.user = 'tlamo'
+        # self.password = 'tlamo'
+        # self.host = 'db'
+        # self.port = '3306'
+        
 
      
         mysql_url = f"mysql+pymysql://{self.user}:{self.password}@{self.host}/{self.db}?charset=utf8mb4"

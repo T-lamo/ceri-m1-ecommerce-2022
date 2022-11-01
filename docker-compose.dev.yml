@@ -1,0 +1,64 @@
+version: "3.9"
+services:
+    frontend:
+      container_name: frontend
+      build:
+        context: ./frontend
+        dockerfile: Dockerfile
+
+      volumes: 
+        - type: bind
+          source: ./frontend
+          target: /home/node/app
+
+        - type: volume
+          target: /home/node/app/node_modules
+      ports:
+          - 8080:8080
+    
+    backend:
+      container_name: backend
+      build: 
+        context: ./backend
+        dockerfile: Dockerfile.yml
+
+      depends_on:
+        - db
+
+      # ports:
+      #   - 8081:80
+
+  
+
+    reverse_proxy:
+      build: 
+        context: ./reverse_proxy
+        dockerfile: Dockerfile
+
+      ports:
+        - 80:80
+
+      depends_on:
+        - db
+        - backend
+        - frontend
+    
+    db: 
+      image: mysql
+
+      container_name: db
+
+      volumes: 
+        - type: volume
+          source: ecom_db
+          target: /var/lib/mysql 
+      
+      env_file: ./db/.env
+
+      ports:
+        - 3307:3306
+
+   
+volumes:
+   ecom_db:
+     external: true

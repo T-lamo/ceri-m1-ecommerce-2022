@@ -1,9 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig, loadEnv } from 'vite';
-import vue from '@vitejs/plugin-vue';
-const env = loadEnv(process.cwd(), '');
-
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,7 +12,8 @@ export default defineConfig({
     }
   },
   server: {
-    host: env.VITE_SERVER_HOST || "localhost",
-    port: Number(env.VITE_SERVER_PORT || "3000"),
+    hmr: {
+      port: 3010,
+    },
   },
-});
+})

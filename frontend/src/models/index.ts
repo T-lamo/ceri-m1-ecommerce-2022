@@ -42,8 +42,8 @@ export class Album implements IAlbum {
 
 export class Artist implements IArtist {
   id?: number = -1;
-  firstname: string;
-  lastname: string;
+  firstname: string = "";
+  lastname: string = "";
   date_of_birth?: string = Date();
   cover?: string = "url";
   list_album?: Album[] = [];
