@@ -36,16 +36,14 @@ class Database(metaclass=DatabaseSingletonMeta):
         self.password = 'WmAsN1'
         self.host = 'pedago.univ-avignon.fr'
         print("test")
-        # self.db = 'ecom_db'
-        # self.user = 'tlamo'
-        # self.password = 'tlamo'
-        # self.host = 'db'
-        # self.port = '3306'
+        self.db = "ecom_db"
+        self.user = 'root'
+        self.password = 'mypass'
+        self.host = 'db'
         
 
-     
-        mysql_url = f"mysql+pymysql://{self.user}:{self.password}@{self.host}/{self.db}?charset=utf8mb4"
 
+        mysql_url = f"mysql+pymysql://{self.user}:{self.password}@{self.host}/{self.db}?charset=utf8mb4"
         self.engine = create_engine(mysql_url, echo=True)
            
 
@@ -122,7 +120,7 @@ class Database(metaclass=DatabaseSingletonMeta):
             return Album.get_list_song(result)
             
     def insert_album(self, album:Album):
-        data = Album(title=album['title'], release_date=album['release_date'], price=album['price'], description=album['description'], cover=album['cover'], artist_id=album['artist_id'], category_id=album['category_id'])
+        data = Album(title=album['title'], release_date=album['release_date'], price=album['price'],stock_qty=album['stock_qty'], description=album['description'], cover=album['cover'], artist_id=album['artist_id'], category_id=album['category_id'])
         session = Session(self.engine)
         session.add(data)
         session.commit()
@@ -135,6 +133,7 @@ class Database(metaclass=DatabaseSingletonMeta):
             update.title= album['title'] 
             update.release_date=album['release_date']
             update.price=album['price']
+            update.stock_qty=album['stock_qty']
             update.description=album['description'] 
             update.cover=album['cover'] 
             update.artist_id=album['artist_id'] 
@@ -151,7 +150,7 @@ class Database(metaclass=DatabaseSingletonMeta):
             return session.exec(select(Song).where(Song.id == id)).first()
             
     def insert_song(self, song:Song):
-        data = Song(title=song['title'], release_date=song['release_date'], like_qty=song['like_qty'], cover=song['cover'], album_id=song['album_id'])
+        data = Song(title=song['title'], release_date=song['release_date'],  cover=song['cover'], album_id=song['album_id'])
         session = Session(self.engine)
         session.add(data)
         session.commit()
@@ -163,7 +162,6 @@ class Database(metaclass=DatabaseSingletonMeta):
             update = results.one()
             update.title=song['title']
             update.release_date=song['release_date'] 
-            update.like_qty=song['like_qty'] 
             update.cover=song['cover'] 
             update.album_id=song['album_id']
             session.add(update)

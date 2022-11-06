@@ -35,6 +35,7 @@ class Album(SQLModel, table=True):
     cover: str
     artist_id:  Optional[int] = Field(default=None, foreign_key="artist.id")
     price: int
+    stock_qty:int
     description: str
     category_id: Optional[int] = Field(default=None, foreign_key="category.id")
    
@@ -59,7 +60,6 @@ class Song(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     title: str
     release_date: str
-    like_qty: int
     cover: str
     album_id: Optional[int] = Field(default=None, foreign_key="album.id")
     album: Optional[Album] = Relationship(back_populates="songs")
@@ -89,6 +89,7 @@ class Login():
 #     release_date: str
 #     cover: str
 #     artist_id:  Optional[int] = Field(default=None, foreign_key="artist.id")
+#     stock_qty: int
 #     price: int
 #     description: str
 #     category_id: int
@@ -112,7 +113,6 @@ class Login():
 #     id: Optional[int] = Field(default=None, primary_key=True)
 #     title: str
 #     release_date: str
-#     like_qty: int
 #     cover: str
 #     album_id: int
 

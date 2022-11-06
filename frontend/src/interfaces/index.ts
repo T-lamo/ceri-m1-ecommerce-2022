@@ -5,8 +5,10 @@ export interface IAlbum {
   cover?: string;
   artist_id: number;
   price: number;
+  stock_qty: number;
   description: string;
   category_id: number;
+  list_song?: ISong[];
 }
 
 export interface IArtist {
@@ -15,13 +17,13 @@ export interface IArtist {
   lastname: string;
   date_of_birth?: string;
   cover?: string;
+  list_album?: IAlbum[];
 }
 
 export interface ISong {
   id?: number;
   title: string;
   release_date: string;
-  like_qty: number;
   cover: string;
   album_id: number;
 }

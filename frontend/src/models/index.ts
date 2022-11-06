@@ -11,7 +11,6 @@ export class Song implements ISong {
   id?: number;
   title!: string;
   release_date!: string;
-  like_qty!: number;
   cover!: string;
   album_id!: number;
 
@@ -27,9 +26,10 @@ export class Album implements IAlbum {
   cover?: string = "default url";
   artist_id!: number;
   price!: number;
+  stock_qty!: number;
   description!: string;
   category_id!: number;
-  list_song?: Song[] = [];
+  list_song?: ISong[] = [];
 
   constructor(fields?: Partial<IAlbum>) {
     Object.assign(this, fields);

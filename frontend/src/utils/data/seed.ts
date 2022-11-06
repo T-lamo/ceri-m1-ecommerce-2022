@@ -81,6 +81,10 @@ export async function seed40Album(collection: string) {
           type: "number",
           range: [85, 200],
         },
+        stock_qty: {
+          type: "number",
+          range: [20, 100],
+        },
         description: {
           type: "sentence",
           range: [14, 16],
@@ -134,10 +138,6 @@ export async function seed50song(collection: string) {
           height: 1000,
           width: 500,
         },
-        like_qty: {
-          type: "number",
-          range: [7000, 40000],
-        },
         album_id: {
           type: "number",
           range: [0, 40],
@@ -187,29 +187,29 @@ export async function seed20promo(collection: string) {
 }
 
 export function seed_db() {
-  //seed10artist("artist");
-  //seed10category("category");
-  //seed40Album("album");
-  //seed20promo("promo");
-  //seed50song("song");
+  seed10artist("artist");
+  seed10category("category");
+  seed40Album("album");
+  seed20promo("promo");
+  seed50song("song");
 }
 
 export function insert_seed_to_db() {
-  //   fetch("https://restapi.fr/api/category").then(async (data) => {
-  //     const res = data.json().then((data) => {
-  //       console.log(data);
-  //       const arr: Category[] = data.map((data) => {
-  //         return new Category({ label: data.label });
-  //       });
-  //       arr.map(async (data) => {
-  //         create_category(data);
-  //       });
+  // fetch("https://restapi.fr/api/category").then(async (data) => {
+  //   const res = data.json().then((data) => {
+  //     console.log(data);
+  //     const arr: Category[] = data.map((data: any) => {
+  //       return new Category({ label: data.label });
+  //     });
+  //     arr.map(async (data) => {
+  //       create_category(data);
   //     });
   //   });
+  // });
   // fetch("https://restapi.fr/api/artist").then(async (data) => {
   //   const res = data.json().then((data) => {
   //     console.log(data);
-  //     const arr: Artist[] = data.map((data) => {
+  //     const arr: Artist[] = data.map((data: any) => {
   //       return new Artist({
   //         firstname: data.firstname,
   //         lastname: data.lastname,
@@ -226,11 +226,12 @@ export function insert_seed_to_db() {
   // fetch("https://restapi.fr/api/album").then(async (data) => {
   //   const res = data.json().then((data) => {
   //     console.log(data);
-  //     const arr: Album[] = data.map((data) => {
+  //     const arr: Album[] = data.map((data: any) => {
   //       return new Album({
   //         title: data.title,
   //         release_date: data.release_date,
   //         price: data.price,
+  //         stock_qty: data.stock_qty,
   //         description: data.description,
   //         artist_id: data.artist_id,
   //         category_id: data.category_id,
@@ -245,12 +246,11 @@ export function insert_seed_to_db() {
   // fetch("https://restapi.fr/api/song").then(async (data) => {
   //   const res = data.json().then((data) => {
   //     console.log(data);
-  //     const arr: Song[] = data.map((data) => {
+  //     const arr: Song[] = data.map((data: any) => {
   //       return new Song({
   //         title: data.title,
   //         release_date: data.release_date,
   //         cover: data.cover,
-  //         like_qty: data.like_qty,
   //         album_id: data.album_id
   //       });
   //     });
@@ -259,17 +259,17 @@ export function insert_seed_to_db() {
   //     });
   //   });
   // });
-  //   fetch("https://restapi.fr/api/promo").then(async (data: any) => {
-  //     const res = data.json().then((data) => {
-  //       console.log(data);
-  //       const arr: Promo[] = data.map((data) => {
-  //         return new Promo(data);
-  //       });
-  //       arr.map(async (data) => {
-  //         create_promo(data);
-  //       });
+  // fetch("https://restapi.fr/api/promo").then(async (data: any) => {
+  //   const res = data.json().then((data: any) => {
+  //     console.log(data);
+  //     const arr: Promo[] = data.map((data: any) => {
+  //       return new Promo(data);
+  //     });
+  //     arr.map(async (data) => {
+  //       create_promo(data);
   //     });
   //   });
+  // });
 }
 
 // statut: {

@@ -1,1 +1,6 @@
+
+.dockerignore
+README.md
+Dockerfile
+.vscode
 /node_modules
