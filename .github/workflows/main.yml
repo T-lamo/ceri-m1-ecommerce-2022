@@ -5,6 +5,6 @@ jobs:
   call-front-action:
     uses: front-action.yml
   call-back-action:
-    uses: front-action.yml
+    uses: back-action.yml
   call-deploy-action:
-    uses: front-action.yml     
+    uses: deploy-action.yml     
