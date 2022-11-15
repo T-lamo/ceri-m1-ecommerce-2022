@@ -26,7 +26,6 @@ import { useAppStore } from "@/stores";
 onMounted(async () => {
   const { list_artist, list_album, list_song, list_promo, list_category } =
     storeToRefs(useAppStore());
-
   list_artist.value = (await read_artists()).map((res: any) => {
     return new Artist({
       id: res.id,
