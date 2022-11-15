@@ -3,8 +3,8 @@ run-name: ${{ github.actor }} is learning GitHub Actions
 on: [push]
 jobs:
   call-front-action:
-    uses: front-action.yml
+    uses: front-action.yml@v0.0.1
   call-back-action:
-    uses: back-action.yml
+    uses: back-action.yml@v0.0.1
   call-deploy-action:
-    uses: deploy-action.yml     
+    uses: deploy-action.yml@v0.0.1     
