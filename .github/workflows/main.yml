@@ -1,0 +1,10 @@
+name: deploy-actions
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
+jobs:
+  call-front-action:
+    uses: front-action.yml
+  call-back-action:
+    uses: front-action.yml
+  call-deploy-action:
+    uses: front-action.yml     

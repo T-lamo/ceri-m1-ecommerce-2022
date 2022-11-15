@@ -1,6 +1,8 @@
 name: backend-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+on: 
+  workflow_call:
+
 jobs:
   test-backend:
     runs-on: ubuntu-latest

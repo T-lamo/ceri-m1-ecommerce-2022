@@ -1,6 +1,8 @@
 name: front-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+on: 
+  workflow_call:
+  
 jobs:
   test-frontend:
     runs-on: ubuntu-latest
