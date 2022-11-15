@@ -1,0 +1,17 @@
+name: learn-github-actions
+run-name: ${{ github.actor }} is learning GitHub Actions
+on: [push]
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    default:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - run: pip install poetry
+      - run: poetry install 
+      - run: pytest tests/
