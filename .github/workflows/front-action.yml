@@ -2,7 +2,7 @@ name: front-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: [push]
 jobs:
-  test-backend:
+  test-fontend:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -13,4 +13,4 @@ jobs:
         with:
           node-version: 18
       - run: npm ci
-      - run: npm test
+      - run: npm run test:unit
