@@ -7,4 +7,4 @@ jobs:
   call-back-action:
     uses: ./.github/workflows/back-action.yml
   call-deploy-action:
-    uses: ./.github/workflows/deploy-action.yml    
+    uses: ./.github/workflows/deploy-action.yml
