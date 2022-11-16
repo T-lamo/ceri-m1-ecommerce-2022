@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Homepage from '../components/HomePage.vue'
-import AlbumDetail from '../components/AlbumDetail.vue'
-import ListAlbumAchat from '../components/ListAlbumAchat.vue'
-import Panier from '../components/Panier.vue'
-import Panier_Multistep from '../components/Panier_Multistep.vue'
+import AlbumDetail from '../components/album/AlbumDetail.vue'
+import ListAlbumAchat from '../components/album/ListAlbumAchat.vue'
+import Panier from '../components/panier/Panier.vue'
+// import Panier_Multistep from '../components/Panier_Multistep.vue'
+import ArtistDetail from '../components/artist/ArtistDetail.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -30,8 +32,14 @@ const router = createRouter({
       path: '/panier',
       name: 'panier',
       component: Panier
-    }
-  ]
+    },
+    {
+      path: '/artist_selected/:id',
+      name:  'artist',
+      component: ArtistDetail
+    },
+  ],
+  strict: true,
 })
 
-export default router
+export default router;

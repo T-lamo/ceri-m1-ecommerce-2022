@@ -9,17 +9,19 @@
 </template>
 
 <script>
-import Header from './components/Header.vue'
+import Header from './components/navigation/Header.vue'
 import Homepage from './components/Homepage.vue'
-import Test from './components/Test.vue'
-import Promo from './components/Promo.vue'
-import ListCategory from './components/ListCategory.vue'
-import ListAlbum from './components/ListAlbum.vue'
-import Footer from './components/Footer.vue'
-import AlbumDetail from './components/AlbumDetail.vue'
-import ListAlbumAchat from './components/ListAlbumAchat.vue'
-import Panier from './components/Panier.vue'
+import Test from './components/navigation/Test.vue'
+import Promo from './components/navigation/Promo.vue'
+import ListCategory from './components/category/ListCategory.vue'
+import ListAlbum from './components/album/ListAlbum.vue'
+import Footer from './components/navigation/Footer.vue'
+import AlbumDetail from './components/album/AlbumDetail.vue'
+import ListAlbumAchat from './components/album/ListAlbumAchat.vue'
+import Panier from './components/panier/Panier.vue'
 import StepProgress from './components/StepProgress.vue'
+import HelloWorld from './components/HelloWorld.vue'
+import OneAlbumDetail from './components/album/OneAlbumDetail.vue'
 export default {
   name: 'App',
   components: {
@@ -35,6 +37,8 @@ export default {
     ListAlbumAchat,
     Panier,
     StepProgress,
+    HelloWorld,
+    OneAlbumDetail,
   }
 }
 </script>

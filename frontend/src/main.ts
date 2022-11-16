@@ -1,7 +1,7 @@
 import { createApp  } from 'vue'
 import App from './App.vue'
-import router from './router'
 import { loadFonts } from './plugins/webfontloader'
+import { createPinia } from "pinia";
 
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -18,9 +18,16 @@ library.add(faUserSecret,faUser,faCartShopping,faCommentSms,faMagnifyingGlass,
 faArrowLeftLong,faArrowRightLong,faStar,faHeart,faAnglesRight,faAnglesDown,
 faFacebook, faTwitch,faTwitter,faLinkedin,faGoogle,faCirclePlus,faCartShopping, faTrash,faPenToSquare,faPlus,faMinus)
 
-loadFonts()
+import router from "./router";
 
+loadFonts()
+// import "./assets/scss/base.scss";
+// import "./assets/scss/_mixins.scss";
+// import "./assets/scss/debug.scss";
+
+const pinia = createPinia()
 const app = createApp(App)
   .use(router)
+  .use(pinia)
   .component('font-awesome-icon', FontAwesomeIcon)
-  .mount('#app')
+  .mount("#app")
