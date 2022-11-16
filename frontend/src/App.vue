@@ -22,6 +22,7 @@ import Panier from './components/panier/Panier.vue'
 import StepProgress from './components/StepProgress.vue'
 import HelloWorld from './components/HelloWorld.vue'
 import OneAlbumDetail from './components/album/OneAlbumDetail.vue'
+import OneArtistDetail from './components/artist/OneArtistDetail.vue'
 export default {
   name: 'App',
   components: {
@@ -39,6 +40,7 @@ export default {
     StepProgress,
     HelloWorld,
     OneAlbumDetail,
+    OneArtistDetail,
   }
 }
 </script>

@@ -12,16 +12,7 @@
             return res;
         })
     })
-    // const data_album = {
-    //     "id": 0,
-    //     "title":'',
-    //     "release_date": '',
-    //     "cover":'',
-    //     "price":0,
-    //     "stock_qty":0,
-    //     "description":'',
-    //     "category_id":0
-    // }
+
 </script>
 <template>
 <div class="container-fluid py-2 px-5 my-3">
@@ -33,20 +24,16 @@
     </i>
     </span>
     <hr class="dropdown-divider">
-    <div v-for="item in list_album" :key="item.id">
-        <OneAlbumDetail
-            :album_id="item.id"
-            :title="item.title"
-            :release_date="item.release_date"
-            :cover="item.cover"
-            :price="item.price"
-            :stock_qty="item.stock_qty"
-            :description="item.description"
-            :category_id="item.category_id"
-            :artist_id="item.artist_id"
-            />
+    <div class="row">
+            <OneAlbumDetail
+                v-for="item in list_album" :key="item.id"
+                :item = item
+                />
+   
     </div>
-    
 </div>
 
 </template>
+<style scoped>
+    
+</style>

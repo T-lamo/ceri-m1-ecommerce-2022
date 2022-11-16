@@ -1,33 +1,26 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue';
+import type { Album } from '../../models';
 const props = defineProps<{
-    album_id: number,
-    title: string,
-    release_date:string,
-    cover:string,
-    price:number,
-    stock_qty:number,
-    description:string,
-    category_id:number,
-    artist_id:number 
+    item:Album,
 }>()
-
-console.log(props.title)
+console.log('here')
+console.log(props.item.description)
 
 const getImage = (imagePath:string) => {
     return (imagePath);
 }
 </script>
 <template>
-    <!-- <div class="col"> -->
-        <div class="card m-3" style="width: 14rem;"><!-- v-for="item in list_album" :key="item.id" -->
+    
+        <div class="card m-3 py-2 px-2 my-2" style="width: 14rem;">
                 <div class="card_title" style="background-color: rgba(0, 0, 0, 0.5)">
-                    <img :src=getImage(props.cover) class="album_cover card-img-top rounded" alt="album picture">
+                    <img :src=getImage(props.item.cover) class="album_cover card-img-top rounded" alt="album picture">
                     <!-- Text Overlay -->
                     <div class="card-img" style="font-weight:500;">
                         <div class="card-text">
-                            <p class="card-title text-white text-center pt-2">{{props.title}}</p>
-                        <p class="text-white text-center align-self-center">{{props.release_date}}</p>
+                            <p class="card-title text-white text-center pt-2">{{props.item.title}}</p>
+                        <p class="text-white text-center align-self-center">{{props.item.release_date}}</p>
                         </div>
                         
                         <p class="text-white text-center align-self-center">
@@ -43,7 +36,7 @@ const getImage = (imagePath:string) => {
                     <div class="row">
                         <img src="https://cdn.pixabay.com/photo/2018/08/28/13/29/avatar-3637561__340.png" class="rounded-circle" alt="user">
                         &nbsp;&nbsp;
-                        <p class="description_paragraph">{{props.artist_id}}</p>
+                        <p class="description_paragraph">{{props.item.artist_id}}</p>
                     
                     </div>
                 </div>
@@ -60,7 +53,7 @@ const getImage = (imagePath:string) => {
                     <a>
                             <font-awesome-icon icon="fa-solid fa-cart-shopping" size="lg" :style="{ color: 'orange' }"/>
                     </a>
-                    <p>{{props.price}}</p>
+                    <p>{{props.item.price}}</p>
                 </div>
             </div>
     <!-- </div> -->
