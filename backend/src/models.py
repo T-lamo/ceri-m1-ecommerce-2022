@@ -81,7 +81,16 @@ class User(SQLModel, table=True):
         data["list_album"]= item.albums
         return data
 
-
+class UserAddress(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    address_line1: str
+    address_line2: str
+    city: str
+    postal_code: str
+    country: str
+    mobile: str
+    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+    
 class ShoppingSession(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     total: float
@@ -104,15 +113,7 @@ class UserPayment(SQLModel, table=True):
 
     
 
-class UserAddress(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    address_line1: str
-    address_line2: str
-    city: str
-    postal_code: str
-    country: str
-    mobile: str
-    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+
 
 class OrderDetail(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

@@ -5,7 +5,6 @@ terraform {
     workspaces {
       name = "ceri-m1-ecommerce-2022"
     }
-   
   }
 }
 
