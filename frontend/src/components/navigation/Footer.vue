@@ -185,61 +185,77 @@
 <style scoped>
 * {
   background-color: #131312;
+  margin-top: 10px;
 }
 footer.my-footer {
-background: #131312;;
-border-top: 3px solid #b78c33; }
+  padding-top: 25px;
+  background: #131312;;
+  border-top: 3px solid #b78c33; 
+  display: block;
+}
 footer.my-footer .about {
-margin: 0 auto;
-margin-top: 40px;
-max-width: 1170px;
-text-align: center; }
+  margin: 0 auto;
+  margin-top: 40px;
+  max-width: 1170px;
+  text-align: center; 
+}
 footer.my-footer .about p {
-font-size: 13px;
-color: #999;
-margin-top: 30px; }
+  font-size: 13px;
+  color: #999;
+  margin-top: 30px; 
+}
 footer.my-footer .about .social-media {
-margin-top: 15px; }
+  margin-top: 15px; 
+}
 footer.my-footer .about .social-media ul li a {
-display: inline-block;
-width: 45px;
-height: 45px;
-line-height: 45px;
-border-radius: 50%;
-font-size: 16px;
-color: #b78c33;
-border: 1px solid rgba(255, 255, 255, 0.3); }
+  display: inline-block;
+  width: 45px;
+  height: 45px;
+  line-height: 45px;
+  border-radius: 50%;
+  font-size: 16px;
+  color: #b78c33;
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  }
 footer.my-footer .about .social-media ul li a:hover {
-background: #b78c33;
-color: #fff;
-border-color: #b78c33; }
+  background: #b78c33;
+  color: #fff;
+  border-color: #b78c33; 
+}
 footer.my-footer .footer-info {
-margin-top: 30px; }
+  margin-top: 30px; 
+}
 footer.nb-footer .footer-info .title {
 /* color: #aaa; */
-color: #b78c33;
-text-transform: uppercase;
-font-size: 16px;
-border-left: 4px solid #b78c33;
-padding-left: 5px; }
+  color: #b78c33;
+  text-transform: uppercase;
+  font-size: 16px;
+  border-left: 4px solid #b78c33;
+  padding-left: 5px; 
+}
 footer.my-footer .footer-info ul li a {
-display: block;
-color: #aaa;
-padding: 2px 0; }
+  display: block;
+  color: #aaa;
+  padding: 2px 0; 
+}
 footer.my-footer .footer-info ul li a:hover {
-color: #b78c33;
-list-style: none;
-list-style-type: none; }
+  color: #b78c33;
+  list-style: none;
+  list-style-type: none; 
+}
 footer.my-footer .footer-info p {
-font-size: 13px;
-line-height: 20px;
-color: #aaa; }
+  font-size: 13px;
+  line-height: 20px;
+  color: #aaa; 
+}
 footer.my-footer .copyright {
-margin-top: 15px;
-background: #111;
-padding: 7px 0;
-color: #999; }
+  margin-top: 15px;
+  background: #111;
+  padding: 7px 0;
+  color: #999; 
+}
 footer.my-footer .copyright p {
-margin: 0;
-padding: 0; }
+  margin: 0;
+  padding: 0; 
+}
 </style>

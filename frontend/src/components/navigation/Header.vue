@@ -7,116 +7,88 @@ export default {
   }
 }
 </script>
-
 <template>
-  <header>
-    <div class="header">
-      <!-- <div class="div-logo"> -->
-        <a href="#default" class="logo">
-        CompanyLogo
-      </a>
-      <!-- </div> -->
-      
-      <!-- <div class="search-container"> -->
-          
-          <!-- <button>
-            Search
-          </button> -->
-      <!-- </div> -->
-      <div class="header-right">
-        <!-- Search box -->
-        <input type="text" name="search" placeholder="Search......" class="search-input">
-          <button href="#" class="search-btn" >
-              <font-awesome-icon icon="fa-solid fa-magnifying-glass fa-7x"/>
-          </button>
-        &nbsp;&nbsp;
-        <!-- Contact now -->
-        <a href="#">
-          <font-awesome-icon icon="fa-solid fa-comment-sms" size="lg" :style="{ color: 'white' }" />
-        </a>
-        &nbsp;&nbsp;
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand px-2" href="#">
+      Logo
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">
+            <router-link to="/" style="color:#bdc3c7;text-decoration: none;">Home</router-link>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Liste
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Artistes</a></li>
+            <li><a class="dropdown-item" href="#">Albums</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Promo</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-warning me-4" type="submit">Search</button>
+      </form>
+      <div class=".col-4 icon_header me-4 py-2 my-2">
         <!-- Link  to shop -->
         <a href="#">
-          <font-awesome-icon icon="fa-solid fa-cart-shopping" size="lg" :style="{ color: 'white' }"/>
+          <router-link to="/panier" class="router_link_class">
+            <font-awesome-icon icon="fa-solid fa-cart-shopping" size="2x" :style="{ color: 'white' }"/>
+            <!-- <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">
+              99+
+            <span class="visually-hidden">unread messages</span>
+            </span> -->
+          </router-link>
         </a>
-        <!-- Link for user  -->
-        &nbsp;&nbsp;
-        <a href="#">
-          <font-awesome-icon icon="fa-solid fa-user" size="lg" :style="{ color: 'white' }"/>
-        </a>
-      
+      </div>
+      <!-- compte -->
+           <div class=".col-4 icon_header me-4 my-2">
+            <ul class="navbar-nav me-auto mb-2">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <font-awesome-icon icon="fa-solid fa-user" size="2x" :style="{ color: 'white' }"/>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li>
+                      <a class="dropdown-item" href="#">Account</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <router-link to="/panier_step" class="router_link_class">Commandes</router-link>
+                      </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <a class="dropdown-item" href="#">Logout</a>
+                    </li>
+                  </ul>
+              </li>
+            </ul>
+        </div>
     </div>
   </div>
-  </header>
+</nav>
 </template>
 <style scoped>
-.header {
-  width: 100%;
-  overflow: hidden;
-  background-color: #131312;
-  padding: 20px 10px;
-  /* display: flex; */
-  flex-direction: row;
-  /* display:flex; */
-  /* justify-content: flex-start; */
+* {
+    margin: 0px 0px 0px 0px;
+    /* background-color: #2f3640; */
 }
-/* style of header links */
-.header a {
-  color: #fff;
-  margin: 0 10px;
-  font-size: 16px;
-  font-weight: 500;
+.icon_header{
+    margin-top: 5px;
+}
+.router_link_class {
   text-decoration: none;
-  /* color: #414141; */
-  /* display: inline-block; */
-  /* float: left; */
-  /* position: relative; */
-  display: block;
-  float: left;
+  color: black;
 }
-.header-right {
-  display: block;
-  float: right;
-  margin-right: 20px;
-  /* text-align: end; */
-  /* float: right; */
-  /* display: inline-block; */
-  /* word-spacing: 20px; */
-}
-.header-right input[type=text] {
-  float: right;
-  padding: 6px;
-  border: none;
-  margin-top: 8px;
-  margin-right: 16px;
-  font-size: 17px;
-}
-.header-right button {
-  float: right;
-  padding: 6px 10px;
-  margin-top: 8px;
-  margin-right: 16px;
-  background: #ddd;
-  font-size: 17px;
-  border: none;
-  cursor: pointer;
-}
-.search-container button {
-  border-radius: 10px;
-  background-color:black;
-  color: #fff;
-}
-
-
-/* uncomment for shaking search box */
-/* @keyframes hoverShake {
-  0% {transform: skew(0deg,0deg);}
-  25% {transform: skew(5deg, 5deg);}
-  75% {transform: skew(-5deg, -5deg);}
-  100% {transform: skew(0deg,0deg);}
-} */
-
-.search-input:hover{
-  animation: hoverShake 0.15s linear 3;
-} 
 </style>

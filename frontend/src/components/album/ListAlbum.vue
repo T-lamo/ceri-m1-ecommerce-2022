@@ -12,6 +12,7 @@
             return res;
         })
     })
+  
 
 </script>
 <template>
@@ -29,7 +30,6 @@
                 v-for="item in list_album" :key="item.id"
                 :item = item
                 />
-   
     </div>
 </div>
 

@@ -11,12 +11,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
 import { faUserSecret, faUser, faCartShopping,faCommentSms,faMagnifyingGlass, faArrowLeftLong,faArrowRightLong,
-faStar,faHeart,faAnglesRight, faAnglesDown, faCirclePlus, faTrash, faPenToSquare, faPlus, faMinus} from '@fortawesome/free-solid-svg-icons'
+faStar,faHeart,faAnglesRight, faAnglesDown, faCirclePlus, faTrash, faPenToSquare, faPlus, faMinus, faCircleCheck} from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faTwitter, faTwitch, faLinkedin, faGoogle } from '@fortawesome/free-brands-svg-icons'
 /* add icons to the library */
 library.add(faUserSecret,faUser,faCartShopping,faCommentSms,faMagnifyingGlass,
 faArrowLeftLong,faArrowRightLong,faStar,faHeart,faAnglesRight,faAnglesDown,
-faFacebook, faTwitch,faTwitter,faLinkedin,faGoogle,faCirclePlus,faCartShopping, faTrash,faPenToSquare,faPlus,faMinus)
+faFacebook, faTwitch,faTwitter,faLinkedin,faGoogle,faCirclePlus,faCartShopping, faTrash,faPenToSquare,faPlus,faMinus,
+faCircleCheck)
 
 import router from "./router";
 

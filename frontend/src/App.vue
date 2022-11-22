@@ -3,26 +3,29 @@
   <!-- <Header/> -->
   <Test/>
   <router-view></router-view>
-  <Footer/>
-   <!-- <Homepage/> -->
   <!-- <Footer/> -->
+   <!-- <Homepage/> -->
+  <Footer/>
 </template>
 
 <script>
 import Header from './components/navigation/Header.vue'
 import Homepage from './components/Homepage.vue'
-import Test from './components/navigation/Test.vue'
+import Test from './components/navigation/Header.vue'
 import Promo from './components/navigation/Promo.vue'
 import ListCategory from './components/category/ListCategory.vue'
 import ListAlbum from './components/album/ListAlbum.vue'
 import Footer from './components/navigation/Footer.vue'
 import AlbumDetail from './components/album/AlbumDetail.vue'
 import ListAlbumAchat from './components/album/ListAlbumAchat.vue'
-import Panier from './components/panier/Panier.vue'
-import StepProgress from './components/StepProgress.vue'
 import HelloWorld from './components/HelloWorld.vue'
 import OneAlbumDetail from './components/album/OneAlbumDetail.vue'
 import OneArtistDetail from './components/artist/OneArtistDetail.vue'
+import Authentification from './components/auth//Authentification.vue'
+import Panier_Multistep from './components/panier/Panier_Multistep.vue'
+import Liste_Commandes from './components/panier/Liste_Commandes.vue'
+import Wizard from 'form-wizard-vue3'
+
 export default {
   name: 'App',
   components: {
@@ -36,11 +39,13 @@ export default {
     Footer,
     AlbumDetail,
     ListAlbumAchat,
-    Panier,
-    StepProgress,
     HelloWorld,
     OneAlbumDetail,
     OneArtistDetail,
+    Authentification,
+    Panier_Multistep,
+    Liste_Commandes,
+    Wizard,
   }
 }
 </script>

@@ -4,12 +4,22 @@ import type { Album } from '../../models';
 const props = defineProps<{
     item:Album,
 }>()
-console.log('here')
-console.log(props.item.description)
 
 const getImage = (imagePath:string) => {
     return (imagePath);
 }
+const getDate = (str:string) => {
+        const date = new Date(str)
+        return date
+}
+let dateOfRelease:Date;
+dateOfRelease = getDate(props.item.release_date)
+// const my_date_of_release:string = dateOfRelease.getDay()+"+""+
+console.log('date below: '+dateOfRelease.getDate())
+console.log(dateOfRelease.getDay())
+console.log(dateOfRelease.getMonth())
+console.log(dateOfRelease.getFullYear())
+
 </script>
 <template>
     
@@ -20,7 +30,7 @@ const getImage = (imagePath:string) => {
                     <div class="card-img" style="font-weight:500;">
                         <div class="card-text">
                             <p class="card-title text-white text-center pt-2">{{props.item.title}}</p>
-                        <p class="text-white text-center align-self-center">{{props.item.release_date}}</p>
+                            <p class="text-white text-center align-self-center">{{props.item.release_date}}</p>
                         </div>
                         
                         <p class="text-white text-center align-self-center">
