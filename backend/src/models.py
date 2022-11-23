@@ -2,6 +2,8 @@
 
 from typing import Optional,List
 from xmlrpc.client import Boolean
+from datetime import datetime
+
 
 from sqlmodel import Field, SQLModel, Relationship
 
@@ -9,6 +11,8 @@ class Category(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     label: str
     albums: List["Album"] = Relationship(back_populates="category")
+    created_date: datetime 
+    
 
     def get_list_album(item):
         data = dict(item)
@@ -22,6 +26,7 @@ class Artist(SQLModel, table=True):
     date_of_birth: str
     cover: str
     albums: List["Album"] = Relationship(back_populates="artist")
+    created_date: datetime 
 
     def get_list_album(item):
         data = dict(item)
@@ -38,7 +43,8 @@ class Album(SQLModel, table=True):
     stock_qty:int
     description: str
     category_id: Optional[int] = Field(default=None, foreign_key="category.id")
-   
+    created_date: datetime 
+
     artist: Optional[Artist] = Relationship(back_populates="albums")
     category: Optional[Category] = Relationship(back_populates="albums")
 
@@ -55,6 +61,7 @@ class Promo(SQLModel, table=True):
     end_date: str
     rate: int
     album_id: int
+    created_date: datetime 
 
 class Song(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -63,23 +70,21 @@ class Song(SQLModel, table=True):
     cover: str
     album_id: Optional[int] = Field(default=None, foreign_key="album.id")
     album: Optional[Album] = Relationship(back_populates="songs")
+    created_date: datetime 
 
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    telephone: str
+    email: str
     username: str
     firstname: str
     lastname: str
-    telephone: str
-    email: str
     password: str = "password"
     is_admin: Boolean
-    user_payment: List["UserPayment"] = Relationship(back_populates="user")
+    created_date: datetime 
 
-    def get_list_album(item):
-        data = dict(item)
-        data["list_album"]= item.albums
-        return data
+
 
 class UserAddress(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -89,55 +94,53 @@ class UserAddress(SQLModel, table=True):
     postal_code: str
     country: str
     mobile: str
-    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
-    
+    user_id: int
+    created_date: datetime 
+
+
 class ShoppingSession(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     total: float
-    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+    user_id: int
+    created_date: datetime 
 
 class CartItem(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    total: float
-    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
-    album_id: Optional[int] = Field(default=None, foreign_key="album.id")
+    total: int
+    album_id: int
     qty: int
-    shopping_session_id: Optional[int] = Field(default=None, foreign_key="shoppingsession.id")
-
-class UserPayment(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    payment_type: str
-    provider: str
-    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
-    user: Optional[User] = Relationship(back_populates="user_payment")
-
-    
-
-
+    shopping_session_id: int
+    created_date: datetime 
 
 class OrderDetail(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     total: str
-    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
+    user_id: int
+    created_date: datetime 
+
 
 class OrderItem(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     qty: int
-    order_detail_id: Optional[int] = Field(default=None, foreign_key="orderdetail.id")
-    album_id: Optional[int] = Field(default=None, foreign_key="album.id")
+    order_detail_id: int
+    created_date: datetime 
+
 class PaymentDetail(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     amount: float
     status: Boolean
-    order_detail_id: Optional[int] = Field(default=None, foreign_key="orderdetail.id")
+    order_detail_id: int
+    created_date: datetime 
 
-    
-    
+
 class Login():
     username: str
     password: str
 
-
+# album : Optional[Album] = Relationship(back_populates="order_items")
+# album_id: Optional[int] = Field(default=None, foreign_key="album.id")
+# user: Optional[User] = Relationship(back_populates="order_details")
+   
 
 #Create 
 # class ArtistCreate():
