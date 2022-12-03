@@ -1,5 +1,5 @@
 name: deploy-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
+run-name: ${{ github.actor }} is learning teraform
 on: [push]
 jobs:
   call-front-action:
