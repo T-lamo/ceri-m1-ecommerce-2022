@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Homepage from '../components/HomePage.vue'
+import Homepage from '../components/Homepage.vue'
 import AlbumDetail from '../components/album/AlbumDetail.vue'
 import ListAlbumAchat from '../components/album/ListAlbumAchat.vue'
 import ArtistDetail from '../components/artist/ArtistDetail.vue'
 import Authentification from '../components/auth/Authentification.vue'
 import Panier_Multistep from '../components/panier/Panier_Multistep.vue'
+import OneArticle from '../components/album/OneArticle.vue'
+import LoginssotestVue from '../components/auth/Loginssotest.vue'
+import Promo from '../components/promo/Promo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +45,26 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Authentification
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Authentification
+    },
+    {
+      path: '/onearticle',
+      name: 'onearticle',
+      component: OneArticle
+    },
+    {
+      path: '/loginsso',
+      name:'loginsso',
+      component:LoginssotestVue
+    },
+    {
+      path: '/promo',
+      name:'promo',
+      component:Promo
     }
   ],
   strict: true,

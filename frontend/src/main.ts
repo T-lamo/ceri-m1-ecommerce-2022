@@ -2,7 +2,6 @@ import { createApp  } from 'vue'
 import App from './App.vue'
 import { loadFonts } from './plugins/webfontloader'
 import { createPinia } from "pinia";
-
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 
@@ -21,6 +20,13 @@ faCircleCheck)
 
 import router from "./router";
 
+/* google oauth */
+import vue3GoogleLogin from 'vue3-google-login'
+
+/**toast plugin */
+import ToastPlugin from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+
 loadFonts()
 // import "./assets/scss/base.scss";
 // import "./assets/scss/_mixins.scss";
@@ -28,7 +34,11 @@ loadFonts()
 
 const pinia = createPinia()
 const app = createApp(App)
+  .use(ToastPlugin)
   .use(router)
   .use(pinia)
+  .use(vue3GoogleLogin, {
+    clientId: '203638889084-p1gjpddbcnmioc1id0leg9vk7n0jocj9.apps.googleusercontent.com'
+  })
   .component('font-awesome-icon', FontAwesomeIcon)
   .mount("#app")

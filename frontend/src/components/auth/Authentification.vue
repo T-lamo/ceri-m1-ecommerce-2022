@@ -1,10 +1,46 @@
 <script lang="ts" setup>
-    import { ref } from "vue"
+    import { ref,onMounted } from "vue"
+    import { User } from "@/models";
+    import { create_user,read_users } from "@/services/crud";
+    import { useAppStore } from "@/stores";
+    import { storeToRefs } from "pinia";
+
+    const { list_category , list_users} = storeToRefs(useAppStore())
+    onMounted(async () => {
+      list_users.value = (await read_users()).map((res:any) => {
+        console.log(res)
+            return res;
+        })
+    })
 
     const show = ref(true)
 
     const toggle = () => {
         show.value = !show.value
+    }
+
+    let passwordcheck = ref('')
+
+    let user = {
+      username:ref(''),
+      firstname:ref(''),
+      email:ref(''),
+      password:ref(''),
+      is_admin: false
+    }
+   
+    const addUser = async () => {
+      console.log("my_user")
+      console.log(user.username.value)
+      const response = await create_user(new User({
+        "username":user.username.value,
+        "firstname":user.firstname.value,
+        "email":user.email.value,
+        "password":user.password.value,
+        "is_admin": user.is_admin}))
+            .then(res =>  console.log(res) )
+            .catch(error => console.log(error))
+          
     }
 </script>
 <template>
@@ -31,7 +67,8 @@
                     <div class="form-floating mb-3">
                         <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
                         <label for="floatingInput">Email address</label>
-                        </div>
+                      </div>
+                      <!-- <label>Validate me </label> -->
 
                     <div class="form-floating mb-3">
                         <input type="password" id="floatingpasswordinput" class="form-control" placeholder="...type your password here"/>
@@ -48,30 +85,31 @@
                 </div>
                    <!-- Please sign up -->
                 <div v-else>
+                  {{user}}
                     <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingUsernameInput" placeholder="name@example.com">
+                            <input type="text" class="form-control" id="floatingUsernameInput" placeholder="name@example.com" v-model="user.username.value">
                             <label for="floatingUsernameInput">Username</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingfirstnameInput" placeholder="name@example.com">
+                            <input type="text" class="form-control" id="floatingfirstnameInput" placeholder="name@example.com" v-model="user.firstname.value">
                             <label for="floatingfirstnameInput">Firstname</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="floatingemailInput" placeholder="name@example.com">
+                            <input type="email" class="form-control" id="floatingemailInput" placeholder="name@example.com" v-model="user.email.value">
                             <label for="floatingemailInput">Email address</label>
                         </div>
 
                     <div class="form-floating mb-3">
-                        <input type="password" id="floatingpasswordinput1" class="form-control" placeholder="...type your password here"/>
+                        <input type="password" id="floatingpasswordinput1" class="form-control" placeholder="...type your password here" v-model="user.password.value">
                         <label for="floatingpasswordinput1">Password</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="password" id="floatingpasswordinput2" class="form-control" placeholder="...type your password here"/>
+                        <input type="password" id="floatingpasswordinput2" class="form-control" placeholder="...retype your password here" v-model="passwordcheck">
                         <label for="floatingpasswordinput2">Repeat Password</label>
                     </div>
                       
                   <div class="text-center pt-1 mb-5 pb-1">
-                    <button class="btn btn-outline-warning btn-block" type="button">
+                    <button class="btn btn-outline-warning btn-block" type="button" @click="addUser()">
                         Sign Up
                     </button>
                     <!-- <a class="text-muted" href="#!">Forgot password?</a> -->

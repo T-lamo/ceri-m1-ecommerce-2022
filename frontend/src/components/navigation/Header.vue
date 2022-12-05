@@ -28,10 +28,16 @@ export default {
             Liste
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Artistes</a></li>
-            <li><a class="dropdown-item" href="#">Albums</a></li>
+            <li>
+              <a class="dropdown-item" href="#"><router-link to="/artists" style="color:black;text-decoration: none;">Artistes</router-link></a>
+          </li>
+            <li>
+              <a class="dropdown-item" href="#"><router-link to="/albums" style="color:black;text-decoration: none;">Albums</router-link></a>
+            </li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Promo</a></li>
+            <li>
+              <a class="dropdown-item" href="#"><router-link to="/promos" style="color:black;text-decoration: none;">Promo</router-link></a>
+            </li>
           </ul>
         </li>
       </ul>

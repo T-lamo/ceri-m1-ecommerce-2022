@@ -27,6 +27,8 @@
     "roboto-fontface": "*",
     "vue": "^3.2.41",
     "vue-router": "^4.1.5",
+    "vue3-carousel": "^0.2.6",
+    "vue3-google-login": "^2.0.12",
     "webfontloader": "^1.0.0"
   },
   "devDependencies": {
@@ -52,6 +54,7 @@
     "vite": "^3.0.9",
     "vitest": "^0.24.3",
     "vue-cli-plugin-mdb5": "~1.2.0",
+    "vue-toast-notification": "^3.0.4",
     "vue-tsc": "^1.0.8",
     "webpack-plugin-vuetify": "^2.0.0-alpha.0"
   }

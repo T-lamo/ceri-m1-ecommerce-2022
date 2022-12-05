@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Artist, type Album, type Category, type Promo, type Song } from "@/models";
+import { Artist, User, type Album, type Category, type Promo, type Song } from "@/models";
 import {
   read_albums,
   read_artists,
@@ -21,5 +21,8 @@ export const useAppStore = defineStore("app", () => {
   const list_category = ref<Category[]>([]);
 
   const one_artist = ref<Artist>();
-  return { list_artist, list_album, list_song, list_promo, list_category,one_artist};
+  const one_album = ref<Album>();
+  const list_users = ref<User[]>([]);
+
+  return { list_artist, list_album, list_song, list_promo, list_category,one_artist,one_album,list_users};
 });
