@@ -14,6 +14,13 @@ import {
   read_songs,
   read_categories,
   read_promos,
+  read_cart_items,
+  read_order_details,
+  read_payment_details,
+  read_shopping_sessions,
+  read_order_items,
+  read_users,
+  read_user_addresses,
 } from "@/services/crud";
 
 import { insert_seed_to_db, seed_db } from "@/utils/data/seed";
@@ -24,9 +31,20 @@ import { storeToRefs } from "pinia";
 import { useAppStore } from "@/stores";
 
 onMounted(async () => {
-  const { list_artist, list_album, list_song, list_promo, list_category } =
-    storeToRefs(useAppStore());
-
+  const {
+    list_artist,
+    list_album,
+    list_song,
+    list_promo,
+    list_category,
+    list_cart_item,
+    list_order_detail,
+    list_payment_detail,
+    list_shopping_Session,
+    list_order_item,
+    list_user,
+    list_user_address,
+  } = storeToRefs(useAppStore());
   list_artist.value = (await read_artists()).map((res: any) => {
     return new Artist({
       id: res.id,
@@ -79,8 +97,44 @@ onMounted(async () => {
   list_category.value = (await read_categories()).map((res: any) => {
     return res;
   });
-
   console.log("list category", list_category.value);
+
+  list_cart_item.value = (await read_cart_items()).map((res: any) => {
+    return res;
+  });
+  console.log("list cart item", list_cart_item.value);
+
+  list_order_detail.value = (await read_order_details()).map((res: any) => {
+    return res;
+  });
+  console.log("list order detail", list_order_detail.value);
+
+  list_payment_detail.value = (await read_payment_details()).map((res: any) => {
+    return res;
+  });
+  console.log("list payment_details", list_payment_detail.value);
+
+  list_shopping_Session.value = (await read_shopping_sessions()).map(
+    (res: any) => {
+      return res;
+    }
+  );
+  console.log("list shopping session", list_shopping_Session.value);
+
+  list_order_item.value = (await read_order_items()).map((res: any) => {
+    return res;
+  });
+  console.log("list order item", list_order_item.value);
+
+  list_user.value = (await read_users()).map((res: any) => {
+    return res;
+  });
+  console.log("list user", list_user.value);
+
+  list_user_address.value = (await read_user_addresses()).map((res: any) => {
+    return res;
+  });
+  console.log("list user address", list_user_address.value);
 
   // seed_db();
   // insert_seed_to_db();

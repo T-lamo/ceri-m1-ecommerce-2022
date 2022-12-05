@@ -42,3 +42,4 @@ RUN if [ ${poetry_script_name} = "install-poetry.py" ]; then poetry export -f re
 
 # Final copy
 COPY . /app
+RUN pytest /app/tests/test_utils.py
