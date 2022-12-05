@@ -84,7 +84,6 @@ export class Category implements ICategory {
 export class User implements IUser {
   id?: number;
   username!: string;
-  firstname!: string;
   email!: string;
   password?: string | undefined = undefined;
   is_admin!: boolean;

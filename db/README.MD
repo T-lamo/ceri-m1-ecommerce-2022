@@ -5,7 +5,7 @@
 Créer un volume du nom **ecom_db_backup** avec la commande `docker volume create ecom_db_backup` 
 
 ## Charger la base 
-1. Executer la commande `docker exec -it db sh` après avoir lancer le docker compose (docker compose --build up)
+1. Executer la commande `docker exec -it db sh` après avoir lancer le docker compose (docker compose -f docker-compose.dev.yml --build up)
 2. Charger la base de données avec cette commande `mysql -u root -p ecom_db < /app/ecom_db.sql`. 
 3. Saisir **mypass** comme modepasse.
 

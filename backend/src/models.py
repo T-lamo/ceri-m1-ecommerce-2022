@@ -69,7 +69,7 @@ class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     username: str
     email: str
-    password: str = "password"
+    password: str 
     is_admin: Boolean
 
 class Login():

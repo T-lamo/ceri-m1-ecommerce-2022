@@ -44,7 +44,6 @@ export interface IPromo {
 export interface IUser {
   id?: number;
   username: string;
-  firstname: string;
   email: string;
   password?: string;
   is_admin: boolean;

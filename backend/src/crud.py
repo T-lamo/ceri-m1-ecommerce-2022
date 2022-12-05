@@ -200,7 +200,7 @@ class Database(metaclass=DatabaseSingletonMeta):
 
   
     def insert_user(self, user:User):
-        data = User(label=user['label'])
+        data = User(username=user['username'], email=user['email'],password=user['password'],is_admin=['is_admin'])
         session = Session(self.engine)
         session.add(data)
         session.commit()
