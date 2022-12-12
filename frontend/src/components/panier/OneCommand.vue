@@ -30,7 +30,7 @@
     const handleChange = (() => {
         list_cart_item.value.forEach((element) => {
             if (element.album_id == props.item.album_id) {
-                element.qty = qty_cart.value
+                element.qty = qty_cart.value    
                 console.log("for : ",element.album_id)
                 console.log("change qty here: ",element.qty)
                 
@@ -70,6 +70,7 @@
 
               <input id="form1" min="1" name="quantity" type="number" v-model="qty_cart"
                 class="form-control form-control-sm"/>
+              <span>{{qty_cart}}</span>
 
               <button class="btn btn-link px-2"
                 onclick="this.parentNode.querySelector('input[type=number]').stepUp()">

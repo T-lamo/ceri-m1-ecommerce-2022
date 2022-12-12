@@ -121,10 +121,14 @@ export class OrderItem implements IOrderItem {
 }
 export class PaymentDetail implements IPaymentDetail {
   id?: number;
+  name = ""
   amount = 0;
+  credit_card_number = ""
   provider = "";
   status = "";
   order_detail_id = 0;
+  expiration_date = "";
+  cvv = ""
   created_date?: string;
   constructor(fields: Partial<IOrderItem>) {
     Object.assign(this, fields);

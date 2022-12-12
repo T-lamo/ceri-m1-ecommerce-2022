@@ -42,7 +42,7 @@ export const useAppStore = defineStore("app", () => {
     // one_command,
     total_price,
     isLoggedIn,
-    temporary_command,
+    // temporary_command,
     list_artist,
     list_album,
     list_song,
