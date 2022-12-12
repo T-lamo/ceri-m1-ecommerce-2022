@@ -7,5 +7,5 @@ jobs:
     uses: ./.github/workflows/front-action.yml
   call-back-action:
     uses: ./.github/workflows/back-action.yml
-  # call-deploy-action:
-  #   uses: ./.github/workflows/deploy-action.yml
+  call-deploy-action:
+    uses: ./.github/workflows/deploy-action.yml
