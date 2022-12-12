@@ -13,6 +13,7 @@ import type {
   IUser,
   IUserAddress,
 } from "@/interfaces";
+import { useToast } from "vue-toast-notification";
 
 // const api_url = import.meta.env.VITE_API_URL;
 // const api_url = "http://localhost:80";
@@ -410,3 +411,17 @@ export async function delete_user(data: number): Promise<any> {
   };
   return await (await fetch(`/api/user/${data}`, config)).json();
 }
+
+export function toast_function (message:string,type:string) {
+  const $toast = useToast();
+  let instance =  
+        $toast.open({
+        message: message,
+        type:type,
+        duration: 2500,
+        position: "bottom-left"
+      })
+
+  return instance
+}
+

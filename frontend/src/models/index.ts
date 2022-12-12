@@ -144,10 +144,10 @@ export class User implements IUser {
   id?: number;
   username = "";
   firstname?: string;
-  lastname?: string;
   telephone?: string;
+  email?: string;
   password?: string;
-  created_date?: string;
+  created_at?: string;
   is_admin: boolean = false;
   list_address: UserAddress[] = [];
   list_shopping_session: ShoppingSession[] = [];

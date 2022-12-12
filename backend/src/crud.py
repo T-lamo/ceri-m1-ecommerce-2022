@@ -432,7 +432,8 @@ class Database(metaclass=DatabaseSingletonMeta):
             return session.exec(select(User).where(User.id == id)).first()
             
     def insert_user(self, item:User):
-            data = User(telephone=item['telephone'], firstname=item['firstname'], lastname=item['lastname'],email=item['email'],username=item['username'], password=item['password'], is_admin=item['is_admin'], created_date=datetime.now())
+            data = User(telephone=item['telephone'], firstname=item['firstname'],email=item['email'],
+                        username=item['username'], password=item['password'], is_admin=item['is_admin'], created_date=datetime.now())
             session = Session(self.engine)
             session.add(data)
             session.commit()
@@ -446,7 +447,6 @@ class Database(metaclass=DatabaseSingletonMeta):
             update.telephone=item['telephone'] 
             update.email=item['username']
             update.email=item['firtname']
-            update.email=item['lastname']
             update.email=item['email']
             update.password=item['password']
             update.is_admin=item['is_admin']

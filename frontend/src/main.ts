@@ -27,6 +27,7 @@ import vue3GoogleLogin from 'vue3-google-login'
 import ToastPlugin from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
 
+
 loadFonts()
 // import "./assets/scss/base.scss";
 // import "./assets/scss/_mixins.scss";

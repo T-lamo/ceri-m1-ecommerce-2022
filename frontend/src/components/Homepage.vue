@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import ListAlbum from './album/ListAlbum.vue';
-import ListCategory from './category/ListCategory.vue';
-import ListArtist from './artist/ListArtist.vue';
-import HelloWorld from './HelloWorld.vue';
-import Promo from './promo/Promo.vue';
+  import ListAlbum from './album/ListAlbum.vue';
+  import ListCategory from './category/ListCategory.vue';
+  import ListArtist from './artist/ListArtist.vue';
+  import Promo from './promo/Promo.vue';
 
 
 </script>

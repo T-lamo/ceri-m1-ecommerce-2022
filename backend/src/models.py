@@ -79,7 +79,6 @@ class User(SQLModel, table=True):
     email: str
     username: str
     firstname: str
-    lastname: str
     password: str = "password"
     is_admin: Boolean
     created_date: datetime 

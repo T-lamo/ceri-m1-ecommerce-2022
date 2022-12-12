@@ -9,11 +9,15 @@ import OneArticle from '../components/album/OneArticle.vue'
 import LoginssotestVue from '../components/auth/Loginssotest.vue'
 import Promo from '../components/promo/Promo.vue'
 
+const UserInfo = {
+  template: '<div><p>User {{ $route.params.id }}</p></div>'
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: Homepage
     },
@@ -32,8 +36,8 @@ const router = createRouter({
       component: ListAlbumAchat
     },
     {
-      path: '/panier_step',
-      name: 'panier_step',
+      path: '/panier',
+      name: 'panier',
       component: Panier_Multistep
     },
     {
@@ -42,12 +46,7 @@ const router = createRouter({
       component: ArtistDetail
     },
     {
-      path: '/login',
-      name: 'login',
-      component: Authentification
-    },
-    {
-      path: '/login',
+      path: '/',
       name: 'login',
       component: Authentification
     },
@@ -65,6 +64,11 @@ const router = createRouter({
       path: '/promo',
       name:'promo',
       component:Promo
+    },
+    {
+      path:'/user/:id', 
+      name: 'user',
+      component: UserInfo
     }
   ],
   strict: true,

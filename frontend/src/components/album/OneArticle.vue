@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-    import { defineProps, onMounted } from 'vue';
-    import { read_promos , read_artists} from '@/services/crud';
+    import { defineProps, onMounted, ref } from 'vue';
+    import { read_promos , read_artists, read_one_album, read_albums} from '@/services/crud';
     import { Artist, Promo, type Album } from '../../models';
     import { storeToRefs } from 'pinia';
     import { useAppStore } from '@/stores';
-    import { useToast} from 'vue-toast-notification';
-    import 'vue-toast-notification/dist/theme-sugar.css';
+    import { toast_function } from '@/services/crud';
     
+    let id_cart_item = 0
+
+
     const props = defineProps<{
         item:Album,
         promo:boolean,
@@ -26,7 +28,7 @@
     // console.log(dateOfRelease.getDay())
     // console.log(dateOfRelease.getMonth())
     // console.log(dateOfRelease.getFullYear())
-    const { list_promo , list_artist} = storeToRefs(useAppStore())
+    const { list_promo , list_artist, list_cart_item, current_user} = storeToRefs(useAppStore())
     let my_promo:Promo
     onMounted(async () => {
       list_promo.value = (await read_promos()).map((res:any) => {
@@ -64,17 +66,31 @@
         return my_selected_artist
     }
 
-    const add_me_to_cart = (id_album:number) => {
-      /** Should add me to panier */
-      const $toast = useToast();
-      let instance = $toast.open({
-        message: "Article successfully added!!",
-        type: "success",
-        duration: "2000"
+    const add_me_to_cart = async (id_album:number,click_type:number) => {
+      let my_article;
+      /** specify whether it is an article added?=1 added to favory lists?=0 */
+      let res = await read_one_album(id_album)
+        .then((res) => 
+          my_article = res)
+        .catch((error) => console.log(error))
+      // store to store list_item_user
+      
+      console.log("here log")
+      console.log(my_article)
+      list_cart_item.value.push({
+        
+        'qty':1,
+        'album_id': id_album,
+        'shopping_session_id':current_user.value?.id!,
+        'created_date': new Date().toDateString()
+
+      })
+      list_cart_item.value.forEach(element => {
+        console.log(element)
       });
       
       // instance.dismiss()
-      console.log("add me to chart")
+      console.log("add me to chart");
     } 
    
 

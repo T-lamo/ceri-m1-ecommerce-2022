@@ -80,11 +80,11 @@ export interface IUser {
   id?: number;
   username: string;
   firstname?: string;
-  lastname?: string;
+  email?: string;
   telephone?: string;
   password?: string;
   is_admin: boolean;
-  created_at?: string;
+  created_date?: Date;
 }
 export interface IUserAddress {
   id?: number;
