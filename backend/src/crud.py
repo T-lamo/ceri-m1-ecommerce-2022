@@ -8,6 +8,14 @@ from .models import Album, Artist, CartItem, Category, OrderDetail, OrderItem, P
 from sqlmodel import Field, Session, SQLModel, create_engine,select
 
 
+from pydantic import BaseSettings
+
+
+class Settings(BaseSettings):
+    DATABASE_ADDRESS: str = "localhost:3306"
+    DATABASE_USER: str ="tlamo"
+    DATABASE_PASSWORD: int = 50
+
 
 class DatabaseSingletonMeta(type):
     """
@@ -32,11 +40,13 @@ class DatabaseSingletonMeta(type):
 class Database(metaclass=DatabaseSingletonMeta):
 
     def __init__(self):
-        self.db = "uapv2201069"
-        self.user = 'uapv2201069'
-        self.password = 'WmAsN1'
-        self.host = 'pedago.univ-avignon.fr'
-        print("test")
+        settings = Settings()
+        # print(settings.DATABASE_ADDRESS)
+        # self.db = "greenfish-51TsfXfC"
+        # self.user = 'greenfish'
+        # self.password = 'CwNw54qKkgl6AoGO'
+        # self.host = 'localhost:3306'
+        print("test", settings.DATABASE_ADDRESS)
         self.db = "ecom_db"
         self.user = 'root'
         self.password = 'mypass'
