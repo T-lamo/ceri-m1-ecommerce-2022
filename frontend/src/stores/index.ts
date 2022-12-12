@@ -18,7 +18,9 @@ import { ref } from "vue";
 export const useAppStore = defineStore("app", () => {
   // const list_artist = ref<number[]>([1, 3]);
   const current_user = ref<User>()
-  const one_command = ref<Album>();
+  // const one_command = ref<Album>();
+  // const temporary_command = ref<String>([]);
+  const total_price = ref(0);
   const list_artist = ref<Artist[]>([]);
   const list_album = ref<Album[]>([]);
   const isLoggedIn = ref<boolean>()
@@ -37,8 +39,10 @@ export const useAppStore = defineStore("app", () => {
 
   return {
     current_user,
-    one_command,
+    // one_command,
+    total_price,
     isLoggedIn,
+    temporary_command,
     list_artist,
     list_album,
     list_song,

@@ -5,24 +5,53 @@
    import { ref } from "vue"
    import { useAppStore } from '@/stores';
    import { storeToRefs } from 'pinia';
+   import type { CartItem } from '@/models';
 
-   const {list_cart_item} = storeToRefs(useAppStore())
-   let total_somme = 0
-   let price = 1
-   list_cart_item.value.forEach((element) => {
-        total_somme +=element.qty*price
-   })
+   const {list_cart_item, total_price, list_album} = storeToRefs(useAppStore())
     
    let step = ref(0)
-   const next_step = (() => {
+   // move forward
+   const next_step = ((step_id:number) => {
+        switch(step_id){
+            case 1:
+                console.log('passer la commande')
+                break;
+            case 2:
+                console.log('choisir adresse de livraison et de facturation ??')
+                break;
+            case 3:
+                console.log('choisir carte de paiement ??')
+                break;
+        }
+            
         step.value = step.value + 1;
    })
+
+   //move backward
    const prev_step = (() => {
         step.value--;
    })
-   let my_step = step.value
-
-</script>
+   console.log('step here: ',step.value)
+   // on change quanty of products , change total price
+   const handleChange = (() => {
+        let total_somme = 0
+        list_album.value.forEach((element)=> {
+            
+            // iterate through list cart item
+            list_cart_item.value.forEach((my_cart:CartItem) => {
+                if (element.id == my_cart.album_id) {
+                    total_somme+= element.price * my_cart.qty
+                }
+            })
+            
+        })
+        total_price.value = total_somme
+        console.log("here total: ",total_price.value)
+        return total_price.value
+    })
+   
+   
+   </script>
 
 <template>
 <div class="multistep_container">
@@ -31,17 +60,8 @@
             <div class="container py-5">
                 <h2>Liste des produits</h2>
                 <div class="row d-flex justify-content-center my-2">
-                    <div class="col-md-8">
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                Liste des commandes
-                            </div>
-                            
-                        </div>
-                    </div>
                     <Liste_Commandes
-
-                    />
+                        />
                     <div class="col-md-4">
                         <div class="card mb-4">
                             <div class="card-header py-3">
@@ -52,11 +72,12 @@
                                 <li
                                     class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                     Produits
-                                    <span>$ {{ total_somme}}</span>
+                                    <span>$ {{ handleChange()}}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                     Autre frais
                                     <span>Gratuit</span>
+                                    
                                 </li>
                                 <li
                                     class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
@@ -66,11 +87,11 @@
                                         <p class="mb-0">(en incluant le TVA)</p>
                                     </strong>
                                     </div>
-                                    <span><strong>$ {{ total_somme}}</strong></span>
+                                    <span><strong>$ {{ handleChange()}}</strong></span>
                                 </li>
                                 </ul>
 
-                                <button type="button" class="btn btn-outline-warning btn-lg" @click="next_step">
+                                <button type="button" class="btn btn-outline-warning btn-lg" @click="next_step(1)">
                                     Passer la commande
                                 </button>
                             </div>
@@ -87,7 +108,7 @@
                     Prev
                 </button>
                 &nbsp;&nbsp;
-                <button class="btn btn-outline-warning" @click="next_step">
+                <button class="btn btn-outline-warning" @click="next_step(2)">
                     Suivant
                 </button>
             </div>
@@ -100,7 +121,7 @@
                     Prev
                 </button>
                 &nbsp;&nbsp;
-                <button class="btn btn-outline-warning" @click="next_step">
+                <button class="btn btn-outline-warning" @click="next_step(3)">
                     Suivant
                 </button>
             </div>

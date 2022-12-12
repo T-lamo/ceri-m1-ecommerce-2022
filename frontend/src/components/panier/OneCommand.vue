@@ -5,15 +5,16 @@
 
     import { useAppStore } from '@/stores';
     import { storeToRefs } from 'pinia';
-    import type { getImage } from "@/services/tools";
 
-    const { list_promo, list_cart_item, list_album, current_user} = storeToRefs(useAppStore())
+    // list of stores used in this section
+    const { list_promo, list_cart_item, list_album, current_user, total_price } = storeToRefs(useAppStore())
 
-
+    // define props
     const props = defineProps<{
         item:CartItem,
     }>()
 
+    // the quantity of product
     const qty_cart = ref(1)
 
     const check_me_album = () => {
@@ -25,14 +26,23 @@
         })
         return my_selected_album
     }
+    // modify quantity of product in store
+    const handleChange = (() => {
+        list_cart_item.value.forEach((element) => {
+            if (element.album_id == props.item.album_id) {
+                element.qty = qty_cart.value
+                console.log("for : ",element.album_id)
+                console.log("change qty here: ",element.qty)
+                
+            }    
+        })
+    })
 
-    const handleChange = () => {
-        console.log(qty_cart.value)
-    }
-    // console.log('corres album: ',props.corres_album)
+    // get image source
     const getImage = (imagePath:string) => {
         return (imagePath);
     }
+
 </script>
 
 <template>
@@ -45,20 +55,20 @@
               <img
                 :src=getImage((check_me_album()).cover)
                 class="img-fluid rounded-3" alt="Cotton T-shirt">
-                
+                <p>{{handleChange()}}</p>
             </div>
             <div class="col-md-3 col-lg-3 col-xl-3">
-              <p class="lead fw-normal mb-2">{{(check_me_album()).title}}</p>
+              <p class="lead fw-normal mb-2">{{(check_me_album()).title}} {{props.item.album_id}}</p>
               <p> $ {{(check_me_album()).price }}</p>
               <!-- <p><span class="text-muted">Size: </span>M <span class="text-muted">Color: </span>Grey</p> -->
             </div>
             <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
               <button class="btn btn-link px-2"
-                onclick="this.parentNode.querySelector('input[type=number,value=0]').stepDown()" @click="handleChange()">
+                onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
                 <i class="fas fa-minus"></i>
               </button>
 
-              <input id="form1" min="0" name="quantity" type="number" v-model="qty_cart"
+              <input id="form1" min="1" name="quantity" type="number" v-model="qty_cart"
                 class="form-control form-control-sm"/>
 
               <button class="btn btn-link px-2"
