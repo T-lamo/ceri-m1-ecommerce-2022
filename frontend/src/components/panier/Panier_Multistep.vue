@@ -127,6 +127,20 @@
             </div>
         </div>
         <div v-if="step === 3">
+            <div>
+                <p>Récapitulatif commandes: </p>
+            </div>
+            <div class="col-12 text-center">
+                <button class="btn btn-secondary" @click="prev_step">
+                    Prev
+                </button>
+                &nbsp;&nbsp;
+                <button class="btn btn-outline-warning" @click="next_step(3)">
+                    Suivant
+                </button>
+            </div>
+        </div>
+        <div v-if="step === 4">
             <div class="container">
                 <h2 class="text-center pt-4">
                     <P>Bravo vous avez terminée votre commande. Allez sur le site du transporteur</P>

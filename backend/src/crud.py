@@ -218,7 +218,11 @@ class Database(metaclass=DatabaseSingletonMeta):
     def select_one_order_detail(self, id):
         with Session(self.engine) as session:
             return session.exec(select(OrderDetail).where(OrderDetail.id == id)).first()
-            
+    
+    def select_last_one_order_detail_byuserid(self,user_id):
+        with Session(self.engine) as session:
+            return session.exec(select(OrderDetail).where(OrderDetail.user_id == user_id).order_by(OrderDetail.id.desc())).first()
+
     def insert_order_detail(self, item:OrderDetail):
         data = OrderDetail(total=item['total'], user_id=item['user_id'], created_date=datetime.now())
         session = Session(self.engine)
@@ -318,6 +322,10 @@ class Database(metaclass=DatabaseSingletonMeta):
     def select_one_shopping_session(self, id):
         with Session(self.engine) as session:
             return session.exec(select(ShoppingSession).where(ShoppingSession.id == id)).first()
+
+    def select_last_one_shopping_session_by_userid(self, user_id):
+        with Session(self.engine) as session:
+            return session.exec(select(ShoppingSession).where(ShoppingSession.user_id == user_id).order_by(ShoppingSession.id.desc())).first()
             
     def insert_shopping_session(self, item:ShoppingSession):
         data = ShoppingSession(total=item['total'], user_id=item['user_id'], created_date=datetime.now())

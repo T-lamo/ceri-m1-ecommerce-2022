@@ -28,7 +28,7 @@
     // console.log(dateOfRelease.getDay())
     // console.log(dateOfRelease.getMonth())
     // console.log(dateOfRelease.getFullYear())
-    const { list_promo , list_artist, list_cart_item, current_user} = storeToRefs(useAppStore())
+    const { list_promo , list_artist, list_cart_item, current_shopping_session} = storeToRefs(useAppStore())
     let my_promo:Promo
     onMounted(async () => {
       list_promo.value = (await read_promos()).map((res:any) => {
@@ -73,7 +73,7 @@
         .then((res) => 
           my_article = res)
         .catch((error) => console.log(error))
-      // store to store list_item_user
+     
       
       console.log("here log")
       console.log(my_article)
@@ -81,10 +81,11 @@
         
         'qty':1,
         'album_id': id_album,
-        'shopping_session_id':current_user.value?.id!,
-        'created_date': new Date().toDateString()
+        'shopping_session_id': current_shopping_session.value?.id!,
+        'created_date': new Date()
 
       })
+      console.log("list cart items for ")
       list_cart_item.value.forEach(element => {
         console.log(element)
       });

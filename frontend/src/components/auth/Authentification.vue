@@ -1,7 +1,8 @@
 <script lang="ts" setup>
     import { ref,onMounted } from "vue"
-    import { User } from "@/models";
-    import { create_user,read_users, toast_function } from "@/services/crud";
+    import { ShoppingSession, User } from "@/models";
+    import { create_user,read_users, toast_function , 
+      create_shopping_session, read_shopping_sessions, read_cart_items, read_last_one_shopping_session_byuser} from "@/services/crud";
     import { useAppStore } from "@/stores";
     import { storeToRefs } from "pinia";
     import { Form } from 'vee-validate';
@@ -10,6 +11,50 @@
     import {useToast} from 'vue-toast-notification';
     import { decodeCredential, googleLogout } from "vue3-google-login";
     import { useRouter } from 'vue-router';
+    
+    /** get values from the stores */
+    const { list_category, list_user, current_user, isLoggedIn, list_cart_item,
+       list_shopping_Session , last_shopping_session, current_shopping_session} = storeToRefs(useAppStore())
+
+    const get_last_shoppsession_db = (list_shop_sess_db:Array<ShoppingSession>):boolean => {
+
+      let found = false
+      let count = 0
+      list_shop_sess_db.forEach((element:ShoppingSession) => {
+        
+        // iterate through user list
+        list_user.value.forEach((user_item:User) => {
+            // if user id is found in list shopping sesssion, get the last element
+            if (user_item.id == element.user_id) {
+              last_shopping_session.value = element
+              found = true
+              count+=1
+            }
+          })
+        })
+      console.log("count value: ",count)
+      return found
+    }
+
+    const get_current_shoppsession_db = (list_shop_sess_db:Array<ShoppingSession>):boolean => {
+
+      let found = false
+      let count = 0
+      list_shop_sess_db.forEach((element:ShoppingSession) => {
+
+        // iterate through user list
+        list_user.value.forEach((user_item:User) => {
+            // if user id is found in list shopping sesssion, get the last element
+            if (user_item.id == element.user_id) {
+              current_shopping_session.value= element
+              found = true
+              count+=1
+            }
+          })
+        })
+      console.log("count value: ",count)
+      return found
+    }
 
     /** routing */
 
@@ -20,7 +65,6 @@
         show.value = !show.value
     }
 
-    const { list_category, list_user, current_user, isLoggedIn } = storeToRefs(useAppStore())
     
     /** initialize userLoggin in store to false */
     isLoggedIn.value = false
@@ -42,6 +86,7 @@
             return res;
         })
     })
+
     /** check existence of email in the db*/
     const check_email = ((my_email:string, my_pass:string)  => {
       let res:Boolean = false;
@@ -75,13 +120,58 @@
       }
   
     })
-      
+    /** get last shopping session in db */
+    
     /** onsubmit login */
-    const onLogin = ((values:any) => {
+    const onLogin =  (async (values:any) => {
       const $toast = useToast();
       // if log in success
       if (check_email(values.email,values.password)) {
+
+        // initialize isLoggedIn store value
         isLoggedIn.value = true
+
+        // get last shopping session for a user loggedin
+        let found = false
+        let response_read_last_shopping = await read_last_one_shopping_session_byuser(current_user.value?.id!)
+        last_shopping_session.value = response_read_last_shopping
+        // create a new variable of shopping session
+        let shopping_session = new ShoppingSession({
+          "user_id": current_user.value?.id,
+          "total": 0,
+          "created_date": new Date(),
+        })
+
+        // if shopping session exists
+        if(found = true) { 
+            // get cartItem corresponding to shopping session
+            let cart_items_db = await read_cart_items()
+            console.log("read cart items in db: ")
+            console.log(cart_items_db) 
+            // list_cart_item.value = cart_items_db                
+            console.log("shopping session for user exist last shopping session")
+            console.log(last_shopping_session.value)
+            if (list_cart_item.value.length != 0) {
+              console.log(list_cart_item.value.length)
+            }
+            // let found = get_last_shoppsession_db(list_shop_sess_db)
+
+        } else {
+          console.log("shopping session for user does not exist")
+          
+        }
+
+        // add shopping session to database
+        const response_create_shop_sess = await create_shopping_session(shopping_session)
+                      .then((res) => console.log("shopping session created successfully"))
+                      .catch((error) => console.log(error))
+
+        // initialize current shopping session values 
+        // get_current_shoppsession_db(list_shop_sess_db)
+        console.log("current shopping session: ")
+        let response_read_one_shopping_session = await read_last_one_shopping_session_byuser(current_user.value?.id!)
+        current_shopping_session.value = response_read_one_shopping_session
+        console.log(current_shopping_session.value)
         toast_function("You are successfully logged in!","success")
         setTimeout(() => {
             router.push({

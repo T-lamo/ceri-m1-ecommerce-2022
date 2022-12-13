@@ -112,6 +112,10 @@ def read_order_detail():
 def read_order_detail(id: int):
     return db.select_one_order_detail(id)
 
+@app.get("/api/order_detail_byid/{user_id}")
+def read_order_detail(user_id: int):
+    return db.select_last_one_order_detail_byuserid(user_id)
+
 @app.post("/api/order_detail")
 async def create_order_detail(order_detail: OrderDetail):
     print("iorder_detail", order_detail)
@@ -173,6 +177,10 @@ def read_shopping_session():
 @app.get("/api/shopping_session/{id}")
 def read_shopping_session(id: int):
     return db.select_one_shopping_session(id)
+
+@app.get("/api/shopping_session_byuserid/{user_id}")
+def read_last_one_shopping_session_byidalbum(user_id:int):
+    return db.select_last_one_shopping_session_by_userid(user_id) 
 
 @app.post("/api/shopping_session")
 async def create_shopping_session(shopping_session: ShoppingSession):

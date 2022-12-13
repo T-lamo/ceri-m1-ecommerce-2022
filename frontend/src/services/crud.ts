@@ -93,6 +93,12 @@ export async function read_one_order_detail(
   return await (await fetch(`/api/order_detail/${data}`)).json();
 }
 
+export async function read_lastone_order_detail_byuserid(
+  data: number
+): Promise<IOrderDetail> {
+  return await (await fetch(`/api/order_detail_byid/${data}`)).json();
+}
+
 export async function read_one_payment_detail(
   data: number
 ): Promise<IPaymentDetail> {
@@ -103,6 +109,12 @@ export async function read_one_shopping_session(
   data: number
 ): Promise<IShoppingSession> {
   return await (await fetch(`/api/shopping_session/${data}`)).json();
+}
+
+export async function read_last_one_shopping_session_byuser(
+  data: number
+): Promise<IShoppingSession> {
+  return await (await fetch(`/api/shopping_session_byuserid/${data}`)).json();
 }
 
 export async function read_one_order_item(data: number): Promise<IOrderItem> {
@@ -174,6 +186,8 @@ export async function create_order_detail(
   };
   return await (await fetch(`/api/order_detail`, config)).json();
 }
+
+
 
 export async function create_payment_detail(
   data: IPaymentDetail

@@ -46,20 +46,20 @@ export interface ICartItem {
   qty: number;
   album_id: number;
   shopping_session_id: number;
-  created_at?: string;
+  created_date?: Date;
 }
 export interface IOrderDetail {
   id?: number;
   total: number;
   user_id: number;
-  created_at?: string;
+  created_date?: Date;
 }
 export interface IOrderItem {
   id?: number;
   qty: number;
   order_detail_id: number;
   album_id: number;
-  created_at?: string;
+  created_date?: Date;
 }
 export interface IPaymentDetail {
   id?: number;
@@ -71,14 +71,14 @@ export interface IPaymentDetail {
   expiration_date: string;
   cvv: string;
   order_detail_id: number;
-  created_at?: string;
+  created_date?: Date;
 }
 
 export interface IShoppingSession {
   id?: number;
   total: number;
   user_id: number;
-  created_at?: string;
+  created_date?: Date;
 }
 export interface IUser {
   id?: number;
@@ -99,7 +99,7 @@ export interface IUserAddress {
   postal_code: string;
   mobile?: string;
   user_id: number;
-  created_date?: string;
+  created_date?: Date;
 }
 
 export interface ILogin {

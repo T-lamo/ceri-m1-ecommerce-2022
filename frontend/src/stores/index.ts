@@ -11,6 +11,7 @@ import type {
   ShoppingSession,
   Song,
   User,
+  UserAddress,
 } from "@/models";
 
 import { ref } from "vue";
@@ -18,6 +19,9 @@ import { ref } from "vue";
 export const useAppStore = defineStore("app", () => {
   // const list_artist = ref<number[]>([1, 3]);
   const current_user = ref<User>()
+  const last_shopping_session = ref<ShoppingSession>()
+  const current_shopping_session = ref<ShoppingSession>()
+  const shipping_chosen = ref<UserAddress>();
   // const one_command = ref<Album>();
   // const temporary_command = ref<String>([]);
   const total_price = ref(0);
@@ -42,7 +46,9 @@ export const useAppStore = defineStore("app", () => {
     // one_command,
     total_price,
     isLoggedIn,
-    // temporary_command,
+    last_shopping_session,
+    current_shopping_session,
+    shipping_chosen,
     list_artist,
     list_album,
     list_song,

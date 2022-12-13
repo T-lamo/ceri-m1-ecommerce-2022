@@ -2,23 +2,53 @@
     import * as Yup from 'yup';
     import { Form } from 'vee-validate';
     import InputField from "../auth/InputField.vue";
+    import { useAppStore } from '@/stores';
+    import { storeToRefs } from 'pinia';
+import { UserAddress } from '@/models';
 
-    const chooseLivraisonOption = (() => {
-        console.log('here')
-    })
+    const { shipping_chosen , current_user} = storeToRefs(useAppStore())
+
     /** */
     const onAddAdress = ((values:any) => {
+       
+        shipping_chosen.value = new UserAddress({
+            "adress_line1": values.adress1,
+            "adress_line2" : "",
+            "city": values.city,
+            "country": values.country,
+            "created_date": new Date(),
+            "mobile": values.phone_number,
+            "user_id": current_user.value?.id
+        })
         console.log("on add address")
-        console.log(values)
+        console.log(shipping_chosen.value)
     })
 
     const onAddRelaypoint = ((values:any) => {
+        shipping_chosen.value = new UserAddress({
+            "adress_line1": values.adress_relay_point,
+            "adress_line2" : "",
+            "city": values.city,
+            "country": values.country,
+            "created_date": new Date(),
+            "mobile": values.phone_number,
+            "user_id": current_user.value?.id
+        })
         console.log("on add relay point adress")
-        console.log(values)
+        console.log(shipping_chosen.value)
     })
     const onAddDeposit = ((values:any) => {
+        shipping_chosen.value = new UserAddress({
+            "adress_line1": values.adress_deposit,
+            "adress_line2" : "",
+            "city": values.city,
+            "country": values.country,
+            "created_date": new Date(),
+            "mobile": values.phone_number,
+            "user_id": current_user.value?.id
+        })
         console.log("on add deposit address")
-        console.log(values)
+        console.log(shipping_chosen.value)
     })
 
     /** on invalid submit */
@@ -33,6 +63,7 @@
 
     /** generate input validation for Home section */
     const schema_home = Yup.object().shape({
+        country: Yup.string().required(),
         adress1: Yup.string().required(),
         city: Yup.string().required(),
         postal_code: Yup.number().required().min(5),
@@ -42,6 +73,7 @@
 
     /** generate input validation for relay point */
     const schema_relaypoint = Yup.object().shape({
+        country: Yup.string().required(),
         city: Yup.string().required(),
         postal_code: Yup.number().required().min(5),
         adress_relay_point: Yup.string().required(),
@@ -50,8 +82,10 @@
 
     /**  generate input validation for deposit office */
     const schema_deposit = Yup.object().shape({
+        country: Yup.string().required(),
         city: Yup.string().required(),
         adress_deposit: Yup.string().required(),
+        postal_code: Yup.number().required(),
         phone_number: Yup.number().min(9)
     })
 </script>
@@ -76,13 +110,13 @@
                                 @invalid-submit="onInvalidSubmit"
                                 >
                                 <InputField
-                                    name="adress1"
+                                    name="country"
                                     type="text"
-                                    label="Adress 1"
-                                    placeholder="Your address"
-                                    success-message="Address is correct !"
+                                    label="Country"
+                                    placeholder="Your country"
+                                    success-message="Country name is correct !"
                                     />
-                               
+
                                 <InputField
                                     name="city"
                                     type="text"
@@ -98,7 +132,15 @@
                                     placeholder="84000"
                                     success-message="Postal code is correct !"
                                     />
-                                
+
+                                <InputField
+                                    name="adress1"
+                                    type="text"
+                                    label="Adress 1"
+                                    placeholder="Your address"
+                                    success-message="Address is correct !"
+                                    />
+
                                 <InputField
                                     name="phone_number"
                                     type="text"
@@ -132,6 +174,14 @@
                                 :validation-schema="schema_relaypoint"
                                 @invalid-submit="onInvalidSubmit"
                                 >
+                                <InputField
+                                    name="country"
+                                    type="text"
+                                    label="Country"
+                                    placeholder="Your country"
+                                    success-message="Country name is correct !"
+                                    />
+
                                 <InputField
                                     name="city"
                                     type="text"
@@ -187,6 +237,13 @@
                                 @invalid-submit="onInvalidSubmit"
                                 >
                             <InputField
+                                name="country"
+                                type="text"
+                                label="Country"
+                                placeholder="Your country"
+                                success-message="Country name is correct !"
+                                />
+                            <InputField
                                 name="adress_deposit"
                                 type="text"
                                 label="Adresse"
@@ -199,6 +256,12 @@
                                 label="City"
                                 placeholder="Avignon "
                                 success-message="City is correct !"
+                                />
+                            <InputField
+                                name="postal_code"
+                                type="number"
+                                label="Postal code"
+                                success-message="Postal code is correct !"
                                 />
                             <InputField
                                 name="phone_number"

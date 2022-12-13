@@ -92,7 +92,7 @@ export class CartItem implements ICartItem {
   qty: number = 0;
   shopping_session_id: number = 0;
   album_id = 0;
-  created_date?: string;
+  created_date?: Date;
 
   constructor(fields: Partial<ICartItem>) {
     Object.assign(this, fields);
@@ -102,19 +102,20 @@ export class OrderDetail implements IOrderDetail {
   id?: number;
   total: number = 0;
   user_id: number = 0;
-  created_date?: string;
+  // created_date?: string;
   list_payment: PaymentDetail[] = [];
+  created_date?: Date | undefined;
   constructor(fields: Partial<IOrderDetail>) {
     Object.assign(this, fields);
   }
-  created_at?: string | undefined;
+ 
 }
 export class OrderItem implements IOrderItem {
   id?: number;
   qty = 0;
   order_detail_id = 0;
   album_id = 0;
-  created_date?: string;
+  created_date?: Date;
   constructor(fields: Partial<IOrderItem>) {
     Object.assign(this, fields);
   }
@@ -129,8 +130,8 @@ export class PaymentDetail implements IPaymentDetail {
   order_detail_id = 0;
   expiration_date = "";
   cvv = ""
-  created_date?: string;
-  constructor(fields: Partial<IOrderItem>) {
+  created_date?: Date;
+  constructor(fields: Partial<IPaymentDetail>) {
     Object.assign(this, fields);
   }
 }
@@ -138,8 +139,8 @@ export class ShoppingSession implements IShoppingSession {
   id?: number;
   total = 0;
   user_id = 0;
-  created_date?: string;
-  constructor(fields: Partial<IOrderItem>) {
+  created_date?: Date;
+  constructor(fields: Partial<IShoppingSession>) {
     Object.assign(this, fields);
   }
 }
@@ -151,12 +152,12 @@ export class User implements IUser {
   telephone?: string;
   email?: string;
   password?: string;
-  created_at?: string;
+  created_date?: Date;
   is_admin: boolean = false;
   list_address: UserAddress[] = [];
   list_shopping_session: ShoppingSession[] = [];
   list_order_detail: OrderDetail[] = [];
-  constructor(fields: Partial<IOrderItem>) {
+  constructor(fields: Partial<IUser>) {
     Object.assign(this, fields);
   }
 }
@@ -169,8 +170,8 @@ export class UserAddress implements IUserAddress {
   postal_code = "";
   mobile?: string;
   user_id = 0;
-  created_date?: string;
-  constructor(fields: Partial<IOrderItem>) {
+  created_date?: Date;
+  constructor(fields: Partial<IUserAddress>) {
     Object.assign(this, fields);
   }
 }

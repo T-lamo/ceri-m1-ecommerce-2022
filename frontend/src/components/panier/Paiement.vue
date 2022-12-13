@@ -3,15 +3,55 @@
     import * as Yup from 'yup'
     import InputField from '../auth/InputField.vue';
     import { useToast } from 'vue-toast-notification';
+    import { storeToRefs } from 'pinia';
+    import { useAppStore } from '@/stores';
+    import { CartItem, OrderDetail, PaymentDetail } from '@/models';
+    import { create_order_detail, read_lastone_order_detail_byuserid, create_payment_detail, toast_function } from '../../services/crud'
+    import Swal from 'sweetalert2';
+    
+
+    const { list_cart_item, current_user, total_price }  = storeToRefs(useAppStore())
 
     /** on invalid submit button */
     const onInvalidSubmit = () => {
 
     }
     /** on add paiement */
-    const onAddPaiement = ((values:any) => {
+    const onAddPaiement = (async (values:any) => {
+        //shopping session
+
+        // create an order
+        let response_create_order = await create_order_detail({
+            "user_id": current_user.value?.id!,
+            "created_date": new Date(),
+            "total": total_price.value,
+        })
+
+        // get last order to get id order to add in payment detail
+        let response_read_last_order_byuserid = await read_lastone_order_detail_byuserid(current_user.value?.id!)
+
+        console.log(response_read_last_order_byuserid)
+
+        //paiement detail
+        let my_paiement = new PaymentDetail({
+            "amount": total_price.value,
+            "created_date": new Date(),
+            "credit_card_number": values.credit_card_number ,
+            "cvv": values.cvv,
+            "expiration_date": values.expiration_date ,
+            "name": values.account_holder,
+            "order_detail_id": response_read_last_order_byuserid.id,
+            "provider": values.provider ,
+            "status": "done"
+            })
         
-    })
+        // create paiement details
+
+        let res_payment = await create_payment_detail(my_paiement)
+                            .then(res => toast_function("Payment successfully done","success"))
+                            .catch(error => toast_function("Error","error"))
+                            
+        })
 
     /** generate input validation for Paiement */
     const schema_paiement = Yup.object().shape({
