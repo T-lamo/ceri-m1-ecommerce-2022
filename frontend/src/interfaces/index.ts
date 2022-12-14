@@ -63,10 +63,11 @@ export interface IOrderItem {
 }
 export interface IPaymentDetail {
   id?: number;
-  amount: number;
-  provider: string;
+  name?: string;
+  card_number?: string;
+  provider?: string;
+  expiration_date?: string;
   status: string;
-  order_detail_id: number;
   created_at?: string;
 }
 

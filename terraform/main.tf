@@ -2,6 +2,7 @@
 terraform {
   cloud {
     organization = "ecom_project"
+
     workspaces {
       name = "ceri-m1-ecommerce-2022"
     }
