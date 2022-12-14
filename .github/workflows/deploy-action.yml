@@ -16,4 +16,5 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.tf_token }}
       - run: terraform init
+      - run: terraform plan
       - run: terraform apply  
