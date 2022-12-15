@@ -137,6 +137,7 @@ onMounted(async () => {
   console.log("list user address", list_user_address.value);
 
   // seed_db();
+  
   // insert_seed_to_db();
 });
 </script>
