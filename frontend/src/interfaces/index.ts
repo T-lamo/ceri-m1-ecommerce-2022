@@ -41,12 +41,65 @@ export interface IPromo {
   album_id: number;
 }
 
+export interface ICartItem {
+  id?: number;
+  qty: number;
+  album_id: number;
+  shopping_session_id: number;
+  created_date?: Date;
+}
+export interface IOrderDetail {
+  id?: number;
+  total: number;
+  user_id: number;
+  created_date?: Date;
+}
+export interface IOrderItem {
+  id?: number;
+  qty: number;
+  order_detail_id: number;
+  album_id: number;
+  created_date?: Date;
+}
+export interface IPaymentDetail {
+  id?: number;
+  amount: number;
+  name: string;
+  provider: string;
+  credit_card_number: string;
+  status: string;
+  expiration_date: string;
+  cvv: string;
+  order_detail_id: number;
+  created_date?: Date;
+}
+
+export interface IShoppingSession {
+  id?: number;
+  total: number;
+  user_id: number;
+  created_date?: Date;
+}
 export interface IUser {
   id?: number;
   username: string;
-  email: string;
+  firstname?: string;
+  email?: string;
+  telephone?: string;
   password?: string;
   is_admin: boolean;
+  created_date?: Date;
+}
+export interface IUserAddress {
+  id?: number;
+  adress_line1: string;
+  adress_line2?: string;
+  city: string;
+  country: string;
+  postal_code: string;
+  mobile?: string;
+  user_id: number;
+  created_date?: Date;
 }
 
 export interface ILogin {

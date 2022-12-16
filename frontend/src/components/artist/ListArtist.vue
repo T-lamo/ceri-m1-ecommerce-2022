@@ -11,9 +11,7 @@
             return res;
         })
     })
-    const getImage = (imagePath:string) => {
-        return (imagePath);
-    }
+
 </script>
 
 <template>

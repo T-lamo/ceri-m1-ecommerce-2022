@@ -1,15 +1,12 @@
 <script lang="ts" setup>
-import OneCommand from './OneCommand.vue'
-import { ref , computed} from "vue"
+    import OneCommand from './OneCommand.vue'
+    import { computed, ref } from "vue"
+    import { read_one_album, toast_function } from '@/services/crud';
+    import { useAppStore } from '@/stores';
+    import { storeToRefs } from 'pinia';
 
-let id = 0
-let total = 0
-
-const list_album_panier=ref([
-        {"id":id++, "title": "Album 1", "Description":"description album 1","Chanteur":"chanerur 1","Annee":2022,"Duree":45,"Prix":452},
-        {"id":id++, "title": "Album 1", "Description":"description album 1","Chanteur":"chanerur 1","Annee":2022,"Duree":45,"Prix":452},
-        {"id":id++, "title": "Album 1", "Description":"description album 1","Chanteur":"chanerur 1","Annee":2022,"Duree":45,"Prix":452},
-    ])
+    const {list_cart_item} = storeToRefs(useAppStore())
+    
 </script>
 
 <template>
@@ -18,10 +15,10 @@ const list_album_panier=ref([
                     <div class="card-header">
                         Liste des commandes
                     </div>
-                    <!-- One command -->
                     <OneCommand
-                        v-for="item in list_album_panier" :key="item.id"
-                                />
+                        v-for="item in list_cart_item" :key="item.id"
+                        :item=item
+                        />
                     
                 </div>
             </div>

@@ -12,7 +12,6 @@
 import Header from './components/navigation/Header.vue'
 import Homepage from './components/Homepage.vue'
 import Test from './components/navigation/Header.vue'
-import Promo from './components/navigation/Promo.vue'
 import ListCategory from './components/category/ListCategory.vue'
 import ListAlbum from './components/album/ListAlbum.vue'
 import Footer from './components/navigation/Footer.vue'
@@ -24,6 +23,7 @@ import OneArtistDetail from './components/artist/OneArtistDetail.vue'
 import Authentification from './components/auth//Authentification.vue'
 import Panier_Multistep from './components/panier/Panier_Multistep.vue'
 import Liste_Commandes from './components/panier/Liste_Commandes.vue'
+import Promo from './components/promo/Promo.vue'
 import Wizard from 'form-wizard-vue3'
 
 export default {
@@ -33,7 +33,6 @@ export default {
     Homepage,
     Footer,
     Test,
-    Promo,
     ListCategory,
     ListAlbum,
     Footer,
@@ -45,6 +44,7 @@ export default {
     Authentification,
     Panier_Multistep,
     Liste_Commandes,
+    Promo,
     Wizard,
   }
 }
