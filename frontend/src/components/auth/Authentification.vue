@@ -133,7 +133,7 @@
 
         // get last shopping session for a user loggedin
         let found = false
-        let response_read_last_shopping = await read_last_one_shopping_session_byuser(current_user.value?.id!)
+        let response_read_last_shopping = await read_last_one_shopping_session_byuser(current_user.value?.id!) // ajouter des données dans le panier???
         last_shopping_session.value = response_read_last_shopping
         // create a new variable of shopping session
         let shopping_session = new ShoppingSession({
