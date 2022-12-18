@@ -63,15 +63,12 @@ export interface IOrderItem {
 }
 export interface IPaymentDetail {
   id?: number;
-  amount: number;
-  name: string;
-  provider: string;
-  credit_card_number: string;
+  name?: string;
+  card_number?: string;
+  provider?: string;
+  expiration_date?: string;
   status: string;
-  expiration_date: string;
-  cvv: string;
-  order_detail_id: number;
-  created_date?: Date;
+  created_at?: string;
 }
 
 export interface IShoppingSession {

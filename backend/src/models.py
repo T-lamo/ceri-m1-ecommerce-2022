@@ -115,6 +115,9 @@ class OrderDetail(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     total: str
     user_id: int
+    payment_status: Boolean
+    delivery_status: Boolean
+    orders_status: str 
     created_date: datetime 
 
 
@@ -126,10 +129,13 @@ class OrderItem(SQLModel, table=True):
 
 class PaymentDetail(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    amount: float
+    name: str
+    card_number: str
+    provider: str
+    expiration_date: str
     status: Boolean
-    order_detail_id: int
     created_date: datetime 
+
 
 
 class Login():

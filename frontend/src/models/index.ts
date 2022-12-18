@@ -92,7 +92,10 @@ export class OrderDetail implements IOrderDetail {
   id?: number;
   total: number = 0;
   user_id: number = 0;
-  // created_date?: string;
+  payment_status: boolean = false;
+  delivery_status: boolean = false;
+  orders_status: string = "";
+  created_date?: string;
   list_payment: PaymentDetail[] = [];
   created_date?: Date | undefined;
   constructor(fields: Partial<IOrderDetail>) {
@@ -112,29 +115,13 @@ export class OrderItem implements IOrderItem {
 }
 export class PaymentDetail implements IPaymentDetail {
   id?: number;
-  name = ""
-  amount = 0;
-  credit_card_number = ""
-  provider = "";
+  name?: string;
+  card_number?: string;
+  provider?: string;
+  expiration_date?: string;
   status = "";
-  order_detail_id = 0;
-  expiration_date = "";
-  cvv = "" ;
-  created_date?: Date;
-  constructor(fields: Partial<IPaymentDetail>) {
-    Object.assign(this, fields);
-  }
-}
-
-
-export class CartItem implements ICartItem {
-  id?: number;
-  qty: number = 0;
-  shopping_session_id: number = 0;
-  album_id = 0;
-  created_date?: Date;
-
-  constructor(fields: Partial<ICartItem>) {
+  created_date?: string;
+  constructor(fields: Partial<IOrderItem>) {
     Object.assign(this, fields);
   }
 }
