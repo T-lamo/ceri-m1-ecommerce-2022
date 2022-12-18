@@ -87,17 +87,7 @@ export class Category implements ICategory {
   }
 }
 
-export class CartItem implements ICartItem {
-  id?: number;
-  qty: number = 0;
-  shopping_session_id: number = 0;
-  album_id = 0;
-  created_date?: Date;
 
-  constructor(fields: Partial<ICartItem>) {
-    Object.assign(this, fields);
-  }
-}
 export class OrderDetail implements IOrderDetail {
   id?: number;
   total: number = 0;
@@ -129,12 +119,26 @@ export class PaymentDetail implements IPaymentDetail {
   status = "";
   order_detail_id = 0;
   expiration_date = "";
-  cvv = ""
+  cvv = "" ;
   created_date?: Date;
   constructor(fields: Partial<IPaymentDetail>) {
     Object.assign(this, fields);
   }
 }
+
+
+export class CartItem implements ICartItem {
+  id?: number;
+  qty: number = 0;
+  shopping_session_id: number = 0;
+  album_id = 0;
+  created_date?: Date;
+
+  constructor(fields: Partial<ICartItem>) {
+    Object.assign(this, fields);
+  }
+}
+
 export class ShoppingSession implements IShoppingSession {
   id?: number;
   total = 0;
