@@ -31,6 +31,7 @@ provider "google" {
 # resource "google-cloud" "backend" {
 #   template {
 #     spec {
+#       service_account_name = "terraform-greenfish@ceri-m1-ecommerce-2022.iam.gserviceaccount.com"
 #       container {
 #         //...
 #         env {
