@@ -35,6 +35,7 @@ export class Album implements IAlbum {
   stock_qty!: number;
   description!: string;
   category_id!: number;
+  created_date?: Date;
   list_song?: ISong[] = [];
 
   constructor(fields?: Partial<IAlbum>) {
@@ -52,6 +53,7 @@ export class Artist implements IArtist {
   lastname: string = "";
   date_of_birth?: string = Date();
   cover?: string = "url";
+  created_date?: Date;
   list_album?: Album[] = [];
 
   constructor(fields?: Partial<IArtist>) {
@@ -79,6 +81,7 @@ export class Category implements ICategory {
   id?: number = -1;
   label!: string;
   list_album?: Album[] = [];
+  created_date?: Date ;
   constructor(data: Partial<ICategory>) {
     Object.assign(this, data);
   }
@@ -87,6 +90,16 @@ export class Category implements ICategory {
   }
 }
 
+export class CartItem implements ICartItem {
+  id?: number | undefined;
+  qty!: number;
+  album_id!: number;
+  shopping_session_id!: number ;
+  created_date?: Date | undefined;
+  constructor(data: Partial<ICartItem>) {
+    Object.assign(this, data);
+  }
+}
 
 export class OrderDetail implements IOrderDetail {
   id?: number;
@@ -94,8 +107,8 @@ export class OrderDetail implements IOrderDetail {
   user_id: number = 0;
   payment_status: boolean = false;
   delivery_status: boolean = false;
+  send_status: boolean = false;
   orders_status: string = "";
-  created_date?: string;
   list_payment: PaymentDetail[] = [];
   created_date?: Date | undefined;
   constructor(fields: Partial<IOrderDetail>) {
@@ -115,13 +128,10 @@ export class OrderItem implements IOrderItem {
 }
 export class PaymentDetail implements IPaymentDetail {
   id?: number;
-  name?: string;
-  card_number?: string;
-  provider?: string;
-  expiration_date?: string;
   status = "";
-  created_date?: string;
-  constructor(fields: Partial<IOrderItem>) {
+  created_date?: Date;
+  order_detail_id?: number;
+  constructor(fields: Partial<IPaymentDetail>) {
     Object.assign(this, fields);
   }
 }

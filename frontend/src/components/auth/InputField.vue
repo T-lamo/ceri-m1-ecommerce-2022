@@ -1,7 +1,6 @@
 <script setup lang="ts">
-    import { toRef , defineProps, computed} from 'vue';
+    import { defineProps, computed} from 'vue';
     import { useField } from 'vee-validate'
-import type { error } from 'console';
 
     const props = defineProps ({
         label: {
@@ -14,7 +13,7 @@ import type { error } from 'console';
         },
         value: {
             type: String,
-            default: '',
+            // default: '',
         },
         type: {
             type: String,
@@ -27,9 +26,9 @@ import type { error } from 'console';
         placeholder: {
             type: String,
             default: '',
-        },
+        }
     })
-
+   
     // const my_name = toRef(props, 'name') or
     const name = computed(() => props.name)
 

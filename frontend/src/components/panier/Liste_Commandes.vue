@@ -5,7 +5,10 @@
     import { useAppStore } from '@/stores';
     import { storeToRefs } from 'pinia';
 
-    const {list_cart_item} = storeToRefs(useAppStore())
+    const {list_cart_item, last_shopping_session} = storeToRefs(useAppStore())
+    console.log("last_shopping_session: ")
+    console.log(last_shopping_session.value)
+    
     
 </script>
 

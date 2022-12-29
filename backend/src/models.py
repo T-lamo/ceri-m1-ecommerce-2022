@@ -105,7 +105,6 @@ class ShoppingSession(SQLModel, table=True):
 
 class CartItem(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    total: int
     album_id: int
     qty: int
     shopping_session_id: int
@@ -117,6 +116,7 @@ class OrderDetail(SQLModel, table=True):
     user_id: int
     payment_status: Boolean
     delivery_status: Boolean
+    send_status: Boolean
     orders_status: str 
     created_date: datetime 
 
@@ -125,15 +125,14 @@ class OrderItem(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     qty: int
     order_detail_id: int
+    album_id:int
     created_date: datetime 
 
 class PaymentDetail(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
-    card_number: str
-    provider: str
-    expiration_date: str
-    status: Boolean
+    amount: str
+    status: str
+    order_detail_id: int
     created_date: datetime 
 
 
