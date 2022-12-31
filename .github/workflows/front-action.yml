@@ -1,7 +1,9 @@
 name: front-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: 
-  workflow_call:
+  push:
+    branches:
+      - "main"
   
 jobs:
   test-frontend:
@@ -16,3 +18,7 @@ jobs:
           node-version: 16
       - run: npm ci
       - run: npm run test:unit
+
+
+
+  

@@ -21,3 +21,38 @@ Créer un volume du nom **ecom_db_backup** avec la commande `docker volume creat
 https://developer.hashicorp.com/terraform/tutorials/automation/github-actions?utm_source=WEBSITE&utm_medium=WEB_IO&utm_offer=ARTICLE_PAGE&utm_content=DOCS
 
 https://developer.hashicorp.com/terraform/cloud-docs/api-docs
+Secret manager 
+
+Architecture microservice
+Monolitique
+Universal backend
+SOA service orienter application 
+
+les port qui est utilisé: sudo netstat -ltnp  | grep -w ':80'
+
+Moteur de recherche
+Algolia
+
+### cloud-sql-proxy
+Télécharger le binaire CloudSQL proxy pour votre plateforme https://github.com/GoogleCloudPlatform/cloud-sql-proxy?utm_source=cloud.google.com&utm_medium=referral#installation
+Assurez vous que le binaire à les perm exec (chmod +x PATH/TO/BIN)
+Ensuite il suffit de lancer le binaire avec la commande suivante:
+./cloud-sql-proxy --credentials-file PATH/TO/KEY.json ceri-m1-ecommerce-2022:europe-west1:mysql-primary
+
+./cloud-sql-proxy --credentials-file key.json ceri-m1-ecommerce-2022:europe-west1:mysql-primary
+
+
+GOOGLE_APPLICATION_CREDENTIALS
+
+
+## credentials-file path
+europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish
+
+## stop mysql service if it is running
+sudo systemct stop mysql
+
+## connect to database from terminal
+mysql -u greenfish -p --host 127.0.0.1
+
+## cloud run service basic
+google cloud ressource

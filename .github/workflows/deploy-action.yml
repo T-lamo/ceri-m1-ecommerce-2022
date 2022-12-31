@@ -16,4 +16,4 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.tf_token }}
       - run: terraform init
-      - run: terraform apply -auto-approve -input=False 
+      - run: terraform apply  

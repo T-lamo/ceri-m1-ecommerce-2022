@@ -103,12 +103,14 @@ export class OrderDetail implements IOrderDetail {
   total: number = 0;
   user_id: number = 0;
   // created_date?: string;
+  payment_status?: boolean;
+  delivery_status?: boolean;
+  orders_status?: string;
   list_payment: PaymentDetail[] = [];
   created_date?: Date | undefined;
   constructor(fields: Partial<IOrderDetail>) {
     Object.assign(this, fields);
   }
- 
 }
 export class OrderItem implements IOrderItem {
   id?: number;
@@ -122,14 +124,14 @@ export class OrderItem implements IOrderItem {
 }
 export class PaymentDetail implements IPaymentDetail {
   id?: number;
-  name = ""
+  name = "";
   amount = 0;
-  credit_card_number = ""
+  credit_card_number = "";
   provider = "";
   status = "";
   order_detail_id = 0;
   expiration_date = "";
-  cvv = ""
+  cvv = "";
   created_date?: Date;
   constructor(fields: Partial<IPaymentDetail>) {
     Object.assign(this, fields);

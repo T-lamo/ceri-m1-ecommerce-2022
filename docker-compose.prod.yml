@@ -23,8 +23,8 @@ services:
       - ./backend/.env
     ports:
       - 8000:8000
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
 
   reverse_proxy:
     build:
@@ -33,28 +33,28 @@ services:
     ports:
       - 80:80
     depends_on:
-      - db
+      # - db
       - backend
       - frontend
 
-  db:
-    image: mysql
-    container_name: db
-    restart: always
-    volumes:
-      - type: volume
-        source: ecom_db_backup
-        target: /var/lib/mysql
-    env_file: ./db/.env
-    ports:
-      - 3307:3306
+  # db:
+  #   image: mysql
+  #   container_name: db
+  #   restart: always
+  #   volumes:
+  #     - type: volume
+  #       source: ecom_db_backup
+  #       target: /var/lib/mysql
+  #   env_file: ./db/.env
+  #   ports:
+  #     - 3307:3306
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
 
-volumes:
-  ecom_db_backup:
-    external: true
+# volumes:
+#   ecom_db_backup:
+#     external: true
