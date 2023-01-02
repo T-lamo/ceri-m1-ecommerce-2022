@@ -1,7 +1,8 @@
 <template>
   <!-- <HelloWorld msg="Thank you for using our product. We're glad you're with us."/> -->
   <!-- <Header/> -->
-  <Test/>
+  <Header
+    />
   <router-view></router-view>
   <!-- <Footer/> -->
    <!-- <Homepage/> -->
@@ -11,7 +12,7 @@
 <script>
 import Header from './components/navigation/Header.vue'
 import Homepage from './components/Homepage.vue'
-import Test from './components/navigation/Header.vue'
+// import Test from './components/navigation/Header.vue'
 import ListCategory from './components/category/ListCategory.vue'
 import ListAlbum from './components/album/ListAlbum.vue'
 import Footer from './components/navigation/Footer.vue'
@@ -32,7 +33,6 @@ export default {
     Header,
     Homepage,
     Footer,
-    Test,
     ListCategory,
     ListAlbum,
     Footer,

@@ -1,25 +1,67 @@
 <script lang="ts" setup>
    import Liste_Commandes from './Liste_Commandes.vue';
+   import RecapitulatifCommandes from './RecapitulatifCommandes.vue';
    import Paiement from './Paiement.vue';
    import Livraison from './Livraison.vue'
    import { ref } from "vue"
    import { useAppStore } from '@/stores';
    import { storeToRefs } from 'pinia';
    import type { CartItem } from '@/models';
+   import { create_order_detail, read_lastone_order_detail_byuserid,create_order_item } from '@/services/crud';
 
-   const {list_cart_item, total_price, list_album} = storeToRefs(useAppStore())
+   const {list_cart_item, total_price, list_album, current_user, current_order_detail} = storeToRefs(useAppStore())
+
+   // create an order detail and add order items
+   const create_order_detail_order_items = async () => {
+
+    let new_order_detail =  await create_order_detail({
+        "created_date": new Date(),
+        "user_id": current_user.value?.id!,
+        "total": total_price.value,
+        "delivery_status": false,
+        "payment_status":false,
+        "send_status": false,
+        "orders_status": "rien"
+    })
+    // get last order detail for a user
+    let last_order_detail = await read_lastone_order_detail_byuserid(current_user.value?.id!)
     
+    // update current_order_detail in store
+    current_order_detail.value = last_order_detail
+    // current_order_detail.value?.delivery_status = last_order_detail.delivery_status
+
+    // create order items for the order detail
+    list_cart_item.value.forEach(async (element:CartItem) => {
+            await create_order_item({
+                "album_id": element.album_id,
+                "created_date": new Date(),
+                "order_detail_id": last_order_detail.id!,
+                "qty": element.qty
+            })
+        })
+    
+
+    }
+    
+
    let step = ref(0)
    // move forward
    const next_step = ((step_id:number) => {
         switch(step_id){
             case 1:
                 console.log('passer la commande')
+                // create order detail and order items
+                create_order_detail_order_items()
                 break;
             case 2:
+                // create delivery address
+
                 console.log('choisir adresse de livraison et de facturation ??')
                 break;
             case 3:
+                // confirm payement
+                
+                // update payement status
                 console.log('choisir carte de paiement ??')
                 break;
         }
@@ -128,7 +170,9 @@
         </div>
         <div v-if="step === 3">
             <div>
-                <p>Récapitulatif commandes: </p>
+                <RecapitulatifCommandes
+                    />
+
             </div>
             <div class="col-12 text-center">
                 <button class="btn btn-secondary" @click="prev_step">

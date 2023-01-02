@@ -1,13 +1,13 @@
 <script lang="ts" setup>
     import { defineProps, onMounted, ref } from 'vue';
-    import { read_promos , read_artists, read_one_album, read_albums} from '@/services/crud';
-    import { Artist, Promo, type Album } from '../../models';
+    import { read_promos , read_artists, read_one_album, read_albums,update_cart_item, 
+      create_cart_item, read_cart_items_by_sessionid} from '@/services/crud';
+    import { Artist, CartItem, Promo, type Album } from '../../models';
     import { storeToRefs } from 'pinia';
     import { useAppStore } from '@/stores';
     import { toast_function } from '@/services/crud';
     
     let id_cart_item = 0
-
 
     const props = defineProps<{
         item:Album,
@@ -28,8 +28,8 @@
     // console.log(dateOfRelease.getDay())
     // console.log(dateOfRelease.getMonth())
     // console.log(dateOfRelease.getFullYear())
-    const { list_promo , list_artist, list_cart_item, current_shopping_session} = storeToRefs(useAppStore())
-    let my_promo:Promo
+    const { list_promo , list_artist, list_cart_item, current_shopping_session, isLoggedIn} = storeToRefs(useAppStore())
+   
     onMounted(async () => {
       list_promo.value = (await read_promos()).map((res:any) => {
             return res;
@@ -66,32 +66,69 @@
         return my_selected_artist
     }
 
-    const add_me_to_cart = async (id_album:number,click_type:number) => {
-      let my_article;
-      /** specify whether it is an article added?=1 added to favory lists?=0 */
-      let res = await read_one_album(id_album)
-        .then((res) => 
-          my_article = res)
-        .catch((error) => console.log(error))
-     
-      
-      console.log("here log")
-      console.log(my_article)
-      list_cart_item.value.push({
-        
-        'qty':1,
-        'album_id': id_album,
-        'shopping_session_id': current_shopping_session.value?.id!,
-        'created_date': new Date()
-
+    const check_existence_cart_item = ((shopping_session_id:number, album_id:number) => {
+      let found = false
+      list_cart_item.value.forEach(async (element:CartItem) => {
+        if (shopping_session_id == element.shopping_session_id && album_id == element.album_id) {
+          // update cart item to db
+          
+          // update cart item in store
+          element.qty+=1
+          element.created_date = new Date()
+          found = true
+        }
       })
-      console.log("list cart items for ")
-      list_cart_item.value.forEach(element => {
-        console.log(element)
-      });
+      return found
+    })
+
+    const add_me_to_cart = async (id_album:number,click_type:number) => {
       
-      // instance.dismiss()
-      console.log("add me to chart");
+      // if loggedd in
+      if (isLoggedIn.value == true) {
+        let my_article;
+        /** specify whether it is an article added?=1 added to favory lists?=0 */
+        let res = await read_one_album(id_album)
+          .then((res) => 
+            my_article = res)
+          .catch((error) => console.log(error))
+        
+        // only if cart item does not in cart item
+        if (check_existence_cart_item(current_shopping_session.value?.id!,id_album)) {
+
+        } else {
+            // create a new cart item
+            let one_cart_item = new CartItem({
+              'qty':1,
+              'album_id': id_album,
+              'shopping_session_id': current_shopping_session.value?.id!,
+              'created_date': new Date()
+            })
+
+            // create a cart item to shopping session in db
+            let response_create_a_cart_item = await create_cart_item(one_cart_item)
+              .then(res => console.log("cart item created successfully"))
+              .catch(error => console.log(error))
+
+            // add to list_cart_item selected cart item
+            list_cart_item.value.push(one_cart_item)
+            console.log("list_cart_item length")
+            console.log(list_cart_item.value.length)
+
+        }
+
+        console.log("list cart items for ")
+        list_cart_item.value.forEach(element => {
+          console.log(element)
+        });
+        
+        toast_function("Article successfully add to cart!","success")
+        // instance.dismiss()
+        console.log("add me to chart");
+      }
+      else {
+        toast_function("Please login","error")
+      }
+      
     } 
    
 

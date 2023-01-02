@@ -2,15 +2,14 @@
     import { Form } from 'vee-validate'
     import * as Yup from 'yup'
     import InputField from '../auth/InputField.vue';
-    import { useToast } from 'vue-toast-notification';
     import { storeToRefs } from 'pinia';
     import { useAppStore } from '@/stores';
     import { CartItem, OrderDetail, PaymentDetail } from '@/models';
-    import { create_order_detail, read_lastone_order_detail_byuserid, create_payment_detail, toast_function } from '../../services/crud'
+    import { create_order_detail, read_lastone_order_detail_byuserid, create_payment_detail, toast_function, read_cart_items_by_sessionid} from '../../services/crud'
     import Swal from 'sweetalert2';
     
 
-    const { list_cart_item, current_user, total_price }  = storeToRefs(useAppStore())
+    const { list_cart_item, current_user, total_price, current_order_detail, current_shopping_session, current_payement }  = storeToRefs(useAppStore())
 
     /** on invalid submit button */
     const onInvalidSubmit = () => {
@@ -18,38 +17,62 @@
     }
     /** on add paiement */
     const onAddPaiement = (async (values:any) => {
-        //shopping session
-
-        // create an order
-        let response_create_order = await create_order_detail({
-            "user_id": current_user.value?.id!,
-            "created_date": new Date(),
-            "total": total_price.value,
-        })
 
         // get last order to get id order to add in payment detail
         let response_read_last_order_byuserid = await read_lastone_order_detail_byuserid(current_user.value?.id!)
-
+        
+        console.log("last order: ")
         console.log(response_read_last_order_byuserid)
 
         //paiement detail
         let my_paiement = new PaymentDetail({
-            "amount": total_price.value,
-            "created_date": new Date(),
-            "credit_card_number": values.credit_card_number ,
-            "cvv": values.cvv,
-            "expiration_date": values.expiration_date ,
-            "name": values.account_holder,
-            "order_detail_id": response_read_last_order_byuserid.id,
-            "provider": values.provider ,
-            "status": "done"
+            "amount": total_price.value, 
+            "status": "payé",
+            "order_detail_id": current_order_detail.value?.id,
+            "created_date": new Date()
+     
             })
-        
+        // add current payment detail
+        current_payement.value = my_paiement
+        console.log("current payment: ")
+        console.log(current_payement.value)
         // create paiement details
+        Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You will save payement details",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, pay it!'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                    Swal.fire(
+                        'Payed!',
+                        'Your order of '+ total_price.value+' has been paid!',
+                        'success'
+                    )
+                    // create payement detail
+                    let res = await create_payment_detail(my_paiement) 
 
-        let res_payment = await create_payment_detail(my_paiement)
-                            .then(res => toast_function("Payment successfully done","success"))
-                            .catch(error => toast_function("Error","error"))
+                    console.log("create a payement")
+                    
+                    // update order detail ????
+                    current_order_detail.value.payment_status = true
+
+                    
+
+                    console.log("current order detail: ")
+                    console.log(current_order_detail.value)
+                    // delete list_cart_item
+                    for (let i = 0; i < list_cart_item.value.length + 1; i++) {
+                        list_cart_item.value.pop();
+                    }
+                    
+                    console.log("after pop: ")
+                    console.log(list_cart_item.value)
+                }
+                })
                             
         })
 
@@ -106,7 +129,7 @@
                         />
                     <InputField
                         name="cvv"
-                        type="number"
+                        type="password"
                         label="CVV/CVC"
                         success-message="CVV/CVC name is correct !"
                         />
@@ -115,41 +138,7 @@
                             Enregistrer
                         </button>
                     </div>
-                </Form>    
-                <!-- <div class="col-12">
-                    <div class="d-flex flex-column">
-                        <p class="text mb-1">Titulaire du compte</p>
-                        <input class="form-control mb-3" type="text" placeholder="Name">
-                    </div>
-                </div> -->
-
-                <!-- <div class="col-12">
-                    <div class="d-flex flex-column">
-                        <p class="text mb-1">Nom de la banque </p>
-                        <input class="form-control mb-3" type="text" placeholder="Name">
-                    </div>
-                </div> -->
-
-                <!-- <div class="col-12">
-                    <div class="d-flex flex-column">
-                        <p class="text mb-1">Numero de la carte bancaire</p>
-                        <input class="form-control mb-3" type="text" placeholder="0526 8457 996526">
-                    </div>
-                </div> -->
-                
-                <!-- <div class="col-6">
-                    <div class="d-flex flex-column">
-                        <p class="text mb-1">Date d'expiration</p>
-                        <input class="form-control mb-3" type="text" placeholder="MM/YYYY">
-                    </div>
-                </div> -->
-
-                <!-- <div class="col-6">
-                    <div class="d-flex flex-column">
-                        <p class="text mb-1">CVV/CVC</p>
-                        <input class="form-control mb-3 pt-2 " type="password" placeholder="***">
-                    </div>
-                </div> -->
+                </Form>   
 
             </div>
         </div>

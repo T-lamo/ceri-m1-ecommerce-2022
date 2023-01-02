@@ -2,7 +2,7 @@
     import { ref,onMounted } from "vue"
     import { ShoppingSession, User } from "@/models";
     import { create_user,read_users, toast_function , 
-      create_shopping_session, read_shopping_sessions, read_cart_items, read_last_one_shopping_session_byuser} from "@/services/crud";
+     read_last_one_shopping_session_byuser, read_cart_items_by_sessionid} from "@/services/crud";
     import { useAppStore } from "@/stores";
     import { storeToRefs } from "pinia";
     import { Form } from 'vee-validate';
@@ -16,45 +16,45 @@
     const { list_category, list_user, current_user, isLoggedIn, list_cart_item,
        list_shopping_Session , last_shopping_session, current_shopping_session} = storeToRefs(useAppStore())
 
-    const get_last_shoppsession_db = (list_shop_sess_db:Array<ShoppingSession>):boolean => {
+    // const get_last_shoppsession_db = (list_shop_sess_db:Array<ShoppingSession>):boolean => {
 
-      let found = false
-      let count = 0
-      list_shop_sess_db.forEach((element:ShoppingSession) => {
+    //   let found = false
+    //   let count = 0
+    //   list_shop_sess_db.forEach((element:ShoppingSession) => {
         
-        // iterate through user list
-        list_user.value.forEach((user_item:User) => {
-            // if user id is found in list shopping sesssion, get the last element
-            if (user_item.id == element.user_id) {
-              last_shopping_session.value = element
-              found = true
-              count+=1
-            }
-          })
-        })
-      console.log("count value: ",count)
-      return found
-    }
+    //     // iterate through user list
+    //     list_user.value.forEach((user_item:User) => {
+    //         // if  id is found in list shopping sesssion, get the last element
+    //         if (user_item.id == element.user_id) {
+    //           last_shopping_session.value = element
+    //           found = true
+    //           count+=1
+    //         }
+    //       })
+    //     })
+    //   console.log("count value: ",count)
+    //   return found
+    // }
 
-    const get_current_shoppsession_db = (list_shop_sess_db:Array<ShoppingSession>):boolean => {
+    // const get_current_shoppsession_db = (list_shop_sess_db:Array<ShoppingSession>):boolean => {
 
-      let found = false
-      let count = 0
-      list_shop_sess_db.forEach((element:ShoppingSession) => {
+    //   let found = false
+    //   let count = 0
+    //   list_shop_sess_db.forEach((element:ShoppingSession) => {
 
-        // iterate through user list
-        list_user.value.forEach((user_item:User) => {
-            // if user id is found in list shopping sesssion, get the last element
-            if (user_item.id == element.user_id) {
-              current_shopping_session.value= element
-              found = true
-              count+=1
-            }
-          })
-        })
-      console.log("count value: ",count)
-      return found
-    }
+    //     // iterate through user list
+    //     list_user.value.forEach((user_item:User) => {
+    //         // if user id is found in list shopping sesssion, get the last element
+    //         if (user_item.id == element.user_id) {
+    //           current_shopping_session.value= element
+    //           found = true
+    //           count+=1
+    //         }
+    //       })
+    //     })
+    //   console.log("count value: ",count)
+    //   return found
+    // }
 
     /** routing */
 
@@ -68,18 +68,15 @@
     
     /** initialize userLoggin in store to false */
     isLoggedIn.value = false
-    async function digestMessage(message:string) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(message);
-        const hash = await crypto.subtle.digest('SHA-256', data);
-        // console.log("hash me")
-        // console.log(hash)
-        return hash;
-      }
-      digestMessage("dkjfsljhefjhkj")
-          // .then((digestBuffer) => console.log(digestBuffer.byteLength));
-    /** security of password a voir avec crypto JS */ 
-   
+    // async function digestMessage(message:string) {
+    //     const encoder = new TextEncoder();
+    //     const data = encoder.encode(message);
+    //     const hash = await crypto.subtle.digest('SHA-256', data);
+    //     // console.log("hash me")
+    //     // console.log(hash)
+    //     return hash;
+    //   }
+    
     onMounted(async () => {
       // console.log("display users: ")
       list_user.value = (await read_users()).map((res:any) => {
@@ -92,8 +89,10 @@
       let res:Boolean = false;
       list_user.value.forEach(element => {
         // console.log(element.email)
-        if (element.email === my_email && element.password === my_pass) {
+        if (element.email == my_email && element.password == my_pass) {
           current_user.value = element
+          // add current_user to localstorage
+          localStorage.setItem("user", JSON.stringify(element))
           res = true
         }
       })
@@ -104,14 +103,14 @@
     const onSignUp = (async (values:any) => {
       
       if (!check_email(values.email,values.password)) {
-        // const response = await create_user({
-        //   "telephone":values.phone,
-        //   "email":values.email,
-        //   "username":values.username,
-        //   "firstname":values.firstname,
-        //   "password":values.password,
-        //   "created_date": new Date(),
-        //   "is_admin": false})
+        const response = await create_user({
+          "telephone":values.phone,
+          "email":values.email,
+          "username":values.username,
+          "firstname":values.firstname,
+          "password":values.password,
+          "created_date": new Date(),
+          "is_admin": false})
         
         toast_function("You are successfully signed up!","success")
       }
@@ -126,15 +125,44 @@
     const onLogin =  (async (values:any) => {
       const $toast = useToast();
       // if log in success
+      console.log(values.email)
+      console.log(values.password)
+      console.log(check_email(values.email,values.password))
       if (check_email(values.email,values.password)) {
-
         // initialize isLoggedIn store value
         isLoggedIn.value = true
 
-        // get last shopping session for a user loggedin
-        let found = false
+        // get last shopping session for user logged in
         let response_read_last_shopping = await read_last_one_shopping_session_byuser(current_user.value?.id!)
-        last_shopping_session.value = response_read_last_shopping
+        // if shopping session for user logged in exist
+        if(response_read_last_shopping!= null) {
+          console.log(response_read_last_shopping)
+          console.log("last shopping sesssion id: ")
+          console.log(response_read_last_shopping.id)
+          // check if there is an cartitem inside the shopping session
+          // get last cart item for a shopping session
+          let response_list_cart_item = await read_cart_items_by_sessionid(response_read_last_shopping.id!)
+              // .then(res => console.log("get cart items by shopsess successfull: ",res))
+              // .catch(error => console.log(error))
+          
+          // assign to list_cart_item cart items from db
+          // response_list_cart_item.forEach((element:ShoppingSession) => {
+          //   list_cart_item.value.push(element)
+          // })
+          // if cart items are not empty
+          console.log("list cart items last session: ")
+          console.log(response_list_cart_item)
+          if (response_list_cart_item != null) {
+            console.log("list cart item not null")
+            list_cart_item.value = response_list_cart_item
+          } else {
+            console.log("list cart item null")
+          }
+          
+        } else {
+          console.log("not an existence session yet! ")
+        }
+
         // create a new variable of shopping session
         let shopping_session = new ShoppingSession({
           "user_id": current_user.value?.id,
@@ -142,46 +170,25 @@
           "created_date": new Date(),
         })
 
-        // if shopping session exists
-        if(found = true) { 
-            // get cartItem corresponding to shopping session
-            let cart_items_db = await read_cart_items()
-            console.log("read cart items in db: ")
-            console.log(cart_items_db) 
-            // list_cart_item.value = cart_items_db                
-            console.log("shopping session for user exist last shopping session")
-            console.log(last_shopping_session.value)
-            if (list_cart_item.value.length != 0) {
-              console.log(list_cart_item.value.length)
-            }
-            // let found = get_last_shoppsession_db(list_shop_sess_db)
-
-        } else {
-          console.log("shopping session for user does not exist")
-          
-        }
-
         // add shopping session to database
-        const response_create_shop_sess = await create_shopping_session(shopping_session)
-                      .then((res) => console.log("shopping session created successfully"))
-                      .catch((error) => console.log(error))
-
-        // initialize current shopping session values 
-        // get_current_shoppsession_db(list_shop_sess_db)
-        console.log("current shopping session: ")
-        let response_read_one_shopping_session = await read_last_one_shopping_session_byuser(current_user.value?.id!)
-        current_shopping_session.value = response_read_one_shopping_session
+        // const response_create_shop_sess = await create_shopping_session(shopping_session)
+        //               .then((res) => console.log("shopping session created successfully"))
+        //               .catch((error) => console.log(error))
+        // get last shopping session
+        let response_read_last_shopping_after_create = await read_last_one_shopping_session_byuser(current_user.value?.id!)
+        // add to current_shopping_session new created shopping session 
+        current_shopping_session.value = response_read_last_shopping_after_create
+        console.log("current_shopping_session.value")
         console.log(current_shopping_session.value)
-        toast_function("You are successfully logged in!","success")
-        setTimeout(() => {
-            router.push({
-            name: 'home',
-            replace:true
-          })
-        },1000)
 
-      }
-      else {
+        toast_function("You are successfully logged in!","success")
+            setTimeout(() => {
+                router.push({
+                name: 'home',
+                replace:true
+              })
+            },1000)
+      } else {
         toast_function("Sorry, wrong email or password! Do you have an account ?","error")
       }
     })
@@ -222,7 +229,7 @@
     /** use Yup to generate a login validation schema */
     const schema_login = Yup.object().shape({
       email: Yup.string().email().required(),
-      password: Yup.string().min(6).required()
+      password: Yup.string().min(1).required()
     })
 
     /** use Yup to generate a signup validation schema */
@@ -230,7 +237,7 @@
       username: Yup.string().required(),
       firstname: Yup.string().required(),
       email: Yup.string().email().required(),
-      phone: Yup.string().required().min(9)
+      phone: Yup.string().required().min(1)
           .oneOf([Yup.ref('phone')], 'Phone number must be at least 9 digits'),
       password: Yup.string().min(1).required(),
       confirm_password: Yup.string()

@@ -3,12 +3,15 @@
   import ListCategory from './category/ListCategory.vue';
   import ListArtist from './artist/ListArtist.vue';
   import Promo from './promo/Promo.vue';
-
+  import { storeToRefs } from 'pinia';
+  import { useAppStore } from '@/stores';
+  import Dashboard from './admin/Dashboard.vue';
+  const { current_user } = storeToRefs(useAppStore())
 
 </script>
 
 <template>
-  <div class="py-2 px-2">
+  <div class="py-2 px-2" v-if="current_user?.is_admin == false">
     <button class="btn btn-primary">Albums</button> &nbsp;&nbsp;
     <button class="btn btn-secondary">Artists</button> &nbsp;&nbsp;
     <button class="btn btn-warning">
@@ -21,6 +24,11 @@
     <ListArtist/>
     <!-- <Footer/>   -->
   </div> 
+  <div class="py-2 px-2">
+    <!-- Admin menu dashboard -->
+    <!-- <Dashboard
+      /> -->
+  </div>
 </template>
 <style scoped>
 

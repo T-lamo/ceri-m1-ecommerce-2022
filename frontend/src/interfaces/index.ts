@@ -9,6 +9,7 @@ export interface IAlbum {
   description: string;
   category_id: number;
   list_song?: ISong[];
+  created_date?: Date;
 }
 
 export interface IArtist {
@@ -18,6 +19,7 @@ export interface IArtist {
   date_of_birth?: string;
   cover?: string;
   list_album?: IAlbum[];
+  created_date?: Date;
 }
 
 export interface ISong {
@@ -31,6 +33,7 @@ export interface ISong {
 export interface ICategory {
   id?: number;
   label: string;
+  created_date?: Date;
 }
 
 export interface IPromo {
@@ -52,6 +55,10 @@ export interface IOrderDetail {
   id?: number;
   total: number;
   user_id: number;
+  payment_status: boolean;
+  delivery_status: boolean;
+  send_status: boolean;
+  orders_status: string;
   created_date?: Date;
 }
 export interface IOrderItem {
@@ -68,9 +75,6 @@ export interface IPaymentDetail {
   provider: string;
   credit_card_number: string;
   status: string;
-  expiration_date: string;
-  cvv: string;
-  order_detail_id: number;
   created_date?: Date;
 }
 

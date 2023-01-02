@@ -39,8 +39,20 @@ export async function read_cart_items(): Promise<ICartItem[]> {
   return await (await fetch(`/api/cart_item`)).json();
 }
 
+export async function read_cart_items_by_sessionid(data:number): Promise<ICartItem[]> {
+  return await (await fetch(`/api/cart_item_by_shopsess/${data}`)).json();
+}
+
 export async function read_order_details(): Promise<IOrderDetail[]> {
   return await (await fetch(`/api/order_detail`)).json();
+}
+
+export async function read_pie_order_details(): Promise<[]> {
+  return await(await fetch(`/api/pie_orders_per_category`)).json()
+}
+
+export async function read_turnover_per_month(data:number): Promise<[]> {
+  return await(await fetch(`/api/turnover_per_month/${data}`)).json()
 }
 
 export async function read_payment_details(): Promise<IPaymentDetail[]> {
@@ -53,6 +65,10 @@ export async function read_shopping_sessions(): Promise<IShoppingSession[]> {
 
 export async function read_order_items(): Promise<IOrderItem[]> {
   return await (await fetch(`/api/order_item`)).json();
+}
+
+export async function read_order_items_by_orderdetail_id(data:number): Promise<IOrderDetail> {
+  return await (await fetch(`/api/order_item_by_orderdetailid/${data}`)).json();
 }
 
 export async function read_user_addresses(): Promise<IUserAddress[]> {
@@ -249,6 +265,8 @@ export async function create_category(data: ICategory): Promise<ICategory> {
   return await (await fetch(`/api/category`, config)).json();
 }
 
+
+
 export async function create_user(data: IUser): Promise<IUser> {
   const config = {
     method: "POST",
@@ -265,15 +283,25 @@ export async function update_artist(data: IArtist): Promise<IArtist> {
     body: JSON.stringify(data),
     headers: content_type,
   };
-  return await (await fetch(`/api/artist/${data.id}`, config)).json();
+  return await (await fetch(`/api/artist`, config)).json();
 }
+
+export async function update_category(data:ICategory): Promise<ICategory> {
+  const config = {
+    method: "PUT",
+    body: JSON.stringify(data),
+    headers: content_type,
+  };
+  return await (await fetch(`/api/category`, config)).json()
+}
+
 export async function update_album(data: IAlbum): Promise<IAlbum> {
   const config = {
     method: "PUT",
     body: JSON.stringify(data),
     headers: content_type,
   };
-  return await (await fetch(`/api/album/${data.id}`, config)).json();
+  return await (await fetch(`/api/album`, config)).json();
 }
 
 export async function update_song(data: ISong): Promise<ISong> {
@@ -382,6 +410,13 @@ export async function delete_cart_item(data: number): Promise<any> {
     method: "DELETE",
   };
   return await (await fetch(`/api/cart_item/${data}`, config)).json();
+}
+
+export async function delete_cart_item_by_shopsession_albumid(shopping_session: number, album_id:number): Promise<any> {
+  const config = {
+    method: "DELETE",
+  };
+  return await (await fetch(`/api/cart_item_shopsessalbum/${shopping_session}/${album_id}`, config)).json();
 }
 
 export async function delete_order_detail(data: number): Promise<any> {

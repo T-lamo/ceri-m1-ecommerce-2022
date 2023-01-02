@@ -2,13 +2,24 @@
 import { Album, type CartItem } from "@/models";
 import { computed, ref } from "vue";
 import { defineProps } from "vue";
-
 import { useAppStore } from "@/stores";
 import { storeToRefs } from "pinia";
+import {
+  delete_cart_item_by_shopsession_albumid,
+  read_cart_items_by_sessionid,
+  toast_function,
+} from "@/services/crud";
+import Swal from "sweetalert2";
 
 // list of stores used in this section
-const { list_promo, list_cart_item, list_album, current_user, total_price } =
-  storeToRefs(useAppStore());
+const {
+  list_promo,
+  list_cart_item,
+  list_album,
+  current_user,
+  total_price,
+  current_shopping_session,
+} = storeToRefs(useAppStore());
 
 // define props
 const props = defineProps<{
@@ -16,11 +27,11 @@ const props = defineProps<{
 }>();
 
 // the quantity of product
-const qty_cart = ref(1);
+const qty_cart = ref(props.item.qty);
 
 const check_me_album = () => {
   let my_selected_album = new Album();
-  list_album.value.forEach((element) => {
+  list_album.value.forEach((element: Album) => {
     if (element.id == props.item.album_id) {
       my_selected_album = element;
     }
@@ -32,6 +43,8 @@ const handleChange = () => {
   list_cart_item.value.forEach((element) => {
     if (element.album_id == props.item.album_id) {
       element.qty = qty_cart.value;
+      // update cart item in db
+
       console.log("for : ", element.album_id);
       console.log("change qty here: ", element.qty);
     }
@@ -41,6 +54,41 @@ const handleChange = () => {
 // get image source
 const getImage = (imagePath: string) => {
   return imagePath;
+};
+
+//delete cart item
+const deleteCartItem = async (album_id: number) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      let res = await delete_cart_item_by_shopsession_albumid(
+        current_shopping_session.value?.id!,
+        album_id
+      );
+      // delete from list_cart_item
+      let response_list_cart_item = await read_cart_items_by_sessionid(
+        current_shopping_session.value?.id!
+      );
+      list_cart_item.value = response_list_cart_item;
+    }
+  });
+
+  // console.log("delete cart item ")
+  // delete cart item by album id et shopping session
+  // let res = await delete_cart_item_by_shopsession_albumid(current_shopping_session.value?.id!, album_id)
+  //       .then(res => toast_function("Article successfully deleted","success"))
+  //       .catch(error => {
+  //         console.log(error)
+  //         toast_function("Article can't be deleted","error")
+  //       })
 };
 </script>
 
@@ -106,13 +154,16 @@ const getImage = (imagePath: string) => {
           <!-- <router-link to="/list_album_achat">    
                   <font-awesome-icon icon="fa-solid fa-edit" size="lg" :style="{ color: '#1B1464' }"/>
               </router-link> &nbsp;&nbsp; -->
-          <router-link to="/list_album_achat">
+          <button
+            class="btn bg-transparent"
+            @click="deleteCartItem(props.item.album_id)"
+          >
             <font-awesome-icon
               icon="fa-solid fa-trash"
               size="lg"
               :style="{ color: 'red' }"
             />
-          </router-link>
+          </button>
         </div>
       </div>
     </div>

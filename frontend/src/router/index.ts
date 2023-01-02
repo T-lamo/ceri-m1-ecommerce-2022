@@ -8,6 +8,12 @@ import Panier_Multistep from "../components/panier/Panier_Multistep.vue";
 import OneArticle from "../components/album/OneArticle.vue";
 import LoginssotestVue from "../components/auth/Loginssotest.vue";
 import Promo from "../components/promo/Promo.vue";
+import Charts from "@/components/admin/Charts.vue";
+import Customers from "@/components/admin/Customers.vue";
+import Orders from "@/components/admin/Orders.vue";
+import Albums from "@/components/admin/Albums.vue";
+import Artists from "@/components/admin/Artists.vue";
+import Category from "@/components/admin/Category.vue";
 
 const UserInfo = {
   template: "<div><p>User {{ $route.params.id }}</p></div>",
@@ -69,6 +75,54 @@ const router = createRouter({
       path: "/user/:id",
       name: "user",
       component: UserInfo,
+    },
+    {
+      path: "/admin",
+      name: "admin",
+      children: [
+        {
+          path: "orders",
+          name: "orders",
+          components: {
+            orders_name: Orders,
+          },
+        },
+        {
+          path: "customers",
+          name: "customers",
+          components: {
+            customers_name: Customers,
+          },
+        },
+        {
+          path: "admin_albums",
+          name: "admin_albums",
+          components: {
+            albums_name: Albums,
+          },
+        },
+        {
+          path: "admin_artists",
+          name: "admin_customers",
+          components: {
+            artists_name: Artists,
+          },
+        },
+        {
+          path: "admin_cat",
+          name: "admin_cat",
+          components: {
+            cat_name: Category,
+          },
+        },
+        {
+          path: "admin_charts",
+          name: "admin_charts",
+          components: {
+            charts_name: Charts,
+          },
+        },
+      ],
     },
   ],
   strict: true,
