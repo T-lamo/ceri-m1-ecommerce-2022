@@ -29,7 +29,7 @@ export const useAppStore = defineStore("app", () => {
   const total_price = ref(0);
   const list_artist = ref<Artist[]>([]);
   const list_album = ref<Album[]>([]);
-  const isLoggedIn = ref<boolean>()
+  const isLoggedIn = ref<boolean>();
   const list_song = ref<Song[]>([]);
   const list_cart_item = ref<CartItem[]>([]);
   const list_order_detail = ref<OrderDetail[]>([]);
