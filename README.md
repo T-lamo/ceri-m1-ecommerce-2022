@@ -27,3 +27,5 @@ Les instructions sont disponibles [ici](https://github.com/Faylixe/ceri-m1-ecomm
 | Backend engineer          | Amos DORCEUS |
 | Frontend engineer         | Faraniaina Rabarisoa |
 | Site reliability engineer | Amos DORCEUS |
+
+test
