@@ -56,3 +56,7 @@ mysql -u greenfish -p --host 127.0.0.1
 
 ## cloud run service basic
 google cloud ressource
+
+## pydantic read env
+
+https://lynn-kwong.medium.com/how-to-use-pydantic-to-read-environment-variables-and-secret-files-in-python-8a6b8c56381c
