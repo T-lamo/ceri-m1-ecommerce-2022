@@ -1,10 +1,9 @@
 name: front-actions
-run-name: ${{ github.actor }} is learning GitHub Actions
-on: 
+# run-name: ${{ github.actor }} is learning GitHub Actions
+on:
   push:
-    branches:
-      - "main"
-  
+    branches: ["main","action_branch"]
+
 jobs:
   test-frontend:
     runs-on: ubuntu-latest
@@ -32,8 +31,3 @@ jobs:
           docker login -u _json_key_base64 -p ${{ secrets.DOCKER_PASSWORD }} europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish
           docker build -t frontend -f Dockerfile .
           docker tag frontend  europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/frontend:0.0.1
-
-
-
-
-  
