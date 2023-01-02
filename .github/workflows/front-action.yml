@@ -1,7 +1,9 @@
 name: front-actions
 run-name: ${{ github.actor }} is learning GitHub Actions
 on: 
-  workflow_call:
+  push:
+    branches:
+      - "main"
   
 jobs:
   test-frontend:
@@ -16,3 +18,22 @@ jobs:
           node-version: 16
       - run: npm ci
       - run: npm run test:unit
+
+  build:
+    needs: test-frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v3
+      - name: Building docker images and push to the registry
+        run: |
+          docker login -u _json_key_base64 -p ${{ secrets.DOCKER_PASSWORD }} europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish
+          docker build -t frontend -f Dockerfile .
+          docker tag frontend  europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/frontend:0.0.1
+
+
+
+
+  

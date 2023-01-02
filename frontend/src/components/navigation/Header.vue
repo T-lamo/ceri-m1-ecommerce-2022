@@ -1,0 +1,258 @@
+<script lang="ts" setup>
+  import { useAppStore } from '@/stores';
+  import { storeToRefs } from "pinia";
+  import { useRouter } from 'vue-router';
+  import { toast_function } from '@/services/crud';
+
+  const router = useRouter()
+
+  const { current_user , isLoggedIn, list_cart_item} = storeToRefs(useAppStore())
+
+  current_user.value = localStorage.getItem('user')
+  
+  const onLogout = (() => {
+    setTimeout(() => {
+      router.push({
+        name: 'login',
+        replace:true})
+      isLoggedIn.value = false
+    },1000)
+    console.log('logged out')
+    toast_function('You are logged out successfully!!','success')
+  })
+  let test = true
+</script>
+<template>
+
+<div class="container_fluid"  v-if="test"> <!-- v-if="current_user?.is_admin" v-if="test"-->
+  <div class="row flex-nowrap">
+      <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+          <div class="d-flex flex-column align-items-center align-items-sm-start text-white min-vh-100 px-3 pt-2">
+              <!-- <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                  <span class="fs-5 d-none d-sm-inline">Menu</span>
+              </a> -->
+              <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                  <!-- Charts -->
+                  <li class="nav-item pt-2">
+                      <a href="#" class="nav-link align-middle px-0">
+                        <router-link to="/admin/admin_charts" style="color:#bdc3c7;text-decoration: none;">
+                          <font-awesome-icon icon="fa-solid fa-chart-pie" size="lg" style="{ color: '#f0932b' ;}"/>
+                           <span class="ms-1 d-none d-sm-inline px-2">Charts</span>
+                        </router-link>
+                      </a>
+                  </li>
+                  <!-- Orders -->
+                  <li class="nav-item pt-2">
+                      <a href="#" class="nav-link px-0 align-middle">
+                        <router-link to="/admin/orders" style="color:#bdc3c7;text-decoration: none;">
+                          <font-awesome-icon icon="fa-solid fa-bag-shopping" size="lg" style="{ color: '#f0932b' ;}"/>  
+                          <span class="ms-1 d-none d-sm-inline px-2">Orders</span>
+                        </router-link>
+                      </a>
+                  </li>
+                  <!--  albums -->
+                  <li class="nav-item pt-2">
+                    <a href="#" class="nav-link px-0 align-middle">
+                      <router-link to="/admin/admin_albums" style="color:#bdc3c7;text-decoration: none;">
+                        <font-awesome-icon icon="fa-solid fa-record-vinyl" size="lg" style="{ color: '#f0932b' ;}"/> 
+                        <span class="ms-1 d-none d-sm-inline px-2">Albums</span>
+                      </router-link>
+                    </a>
+                  </li>
+                  <!-- artists -->
+                  <li class="nav-item pt-2">
+                    <a href="#"  class="nav-link px-0 align-middle">
+                      <router-link to="/admin/admin_artists"  style="color:#bdc3c7;text-decoration: none;" >
+                        <font-awesome-icon icon="fa-solid fa-user-tie" size="lg" style="{ color: '#f0932b' ;}"/>  
+                        <span class="ms-1 d-none d-sm-inline px-2">Artists</span>
+                      </router-link>
+                    </a>
+                  </li>
+
+                  <!-- customers -->
+                  <li class="nav-item pt-2">
+                    <a href="#" class="nav-link px-0 align-middle">
+                      <router-link to="/admin/customers" style="color:#bdc3c7;text-decoration: none;">
+                        <font-awesome-icon icon="fa-solid fa-users" size="lg" style="{ color: '#f0932b' ;}"/>
+                        <span class="ms-1 d-none d-sm-inline">Customers</span>
+                      </router-link>
+                    </a>
+                  </li>
+                  <!-- category -->
+                  <li class="nav-item pt-2">
+                    <a href="#" class="nav-link px-0 align-middle">
+                      <router-link to="/admin/admin_cat" style="color:#bdc3c7;text-decoration: none;">
+                        <font-awesome-icon icon="fa-solid fa-cat" size="lg" style="{ color: '#f0932b' ;}"/>
+                        <span class="ms-1 d-none d-sm-inline">Categories</span>
+                      </router-link>
+                    </a>
+                  </li>
+
+
+              </ul>
+
+              <hr>
+              <div class="dropdown pb-4">
+                  <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                      <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
+                      <span class="d-none d-sm-inline mx-1">{{current_user?.firstname}} Test {{current_user?.username}}</span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                      <li><a class="dropdown-item" href="#">New project...</a></li>
+                      <li><a class="dropdown-item" href="#">Settings</a></li>
+                      <li><a class="dropdown-item" href="#">Profile</a></li>
+                      <li>
+                          <hr class="dropdown-divider">
+                      </li>
+                      <li>
+                        <!-- @click="onLogout"-->
+                          <a class="dropdown-item" href="#">
+                            <button class="btn btn-warning" @click="onLogout">
+                              Sign out
+                            </button> 
+                          </a>
+                      </li>
+                  </ul>
+              </div>
+              
+          </div>
+      </div>
+      <div class="col-md-8">
+        <router-view name="orders_name"></router-view>
+        <router-view name="customers_name"></router-view>
+        <router-view name="albums_name"></router-view>
+        <router-view name="artists_name"></router-view>
+        <router-view name="cat_name"></router-view>
+        <router-view name="charts_name"></router-view>
+      </div>
+      <!-- <div class="col-md-4">
+        <router-view name="customers_name"></router-view>
+        <p>Recap</p>
+      </div> -->
+  </div>
+  
+</div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-else> <!-- v-if="current_user?.is_admin == false"-->
+  <div class="container-fluid">
+    <a class="navbar-brand px-2" href="#">
+      Logo
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">
+            <router-link to="/home" style="color:#bdc3c7;text-decoration: none;">Home</router-link>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#" v-if="current_user?.is_admin">
+            <router-link to="/admin" style="color:#bdc3c7;text-decoration: none;">Admin</router-link>
+          </a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Liste
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li>
+              <a class="dropdown-item" href="#"><router-link to="/artists" style="color:black;text-decoration: none;">Artistes</router-link></a>
+          </li>
+            <li>
+              <a class="dropdown-item" href="#"><router-link to="/albums" style="color:black;text-decoration: none;">Albums</router-link></a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <a class="dropdown-item" href="#"><router-link to="/promos" style="color:black;text-decoration: none;">Promo</router-link></a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-warning me-4" type="submit">Search</button>
+      </form>
+      <div class=".col-4 icon_header me-4 py-2 my-2">
+        <!-- Link  to shop -->
+        <a href="#">
+          <router-link to="/panier" class="router_link_class" v-if="isLoggedIn">
+            <font-awesome-icon icon="fa-solid fa-cart-shopping" size="2x" :style="{ color: 'white' }"/>
+              <!-- <span>hello </span> -->
+            <span class="badge rounded-pill bg-danger">
+              {{ list_cart_item.length }}
+            <!-- <span class="visually-hidden">unread messages</span> -->
+            </span>
+          </router-link>
+        </a>
+      </div>
+      <!-- compte -->
+           <div class=".col-4 icon_header me-4 my-2">
+            <ul class="navbar-nav me-auto mb-2">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <font-awesome-icon icon="fa-solid fa-user" size="2x" :style="{ color: 'white' }"/>
+                  </a>
+                  
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                    <li v-if='isLoggedIn' class='px-3 py-2'>Log in as:</li>
+                    <li v-if='isLoggedIn'><hr class="dropdown-divider"></li>
+                    <li v-if='isLoggedIn' class='px-3 py-2 fst-normal'>
+                      {{current_user.username}} {{current_user.firstname}}
+                    </li>
+                    <li v-if='isLoggedIn' class='px-3 py-1 fst-normal'>
+                      {{current_user.email}}
+                    </li>
+                  
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <a class="dropdown-item" href="#">Account</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <router-link to="/panier_step" class="router_link_class">Commands</router-link>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <router-link to="/" class="router_link_class">Wishing list</router-link>
+                      </a>
+                    </li>
+                    <li v-if='isLoggedIn'><hr class="dropdown-divider"></li>
+                    <li v-if="isLoggedIn">
+                      <a class="dropdown-item" href="#">
+                        <div class="d-grid gap-2">
+                          <button class="btn btn-danger" @click="onLogout">Logout</button>
+                        </div>
+                      </a>
+                    </li>
+                    <li v-else>
+                      <a class="dropdown-item" href="#">
+                        <div class="d-grid gap-2">
+                          <router-link to="/" style="text-decoration:none ;">Sign In </router-link>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+              </li>
+            </ul>
+        </div>
+    </div>
+  </div>
+</nav>
+
+</template>
+<style scoped>
+* {
+    margin: 0px 0px 0px 0px;
+    /* background-color: #2f3640; */
+}
+.icon_header{
+    margin-top: 5px;
+}
+.router_link_class {
+  text-decoration: none;
+  color: black;
+}
+</style>

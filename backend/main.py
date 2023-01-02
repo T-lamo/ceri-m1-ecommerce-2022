@@ -1,4 +1,3 @@
-from functools import reduce
 from typing import Union
 from src.models import Artist, Album, CartItem, OrderDetail, OrderItem, PaymentDetail, ShoppingSession, Song, Category, User, Promo, UserAddress
 
@@ -45,9 +44,9 @@ def read_artist(id: int):
 async def create_artist(artist: Artist):
     return db.insert_artist(dict(artist))
 
-@app.put("/api/artist/{id}")
-async def update(artist: Artist, id):
-    return db.update_artist(dict(artist,id))
+@app.put("/api/artist")
+async def update_artist(artist: Artist):
+    return db.update_artist(dict(artist))
 
 @app.get("/api/album")
 def read_album():
@@ -62,9 +61,9 @@ async def create_album(album: Album):
     print("ialbum", album)
     return db.insert_album(dict(album))
 
-@app.put("/api/album/{id}")
-async def update_album(album: Album, id):
-    return db.update_album(dict(album), id)
+@app.put("/api/album")
+async def update_album(album: Album):
+    return db.update_album(dict(album))
 
 @app.get("/api/song")
 def read_song():
@@ -91,6 +90,10 @@ def read_cart_item():
 def read_cart_item(id: int):
     return db.select_one_cart_item(id)
 
+@app.get("/api/cart_item_by_shopsess/{shoppingsession_id}")
+def read_cart_item_by_shoppingsessionid(shoppingsession_id: int):
+    return db.select_one_cart_item_by_shoppingsession(shoppingsession_id)
+
 @app.post("/api/cart_item")
 async def create_cart_item(cart_item: CartItem):
     print("icart_item", cart_item)
@@ -100,6 +103,10 @@ async def create_cart_item(cart_item: CartItem):
 async def update_cart_item(cart_item: CartItem, id):
     return db.update_cart_item(dict(cart_item), id)
 
+@app.delete("/api/cart_item_shopsessalbum/{shopsess_id}/{album_id}")
+def delete_cart_item(shopsess_id: int, album_id:int):
+     return db.delete_cart_item_by_shopsession_albumid(shopsess_id,album_id)
+
 @app.delete("/api/cart_item/{id}")
 def delete_cart_item(id: int):
      return db.delete_cart_item( id)
@@ -108,18 +115,30 @@ def delete_cart_item(id: int):
 def read_order_detail():
     return db.select_order_detail()
 
+@app.get("/api/pie_orders_per_category")
+def pie_ordered_per_category():
+    return db.pie_orders_per_category()
+
+@app.get("/api/turnover_per_month/{year}")
+def turnover_per_month_year(year:int):
+    return db.turnover_per_month(year)
+
 @app.get("/api/order_detail/{id}")
 def read_order_detail(id: int):
     return db.select_one_order_detail(id)
+
+@app.get("/api/order_detail_byid/{user_id}")
+def read_order_detail(user_id: int):
+    return db.select_last_one_order_detail_byuserid(user_id)
 
 @app.post("/api/order_detail")
 async def create_order_detail(order_detail: OrderDetail):
     print("iorder_detail", order_detail)
     return db.insert_order_detail(dict(order_detail))
 
-@app.put("/api/order_detail/{id}")
-async def update_order_detail(order_detail: OrderDetail, id):
-    return db.update_order_detail(dict(order_detail), id)
+@app.put("/api/order_detail")
+async def update_order_detail(order_detail: OrderDetail):
+    return db.update_order_detail(dict(order_detail))
 
 
 @app.delete("/api/order_detail/{id}")
@@ -133,6 +152,10 @@ def read_order_item():
 @app.get("/api/order_item/{id}")
 def read_order_item(id: int):
     return db.select_one_order_item(id)
+
+@app.get("/api/order_item_by_orderdetailid/{id_orderdetail}")
+def read_order_item(id_orderdetail: int):
+    return db.select_order_items_by_orderdetailid(id_orderdetail)
 
 @app.post("/api/order_item")
 async def create_order_item(order_item: OrderItem):
@@ -173,6 +196,10 @@ def read_shopping_session():
 @app.get("/api/shopping_session/{id}")
 def read_shopping_session(id: int):
     return db.select_one_shopping_session(id)
+
+@app.get("/api/shopping_session_byuserid/{user_id}")
+def read_last_one_shopping_session_byidalbum(user_id:int):
+    return db.select_last_one_shopping_session_by_userid(user_id) 
 
 @app.post("/api/shopping_session")
 async def create_shopping_session(shopping_session: ShoppingSession):
@@ -216,6 +243,9 @@ def read_category():
 async def create_category(category: Category):
     return db.insert_category(dict(category))
 
+@app.put("/api/category")
+async def update_category(category: Category):
+    return db.update_category(dict(category))
 
 @app.get("/api/promo")
 def read_promo():

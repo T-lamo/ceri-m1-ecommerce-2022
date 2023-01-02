@@ -1,12 +1,19 @@
 from datetime import datetime
-from functools import reduce
-import mysql.connector
-from mysql.connector import Error
+from sqlalchemy import update, Table
 from .models import Album, Artist, CartItem, Category, OrderDetail, OrderItem, PaymentDetail, Promo, ShoppingSession, Song, User, UserAddress
 
 
-from sqlmodel import Field, Session, SQLModel, create_engine,select
+from sqlmodel import Field, Session, SQLModel, create_engine,select, func
 
+
+from pydantic import BaseSettings
+
+
+class Settings(BaseSettings):
+    DATABASE_ADDRESS: str = ""
+    DATABASE_USER: str =""
+    DATABASE_PASSWORD: str = ""
+    DATABASE_NAME: str=""
 
 
 class DatabaseSingletonMeta(type):
@@ -32,17 +39,19 @@ class DatabaseSingletonMeta(type):
 class Database(metaclass=DatabaseSingletonMeta):
 
     def __init__(self):
-        self.db = "uapv2201069"
-        self.user = 'uapv2201069'
-        self.password = 'WmAsN1'
-        self.host = 'pedago.univ-avignon.fr'
-        print("test")
-        self.db = "ecom_db"
-        self.user = 'root'
-        self.password = 'mypass'
-        self.host = 'db'
+        settings = Settings()
+        print(settings.DATABASE_ADDRESS)
+        self.db = settings.DATABASE_NAME    
+        self.user = settings.DATABASE_USER
+        self.password = settings.DATABASE_PASSWORD
+        self.host = settings.DATABASE_ADDRESS
+        # print("test", settings.DATABASE_ADDRESS)
+        # self.db = "ecom_db"
+        # self.user = 'root'
+        # self.password = 'mypass'
+        # self.host = 'db'
         
-
+      
 
         mysql_url = f"mysql+pymysql://{self.user}:{self.password}@{self.host}/{self.db}?charset=utf8mb4"
         self.engine = create_engine(mysql_url, echo=True)
@@ -70,18 +79,15 @@ class Database(metaclass=DatabaseSingletonMeta):
         session.add(data)
         session.commit()
 
-    def update_artist(self,artist:Artist, id):
+    def update_artist(self,artist:Artist):
         with Session(self.engine) as session:
-            statement = select(Artist).where(Artist.id == id)
+            statement = update(Artist).where(Artist.id == artist['id']).values(
+                firstname=artist['firstname'],
+                lastname=artist['lastname'],
+                date_of_birth = artist['date_of_birth'],
+                cover = artist['cover'],
+                created_date= datetime.now())
             results = session.exec(statement)
-            update = results.one()
-            update.firstname=artist['firstname']
-            update.lastname=artist['lastname']
-            update.date_of_birth=artist['date_of_birth']
-            update.cover=artist['cover']
-            update.created_date= datetime.now()
-            update.created_date= datetime.now()
-            session.add(update)
             session.commit()
 
     def delete_artist(self,id):
@@ -128,23 +134,20 @@ class Database(metaclass=DatabaseSingletonMeta):
         session.add(data)
         session.commit()
 
-    def update_album(self,album:Album, id):
+    def update_album(self,album:Album):
         with Session(self.engine) as session:
-            statement = select(Album).where(Album.id == id)
+            statement = update(Album).where(Album.id == album['id']).values(
+                title= album['title'],
+                release_date=album['release_date'],
+                price=album['price'],
+                stock_qty=album['stock_qty'],
+                description=album['description'], 
+                cover=album['cover'],
+                artist_id=album['artist_id'] ,
+                category_id=album['category_id'],
+                created_date= datetime.now()
+            )
             results = session.exec(statement)
-            update = results.one()
-            update.title= album['title'] 
-            update.release_date=album['release_date']
-            update.price=album['price']
-            update.stock_qty=album['stock_qty']
-            update.description=album['description'] 
-            update.cover=album['cover'] 
-            update.created_date= datetime.now()
-            update.artist_id=album['artist_id'] 
-            update.category_id=album['category_id']
-            update.created_date= datetime.now()
-
-            session.add(update)
             session.commit()
 
     def select_song(self):
@@ -183,9 +186,13 @@ class Database(metaclass=DatabaseSingletonMeta):
     def select_one_cart_item(self, id):
         with Session(self.engine) as session:
             return session.exec(select(CartItem).where(CartItem.id == id)).first()
-            
+    
+    def select_one_cart_item_by_shoppingsession(self,shop_sess_id) :
+        with Session(self.engine) as session:
+            return list(session.exec(select(CartItem).where(CartItem.shopping_session_id == shop_sess_id)))  
+
     def insert_cart_item(self, item:CartItem):
-        data = CartItem(total=item['total'], album_id=item['album_id'],  qty=item['qty'], shopping_session_id=item['shopping_session_id'], created_date=datetime.now())
+        data = CartItem(album_id=item['album_id'],  qty=item['qty'], shopping_session_id=item['shopping_session_id'], created_date=datetime.now())
         session = Session(self.engine)
         session.add(data)
         session.commit()
@@ -195,7 +202,6 @@ class Database(metaclass=DatabaseSingletonMeta):
             statement = select(CartItem).where(CartItem.id == id)
             results = session.exec(statement)
             update = results.one()
-            update.total=item['total']
             update.qty=item['qty'] 
             update.shopping_session_id=item['shopping_session_id'] 
             update.album_id=item['album_id']
@@ -210,7 +216,15 @@ class Database(metaclass=DatabaseSingletonMeta):
             results = results.one()
             session.delete(results)
             session.commit()
-
+    
+    def delete_cart_item_by_shopsession_albumid(self,shopsess_id,album_id):
+        with Session(self.engine) as session:
+            statement = select(CartItem).where(CartItem.shopping_session_id == shopsess_id).where(CartItem.album_id == album_id)
+            results = session.exec(statement)
+            results = results.one()
+            session.delete(results)
+            session.commit()
+            
     def select_order_detail(self):
         with Session(self.engine) as session:
             return list(session.exec(select(OrderDetail)))
@@ -218,20 +232,35 @@ class Database(metaclass=DatabaseSingletonMeta):
     def select_one_order_detail(self, id):
         with Session(self.engine) as session:
             return session.exec(select(OrderDetail).where(OrderDetail.id == id)).first()
-            
+    
+    def select_last_one_order_detail_byuserid(self,user_id):
+        with Session(self.engine) as session:
+            return session.exec(select(OrderDetail).where(OrderDetail.user_id == user_id).order_by(OrderDetail.id.desc())).first()
+
     def insert_order_detail(self, item:OrderDetail):
-        data = OrderDetail(total=item['total'], user_id=item['user_id'], created_date=datetime.now())
+        
+        data = OrderDetail(total=item['total'], user_id=item['user_id'],payment_status=item['payment_status'],delivery_status=item['delivery_status'],orders_status=item['orders_status'], created_date=datetime.now())
         session = Session(self.engine)
         session.add(data)
         session.commit()
 
-    def update_order_detail(self,item:OrderDetail, id):
+    def update_order_detail(self,item:OrderDetail):
         with Session(self.engine) as session:
-            statement = select(OrderDetail).where(OrderDetail.id == id)
+            statement = update(OrderDetail).where(OrderDetail.id == item['id']).values(
+                total=item['total'],
+                user_id=item['user_id'],
+                payment_status = item['payment_status'],
+                delivery_status = item['delivery_status'],
+                send_status = item['send_status'],
+                orders_status = item['orders_status'],
+                created_date= datetime.now())
             results = session.exec(statement)
             update = results.one()
             update.total=item['total']
             update.user_id=item['user_id']
+            update.payment_status=item['payment_status']
+            update.delivery_status=item['delivery_status']
+            update.orders_status=item['orders_status']
             update.created_date= datetime.now()
             session.add(update)
             session.commit()
@@ -251,9 +280,13 @@ class Database(metaclass=DatabaseSingletonMeta):
     def select_one_order_item(self, id):
         with Session(self.engine) as session:
             return session.exec(select(OrderItem).where(OrderItem.id == id)).first()
-            
+    
+    def select_order_items_by_orderdetailid(self, id_orderdetail:int): 
+        with Session(self.engine) as session:
+            return list(session.exec(select(OrderItem).where(OrderItem.order_detail_id == id_orderdetail)))
+
     def insert_order_item(self, item:OrderItem):
-        data = OrderItem(qty=item['qty'], order_detail_id=item['order_detail_id'],  created_date=datetime.now())
+        data = OrderItem(qty=item['qty'], order_detail_id=item['order_detail_id'],album_id=item['album_id'],created_date=datetime.now())
         session = Session(self.engine)
         session.add(data)
         session.commit()
@@ -286,18 +319,24 @@ class Database(metaclass=DatabaseSingletonMeta):
             return session.exec(select(PaymentDetail).where(PaymentDetail.id == id)).first()
             
     def insert_payment_detail(self, item:PaymentDetail):
-        data = PaymentDetail(amount=item['amount'], status=item['status'],  order_detail_id=item['order_detail_id'], created_date=datetime.now())
+        data = PaymentDetail(name=item['name'], amount=item['amount'],credit_card_number=item['credit_card_number'], status=item['status'],provider=['provider'],expiration_date=['expiration_date'],cvv=item['cvv'],order_detail_id=item['order_detail_id'], created_date=datetime.now())
         session = Session(self.engine)
         session.add(data)
         session.commit()
+
+     
 
     def update_payment_detail(self,item:PaymentDetail, id):
         with Session(self.engine) as session:
             statement = select(PaymentDetail).where(PaymentDetail.id == id)
             results = session.exec(statement)
             update = results.one()
+            update.name= item['name']
             update.amount=item['amount']
+            update.credit_card_number= item['credit_card_number']
             update.status=item['status'] 
+            update.provider=item['provider']
+            update.cvv= item['cvv']
             update.order_detail_id=item['order_detail_id'] 
             update.created_date= datetime.now()
             session.add(update)
@@ -318,6 +357,10 @@ class Database(metaclass=DatabaseSingletonMeta):
     def select_one_shopping_session(self, id):
         with Session(self.engine) as session:
             return session.exec(select(ShoppingSession).where(ShoppingSession.id == id)).first()
+
+    def select_last_one_shopping_session_by_userid(self, user_id):
+        with Session(self.engine) as session:
+            return session.exec(select(ShoppingSession).where(ShoppingSession.user_id == user_id).order_by(ShoppingSession.id.desc())).first()
             
     def insert_shopping_session(self, item:ShoppingSession):
         data = ShoppingSession(total=item['total'], user_id=item['user_id'], created_date=datetime.now())
@@ -396,6 +439,15 @@ class Database(metaclass=DatabaseSingletonMeta):
         session.add(data)
         session.commit()
 
+    def update_category(self, category:Category):
+        with Session(self.engine) as session:
+            statement = update(Category).where(Category.id == category['id']).values(
+                label = category['label'],
+                created_date= datetime.now()
+            )
+            results = session.exec(statement)
+            session.commit()
+
     def delete_category(self,id):
         with Session(self.engine) as session:
             statement = select(Category).where(Category.id == id)
@@ -432,7 +484,8 @@ class Database(metaclass=DatabaseSingletonMeta):
             return session.exec(select(User).where(User.id == id)).first()
             
     def insert_user(self, item:User):
-            data = User(telephone=item['telephone'], firstname=item['firstname'], lastname=item['lastname'],email=item['email'],username=item['username'], password=item['password'], is_admin=item['is_admin'], created_date=datetime.now())
+            data = User(telephone=item['telephone'], firstname=item['firstname'],email=item['email'],
+                        username=item['username'], password=item['password'], is_admin=item['is_admin'], created_date=datetime.now())
             session = Session(self.engine)
             session.add(data)
             session.commit()
@@ -446,7 +499,6 @@ class Database(metaclass=DatabaseSingletonMeta):
             update.telephone=item['telephone'] 
             update.email=item['username']
             update.email=item['firtname']
-            update.email=item['lastname']
             update.email=item['email']
             update.password=item['password']
             update.is_admin=item['is_admin']
@@ -461,3 +513,28 @@ class Database(metaclass=DatabaseSingletonMeta):
             results = results.one()
             session.delete(results)
             session.commit()
+
+    def turnover_per_month(self,year):
+        with Session(self.engine) as session:
+            query = (
+                select([func.month(PaymentDetail.created_date).label('month'), func.sum(PaymentDetail.amount)])
+                .where(func.year(PaymentDetail.created_date) == 2022)
+                .group_by(func.month(PaymentDetail.created_date))
+            )
+            result = query.all()
+            session.commit()
+            return list(result)
+
+
+    def pie_orders_per_category(self):
+        with Session(self.engine) as session:
+            query = (
+                select([Category.label, func.count().label('num_album_ordered')])
+                .select_from(Album.join(OrderItem, Album.id == OrderItem.album_id)
+                .join(Category, Category.id == Album.category_id))
+                .group_by(Category.label)
+            )
+            result = query.all()
+            session.commit()
+            return list(result)
+            
