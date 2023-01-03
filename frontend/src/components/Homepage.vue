@@ -1,13 +1,11 @@
 <script lang="ts" setup>
-  import ListAlbum from './album/ListAlbum.vue';
-  import ListCategory from './category/ListCategory.vue';
-  import ListArtist from './artist/ListArtist.vue';
-  import Promo from './promo/Promo.vue';
-  import { storeToRefs } from 'pinia';
-  import { useAppStore } from '@/stores';
-  import Dashboard from './admin/Dashboard.vue';
-  const { current_user } = storeToRefs(useAppStore())
-
+import ListAlbum from "./album/ListAlbum.vue";
+import ListCategory from "./category/ListCategory.vue";
+import ListArtist from "./artist/ListArtist.vue";
+import Promo from "./promo/Promo.vue";
+import { storeToRefs } from "pinia";
+import { useAppStore } from "@/stores";
+const { current_user } = storeToRefs(useAppStore());
 </script>
 
 <template>
@@ -18,18 +16,16 @@
       <router-link to="/promo"> Promos</router-link>
     </button>
     <!-- <HelloWorld/> -->
-    <Promo/>
-    <ListCategory/>
-    <ListAlbum/> 
-    <ListArtist/>
+    <Promo />
+    <ListCategory />
+    <ListAlbum />
+    <ListArtist />
     <!-- <Footer/>   -->
-  </div> 
+  </div>
   <div class="py-2 px-2">
     <!-- Admin menu dashboard -->
     <!-- <Dashboard
       /> -->
   </div>
 </template>
-<style scoped>
-
-</style>
+<style scoped></style>
