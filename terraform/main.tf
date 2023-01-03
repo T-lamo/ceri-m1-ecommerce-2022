@@ -41,7 +41,7 @@ resource "google_cloud_run_service" "backend" {
     spec {
       service_account_name = "terraform-greenfish@ceri-m1-ecommerce-2022.iam.gserviceaccount.com"
      
-      container {
+      containers {
         image = "europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/backend:0.0.1"
         env {
           name = "DATABASE_ADDRESS"
@@ -87,7 +87,7 @@ resource "google_cloud_run_service" "frontend" {
     spec {
       service_account_name = "terraform-greenfish@ceri-m1-ecommerce-2022.iam.gserviceaccount.com"
      
-      container {
+      containers {
         image = "europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/frontend:0.0.1"
         env {
           name  = "back_url"
