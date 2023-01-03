@@ -29,6 +29,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Building docker images and push to the registry
         run: |
-          docker login -u _json_key_base64 -p ${{ secrets.DOCKER_REGISTRY_PASSWORD }}  https://europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish
+          docker login -u _json_key_base64 -p "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" https://europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish
           docker build -t frontend -f Dockerfile .
           docker tag frontend  europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/frontend:0.0.1
