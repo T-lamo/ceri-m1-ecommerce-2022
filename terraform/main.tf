@@ -29,6 +29,7 @@ data "google_secret_manager_secret" "password" {
 
 
 resource "google_cloud_run_service" "backend" {
+  name="backend"
   template {
     spec {
       service_account_name = "terraform-greenfish@ceri-m1-ecommerce-2022.iam.gserviceaccount.com"
@@ -71,6 +72,7 @@ resource "google_cloud_run_service" "backend" {
 
 
 resource "google_cloud_run_service" "frontend" {
+  name="frontend"
   template {
     spec {
       service_account_name = "terraform-greenfish@ceri-m1-ecommerce-2022.iam.gserviceaccount.com"
