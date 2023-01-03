@@ -56,7 +56,7 @@ export function algolia_insert(objects: any) {
     return { ...data, objectID: data.id };
   });
   // console.log(result)
-  index.saveObjects(objects).then(( objectIDs: any) => {
+  index.saveObjects(objects).then((objectIDs: any) => {
     console.log(objectIDs);
   });
 }
