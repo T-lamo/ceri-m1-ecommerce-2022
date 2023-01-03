@@ -30,14 +30,17 @@ data "google_secret_manager_secret" "password" {
 
 resource "google_cloud_run_service" "backend" {
   name="backend"
+  location = "europe-west1"
+
   template {
-    spec {
-      service_account_name = "terraform-greenfish@ceri-m1-ecommerce-2022.iam.gserviceaccount.com"
-      metadata {
+     metadata {
         annotations = {
           "autoscaling.knative.dev/maxScale" = "1"
         }
       }
+    spec {
+      service_account_name = "terraform-greenfish@ceri-m1-ecommerce-2022.iam.gserviceaccount.com"
+     
       container {
         image = "europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/backend:0.0.1"
         env {
@@ -73,14 +76,17 @@ resource "google_cloud_run_service" "backend" {
 
 resource "google_cloud_run_service" "frontend" {
   name="frontend"
+  location = "europe-west1"
   template {
-    spec {
-      service_account_name = "terraform-greenfish@ceri-m1-ecommerce-2022.iam.gserviceaccount.com"
-      metadata {
+
+     metadata {
         annotations = {
           "autoscaling.knative.dev/maxScale" = "1"
         }
       }
+    spec {
+      service_account_name = "terraform-greenfish@ceri-m1-ecommerce-2022.iam.gserviceaccount.com"
+     
       container {
         image = "europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/frontend:0.0.1"
         env {
