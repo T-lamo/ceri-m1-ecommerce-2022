@@ -1,0 +1,11 @@
+
+name: deploy-actions
+run-name: ${{ github.actor }} is learning teraform
+on: [push]
+jobs:
+  # call-front-action:
+  #   uses: ./.github/workflows/front-action.yml
+  call-back-action:
+    uses: ./.github/workflows/back-action.yml
+  # call-deploy-action:
+  #   uses: ./.github/workflows/deploy-action.yml

@@ -1,11 +1,75 @@
+name: vinyl-actions
+on:
+  push:
+    branches: ["main", "action_branch"]
 
-name: deploy-actions
-run-name: ${{ github.actor }} is learning teraform
-on: [push]
 jobs:
-  # call-front-action:
-  #   uses: ./.github/workflows/front-action.yml
-  call-back-action:
-    uses: ./.github/workflows/back-action.yml
-  # call-deploy-action:
-  #   uses: ./.github/workflows/deploy-action.yml
+  test-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm run test:unit
+
+
+  build-frontend:
+    needs: test-frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v3
+      - name: Building docker images and push to the registry
+        run: |
+          docker login -u _json_key_base64 -p "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" https://europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish
+          docker build -t frontend -f Dockerfile .
+          docker tag frontend  europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/frontend:0.0.1
+
+
+  test-backend:
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: backend
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-python@v2
+          with:
+            python-version: '3.9'
+        - run: pip install poetry
+        - run: poetry install 
+        - run: poetry run pytest tests/
+
+  build-backend:
+    needs: test-backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v3
+      - name: Building docker images and push to the registry
+        run: |
+          docker login -u _json_key_base64 -p "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" https://europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish
+          docker build -t backend -f Dockerfile .
+          docker tag backend  europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/backend:0.0.1
+  deploy:
+      needs: [build-frontend,build-backend]
+      runs-on: ubuntu-latest
+      defaults:
+        run:
+          working-directory: terraform
+      steps:
+        - uses: actions/checkout@v2
+        - uses: hashicorp/setup-terraform@v2
+          with:
+            cli_config_credentials_token: ${{ secrets.tf_token }}
+        - run: terraform init
+        - run: terraform apply  
