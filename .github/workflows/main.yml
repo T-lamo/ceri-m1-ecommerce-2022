@@ -61,12 +61,12 @@ jobs:
           docker build -t backend -f Dockerfile .
           docker tag backend  europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/backend:0.0.1
   deploy:
-      needs: [build-frontend,build-backend]
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: terraform
-      steps:
+    needs: [build-frontend,build-backend]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup Terraform
