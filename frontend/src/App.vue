@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
 import HeaderComponent from "./components/common/HeaderComponent.vue";
 import FooterComponent from "./components/common/FooterComponent.vue";
 import SidebarComponent from "./components/common/SidebarComponent.vue";
 import SearchComponent from "./components/common/SearchComponent.vue";
-
-
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-<script lang="ts">
+<script setup lang="ts">
 import ListCartProduct from "./ListCartProductComponent.vue";
 </script>
 

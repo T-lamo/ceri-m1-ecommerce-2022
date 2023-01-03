@@ -42,7 +42,7 @@ resource "google_cloud_run_service" "backend" {
         env {
           name = "DATABASE_ADDRESS"
           value_from {
-            secret-key-ref {
+            secret_key_ref {
               name = data.google.secret.address.mysql_database
             }
           }
@@ -50,7 +50,7 @@ resource "google_cloud_run_service" "backend" {
         env {
           name = "DATABASE_USER"
           value_from {
-            secret-key-ref {
+            secret_key_ref {
               name = data.google.secret.user.secret_id
             }
           }
@@ -59,7 +59,7 @@ resource "google_cloud_run_service" "backend" {
         env {
           name = "DATABASE_PASSWORD"
           value_from {
-            secret-key-ref {
+            secret_key_ref {
               name = data.google.secret.password.secret_id
             }
           }
