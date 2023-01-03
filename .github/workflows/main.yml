@@ -67,9 +67,27 @@ jobs:
         run:
           working-directory: terraform
       steps:
-        - uses: actions/checkout@v2
-        - uses: hashicorp/setup-terraform@v2
-          with:
-            cli_config_credentials_token: ${{ secrets.tf_token }}
-        - run: terraform init
-        - run: terraform apply  
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_TOKEN }}
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt
+      - name: Terraform init
+        id: init
+        run: terraform init
+      - name: Terraform validate
+        id: validate
+        run: terraform validate -no-color
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        run: terraform plan -no-color -input=false
+        
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=False
+  
