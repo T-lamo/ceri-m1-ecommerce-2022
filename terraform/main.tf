@@ -42,7 +42,7 @@ resource "google_cloud_run_service" "backend" {
       service_account_name = "terraform-greenfish@ceri-m1-ecommerce-2022.iam.gserviceaccount.com"
      
       containers {
-        image = "europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/backend:0.0.1"
+        image = "europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/backend:0.0.2"
         env {
           name = "DATABASE_ADDRESS"
           value_from {

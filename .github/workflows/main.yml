@@ -59,7 +59,7 @@ jobs:
         run: |
           docker login -u _json_key_base64 -p "${{ secrets.DOCKER_REGISTRY_PASSWORD }}" https://europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish
           docker build -t backend -f Dockerfile .
-          docker tag backend  europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/backend:0.0.1
+          docker tag backend  europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish/backend:0.0.2
   deploy:
     needs: [build-frontend,build-backend]
     runs-on: ubuntu-latest
