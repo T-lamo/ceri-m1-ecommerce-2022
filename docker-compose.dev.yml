@@ -32,7 +32,7 @@ services:
     container_name: backend
     build:
       context: ./backend
-      dockerfile: Dockerfile.yml
+      dockerfile: Dockerfile
     env_file:
       - ./backend/.env
     ports:
