@@ -3,11 +3,12 @@
     import { storeToRefs } from 'pinia';
     import { read_users } from '@/services/crud';
     import { onMounted } from 'vue';
+    import type { User } from '@/models';
 
     const { list_user } = storeToRefs(useAppStore())
     
     onMounted(async () => {
-        list_user.value = await read_users()
+        list_user.value = await read_users() as User[]
     })
    
 

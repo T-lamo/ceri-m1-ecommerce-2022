@@ -2,8 +2,8 @@
 <script lang="ts" setup>
     import { storeToRefs } from 'pinia'
     import { read_albums } from '../../services/crud'
-    import { useAppStore } from '../../stores';
-    import { onMounted } from 'vue';
+    import { useAppStore } from '../../stores'
+    import { onMounted } from 'vue'
     import OneArticle from "./OneArticle.vue"
     const { list_album } = storeToRefs(useAppStore())
     onMounted(async() => {
@@ -16,12 +16,9 @@
 
 </script>
 <template>
-<div class="container-fluid py-2 px-5 my-2">
+<div class="container-fluid py-2 px-5 my-2 text-center">
     <span><i>
-        Liste des albums 
-        <router-link to="/list_album_achat">    
-            <font-awesome-icon icon="fa-solid fa-circle-plus" size="lg" :style="{ color: '#1B1464' }"/>
-        </router-link>
+        List of albums
     </i>
     </span>
     <hr class="dropdown-divider">

@@ -7,28 +7,19 @@
     import { useAppStore } from '@/stores';
     import { toast_function } from '@/services/crud';
     
-    let id_cart_item = 0
-
+    const user_from_localstorage = localStorage.getItem("userId")
+    const user_obj = JSON.parse(user_from_localstorage!)
+    const isLoggedIn_from_localstorage = Boolean(localStorage.getItem("isLoggedIn"))
     const props = defineProps<{
         item:Album,
         promo:boolean,
     }>()
-    // console.log("here promo in cardtest: ",props.item)
+
     const getImage = (imagePath:string) => {
         return (imagePath);
     }
-    const getDate = (str:string) => {
-            const date = new Date(str)
-            return date
-    }
-    let dateOfRelease:Date;
-    // dateOfRelease = getDate(props.item.release_date);
-    // const my_date_of_release:string = dateOfRelease.getDay()+"+""+
-    // console.log('date below: '+dateOfRelease.getDate())
-    // console.log(dateOfRelease.getDay())
-    // console.log(dateOfRelease.getMonth())
-    // console.log(dateOfRelease.getFullYear())
-    const { list_promo , list_artist, list_cart_item, current_shopping_session, isLoggedIn} = storeToRefs(useAppStore())
+
+    const { list_promo , list_artist, list_cart_item, current_shopping_session} = storeToRefs(useAppStore())
    
     onMounted(async () => {
       list_promo.value = (await read_promos()).map((res:any) => {
@@ -41,10 +32,19 @@
     
     })
     
-      
-    const check_me_promo = () => {
+    const chek_if_exist_in_promo = () => {
+      let res = false;
+      list_promo.value.forEach((element) => {
+          if (element.album_id == props.item.id) {
+              res = true
+          }
+      })
+      return res
+    }
+
+    const return_promo = () => {
         let my_selected_promo:Promo = new Promo;
-        if (props.promo == true) {
+        if (chek_if_exist_in_promo()) {
               list_promo.value.forEach((element) => {
                 if (element.album_id == props.item.id) {
                   my_selected_promo =  element; /** Select the last promo id */
@@ -81,10 +81,10 @@
       return found
     })
 
-    const add_me_to_cart = async (id_album:number,click_type:number) => {
+    const add_me_to_cart = async (id_album:number) => {
       
       // if loggedd in
-      if (isLoggedIn.value == true) {
+      if (isLoggedIn_from_localstorage == true) {
         let my_article;
         /** specify whether it is an article added?=1 added to favory lists?=0 */
         let res = await read_one_album(id_album)
@@ -111,8 +111,6 @@
 
             // add to list_cart_item selected cart item
             list_cart_item.value.push(one_cart_item)
-            console.log("list_cart_item length")
-            console.log(list_cart_item.value.length)
 
         }
 
@@ -122,8 +120,6 @@
         });
         
         toast_function("Article successfully add to cart!","success")
-        // instance.dismiss()
-        console.log("add me to chart");
       }
       else {
         toast_function("Please login","error")
@@ -134,56 +130,57 @@
 
 </script>
 <template>
-    <!-- <div class="col-md-6 col-lg-4 mb-4 mb-md-0"> -->
-    
+
         <div class="card m-3" style="width: 16rem;">
           <div class="d-flex justify-content-between p-3">
-            <!-- <p class="lead mb-0">{{props.item}}</p> -->
             <div class="d-grid gap-2 justify-content-md-end">
 
-                <button class="btn btn-outline-warning" @click="add_me_to_cart(props.item.id)">
-                    <font-awesome-icon icon="fa-solid fa-cart-shopping" size="lg" style="{ color: '#f0932b' ;}"/>
+                <button class="btn btn-outline-warning" @click="add_me_to_cart(props.item.id!)">
+                    <font-awesome-icon icon="fa-solid fa-cart-shopping" size="lg" :style="{ color: '#f0932b'}"/>
                 </button>
             </div>
             <div
               class="bg-warning rounded-circle d-flex align-items-center justify-content-center shadow-1-strong"
               style="width: 35px; height: 35px;">
               <p class="mb-0 small fa_heart">
-                <font-awesome-icon icon="fa-solid fa-heart" size="lg" style="{ color: 'rgb(223, 249, 251)' ;}"/>
+                <font-awesome-icon icon="fa-solid fa-heart" size="lg" :style="{ color: 'rgb(223, 249, 251)'}"/>
               </p>
             </div>
           </div>
           <div class="image_product">
+            <router-link :to="{ name: 'album_selected', params: {'id': item.id}}">
               <img
-              :src=getImage(props.item.cover) class="album_cover card-img-top rounded img-fluid"
+              :src=getImage(props.item.cover!) class="album_cover card-img-top rounded img-fluid"
               alt="album picture"
               style="height:180px;"
               />
+          </router-link>
           </div>
-          
-          <!-- <hr /> -->
           <div class="card-body">
             <div class="d-flex justify-content-between">
               <p class="small"><a href="#!" class="text-muted text-decoration-none">{{check_me_artist().firstname}} {{check_me_artist().lastname}}</a></p>
-              <p v-if="props.promo == true" class="small text-danger">
+              <p v-if="chek_if_exist_in_promo()" class="small text-danger">
                 <s class="fs-6">${{props.item.price}}</s>
                 </p>
             </div>
 
             <div class="d-flex justify-content-between mb-3">
               <h5 class="mb-0 fs-6">{{props.item.title}}</h5>
-              <h5 v-if="promo" class="text-dark mb-0">$  {{props.item.price - (check_me_promo().rate / 100 * props.item.price)}}</h5>
+              <h5 v-if="promo && !chek_if_exist_in_promo" class="text-dark mb-0">$  {{props.item.price - (return_promo().rate / 100 * props.item.price)}}</h5>
+              <h5 v-else-if="chek_if_exist_in_promo() && promo==false" class="text-dark mb-0">$  {{props.item.price - (return_promo().rate / 100 * props.item.price)}}</h5>
+              
               <h5 v-else class="text-dark mb-0 fs-6">$  {{props.item.price}} </h5>
+              
             </div>
 
             <div class="d-flex justify-content-between mb-2">
               <p class="text-muted mb-0">Available: <span class="fw-bold" style="font-size:medium;">{{props.item.stock_qty}}</span></p>
               <div class="ms-auto text-warning">
-                <font-awesome-icon icon="fa-solid fa-star" size="xs" style="{ color: '#f9ca24' ;}"/>
-                <font-awesome-icon icon="fa-solid fa-star" size="xs" style="{ color: '#f9ca24' ;}"/>
-                <font-awesome-icon icon="fa-solid fa-star" size="xs" style="{ color: '#f9ca24' ;}"/>
-                <font-awesome-icon icon="fa-solid fa-star" size="xs" style="{ color: '#f9ca24' ;}"/>
-                <font-awesome-icon icon="fa-solid fa-star" size="xs" style="{ color: '#f9ca24' ;}"/>
+                <font-awesome-icon icon="fa-solid fa-star" size="xs" :style="{ color: '#f9ca24'}"/>
+                <font-awesome-icon icon="fa-solid fa-star" size="xs" :style="{ color: '#f9ca24'}"/>
+                <font-awesome-icon icon="fa-solid fa-star" size="xs" :style="{ color: '#f9ca24'}"/>
+                <font-awesome-icon icon="fa-solid fa-star" size="xs" :style="{ color: '#f9ca24'}"/>
+                <font-awesome-icon icon="fa-solid fa-star" size="xs" :style="{ color: '#f9ca24'}"/>
               </div>
             </div>
          

@@ -14,7 +14,7 @@
     const { list_category } = storeToRefs(useAppStore())
 
     const onLoad = async () => {
-        list_category.value = await read_categories()
+        list_category.value = await read_categories() as Category[]
     }
 
     onMounted(() => {

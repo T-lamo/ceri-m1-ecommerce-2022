@@ -5,12 +5,10 @@
     import { storeToRefs } from 'pinia';
     import { onMounted, ref } from 'vue';
     import { read_albums, read_categories, read_artists, create_album, update_album, toast_function, delete_album} from '@/services/crud';
-    import type { Album } from '@/models';
+    import type { Album, Artist, Category } from '@/models';
     import Datepicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css';
     import Swal from 'sweetalert2'
-import { icon } from '@fortawesome/fontawesome-svg-core';
-import { Warning } from 'postcss';
 
     // variables
     let display_edit = ref(false)
@@ -23,9 +21,9 @@ import { Warning } from 'postcss';
 
     // initialize list album, category, artist 
     const onLoad = async () => {
-        list_album.value = await read_albums()
-        list_category.value = await read_categories()
-        list_artist.value = await read_artists()
+        list_album.value = await read_albums() as Album[]
+        list_category.value = await read_categories() as Category[]
+        list_artist.value = await read_artists() as Artist[]
     }
     onMounted( () => {
         onLoad()
@@ -53,7 +51,7 @@ import { Warning } from 'postcss';
 
     // default values of album
     let title = ref("")
-    let release_date = ref(new Date())
+    let release_date = ref(""+(new Date()).toString())
     let cover = ref("")
     let artist_id = ref(0)
     let price = ref(0)
@@ -87,7 +85,7 @@ import { Warning } from 'postcss';
         title_update_or_add.value = 'Create'
         // update local stores
         title.value = ""
-        release_date.value = new Date()
+        release_date.value = (new Date()).toString()
         cover.value = ""
         artist_id.value = 1
         price.value = 0
@@ -107,7 +105,7 @@ import { Warning } from 'postcss';
                 "price": price.value,
                 "stock_qty": stock_qty.value,
                 "title": title.value,
-                "release_date": "" + release_date.value,
+                "release_date": "" + release_date.value.toString(),
                 "created_date": new Date()
             })
             .then(res => 
@@ -213,7 +211,7 @@ import { Warning } from 'postcss';
                                 <td>{{item.description}}</td>
                                 <td>{{check_me_artist(item.artist_id)}}</td>
                                 <td>
-                                    <button @click="onDeleteAlbum(item.id)">
+                                    <button @click="onDeleteAlbum(item.id!)">
                                         <font-awesome-icon icon="fa-solid fa-trash" :style="{ color: '#e17055'}"/> 
                                     </button>&nbsp;
                                     <button @click="onCLickEdit(item) ">

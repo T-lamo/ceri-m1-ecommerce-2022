@@ -1,60 +1,21 @@
 <script lang="ts" setup>
     import { ref,onMounted } from "vue"
-    import { ShoppingSession, User } from "@/models";
+    import { CartItem, ShoppingSession, User } from "@/models";
     import { create_user,read_users, toast_function , 
-     read_last_one_shopping_session_byuser, read_cart_items_by_sessionid} from "@/services/crud";
+     read_last_one_shopping_session_byuser, read_cart_items_by_sessionid, create_shopping_session} from "@/services/crud";
     import { useAppStore } from "@/stores";
     import { storeToRefs } from "pinia";
     import { Form } from 'vee-validate';
     import * as Yup from 'yup';
     import InputField from "./InputField.vue";
     import {useToast} from 'vue-toast-notification';
-    import { decodeCredential, googleLogout } from "vue3-google-login";
     import { useRouter } from 'vue-router';
     
+    /** call localStorage */
+    const localStorage = window.localStorage
+
     /** get values from the stores */
-    const { list_category, list_user, current_user, isLoggedIn, list_cart_item,
-       list_shopping_Session , last_shopping_session, current_shopping_session} = storeToRefs(useAppStore())
-
-    // const get_last_shoppsession_db = (list_shop_sess_db:Array<ShoppingSession>):boolean => {
-
-    //   let found = false
-    //   let count = 0
-    //   list_shop_sess_db.forEach((element:ShoppingSession) => {
-        
-    //     // iterate through user list
-    //     list_user.value.forEach((user_item:User) => {
-    //         // if  id is found in list shopping sesssion, get the last element
-    //         if (user_item.id == element.user_id) {
-    //           last_shopping_session.value = element
-    //           found = true
-    //           count+=1
-    //         }
-    //       })
-    //     })
-    //   console.log("count value: ",count)
-    //   return found
-    // }
-
-    // const get_current_shoppsession_db = (list_shop_sess_db:Array<ShoppingSession>):boolean => {
-
-    //   let found = false
-    //   let count = 0
-    //   list_shop_sess_db.forEach((element:ShoppingSession) => {
-
-    //     // iterate through user list
-    //     list_user.value.forEach((user_item:User) => {
-    //         // if user id is found in list shopping sesssion, get the last element
-    //         if (user_item.id == element.user_id) {
-    //           current_shopping_session.value= element
-    //           found = true
-    //           count+=1
-    //         }
-    //       })
-    //     })
-    //   console.log("count value: ",count)
-    //   return found
-    // }
+    const {list_user, current_user, list_cart_item, current_shopping_session, isAdminStore } = storeToRefs(useAppStore())
 
     /** routing */
 
@@ -67,18 +28,10 @@
 
     
     /** initialize userLoggin in store to false */
-    isLoggedIn.value = false
-    // async function digestMessage(message:string) {
-    //     const encoder = new TextEncoder();
-    //     const data = encoder.encode(message);
-    //     const hash = await crypto.subtle.digest('SHA-256', data);
-    //     // console.log("hash me")
-    //     // console.log(hash)
-    //     return hash;
-    //   }
+    
+    // isLoggedIn.value = false
     
     onMounted(async () => {
-      // console.log("display users: ")
       list_user.value = (await read_users()).map((res:any) => {
             return res;
         })
@@ -88,11 +41,26 @@
     const check_email = ((my_email:string, my_pass:string)  => {
       let res:Boolean = false;
       list_user.value.forEach(element => {
-        // console.log(element.email)
+       
         if (element.email == my_email && element.password == my_pass) {
           current_user.value = element
-          // add current_user to localstorage
-          localStorage.setItem("user", JSON.stringify(element))
+          // add user id to localstorage
+          localStorage.setItem("userId", "" + JSON.stringify(element))
+          localStorage.setItem("isLoggedIn","true")
+          const value = (localStorage.getItem("userId"))
+          const user_obj = JSON.parse(value!)
+          console.log(user_obj)
+          if (user_obj?.is_admin) {
+            localStorage.setItem("isAdmin","true")
+            isAdminStore.value = true
+          }
+          else {
+            localStorage.setItem("isAdmin","false")
+            isAdminStore.value = false
+          }
+            
+
+          current_user.value = user_obj
           res = true
         }
       })
@@ -130,7 +98,7 @@
       console.log(check_email(values.email,values.password))
       if (check_email(values.email,values.password)) {
         // initialize isLoggedIn store value
-        isLoggedIn.value = true
+        // isLoggedIn.value = true
 
         // get last shopping session for user logged in
         let response_read_last_shopping = await read_last_one_shopping_session_byuser(current_user.value?.id!)
@@ -142,11 +110,9 @@
           // check if there is an cartitem inside the shopping session
           // get last cart item for a shopping session
           let response_list_cart_item = await read_cart_items_by_sessionid(response_read_last_shopping.id!)
-              // .then(res => console.log("get cart items by shopsess successfull: ",res))
-              // .catch(error => console.log(error))
           
           // assign to list_cart_item cart items from db
-          // response_list_cart_item.forEach((element:ShoppingSession) => {
+          // response_list_cart_item.forEach((element:CartItem) => {
           //   list_cart_item.value.push(element)
           // })
           // if cart items are not empty
@@ -171,9 +137,9 @@
         })
 
         // add shopping session to database
-        // const response_create_shop_sess = await create_shopping_session(shopping_session)
-        //               .then((res) => console.log("shopping session created successfully"))
-        //               .catch((error) => console.log(error))
+        const response_create_shop_sess = await create_shopping_session(shopping_session)
+                      .then((res) => console.log("shopping session created successfully"))
+                      .catch((error) => console.log(error))
         // get last shopping session
         let response_read_last_shopping_after_create = await read_last_one_shopping_session_byuser(current_user.value?.id!)
         // add to current_shopping_session new created shopping session 
@@ -193,30 +159,7 @@
       }
     })
 
-     /** login sso */
-     const onSSOLogin = (response:any) => {
-      const userData = decodeCredential(response.credential)
-      console.log("Handle the userData: "+userData)
-      // if email does not exist 
-      // if (!check_email(userData.email)) {
-      //   save user data
-      //   const response = await create_user({
-      //     "telephone":userData.phone,
-      //     "email":userData.email,
-      //     "username":userData.username,
-      //     "firstname":userData.firstname,
-      //     "password":userData.password,
-      //     "created_date": new Date(),
-      //     "is_admin": false})
-      //   console.log("email does not exist")
-      //   console.log("Handle the userData", userData)
-      // }
-      // if not 
-
-      
-    }
-
-    /** on invalid submit */
+      /** on invalid submit */
     const onInvalidSubmit = (()=> {
       console.log('invalid button me')
       const submitBtn = document.querySelector('.auth-btn');
@@ -287,8 +230,6 @@
                               <a class="text-muted" href="#!">Forgot password?</a>
                             </div>
                       </Form>
-                      <p>Or Login With </p>
-                      <GoogleLogin :callback="onSSOLogin"/> <!--prompt-->
                   </div>
                      <!-- Please sign up -->
                   <div v-else>
@@ -349,42 +290,12 @@
                         <!-- <a class="text-muted" href="#!">Forgot password?</a> -->
                       </div>
                     </Form>
-                </div>
-                  <!--<p class="text-center" v-if="show">Or Log in with:</p>
-                  <p class="text-center" v-else>Or Sign Up with:</p>
-                   list of icons to log in social media -->
-                  <!-- <div class="d-flex align-items-center justify-content-center pb-4">
-                      <ul class="list-unstyled d-flex">
-                          <li>
-                              <a href="#" class="me-4">
-                                  <font-awesome-icon icon="fa-brands fa-linkedin" size="lg" :style="{ color: 'black' }"/>
-                              </a>
-                          </li>
-                          <li>
-                              <a href="#" class="me-4">
-                                  <font-awesome-icon icon="fa-brands fa-facebook" size="lg" :style="{ color: 'black' }"/>
-                              </a>
-                          </li>
-                          <li>
-                              <a href="#" class="me-4">
-                                  <font-awesome-icon icon="fa-brands fa-twitter" size="lg" :style="{ color: 'black' }"/>
-                              </a>
-                          </li>
-                          <li>
-                              <a href="#" class="me-4">
-                                  <font-awesome-icon icon="fa-brands fa-google" size="lg" :style="{ color: 'black' }"/>
-                              </a>
-                          </li>
-                      </ul>
-                     
-                  </div> -->
+                  </div>
                     <div class="d-flex align-items-center justify-content-center pb-4">
                       <!-- <p class="mb-0 me-2">Don't have an account?</p> <a href="#"> Please Sign Up! </a>
                       <p class="mb-0 me-2">Don't have an account?</p> <a href="#"> Please Sign Up! </a> -->
                       <!-- <button type="button" class="btn btn-outline-danger">Create new</button> -->
                     </div>
-                
-                  <!-- </form> -->
                 
                 </div>
               </div>

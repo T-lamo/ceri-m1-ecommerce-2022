@@ -2,33 +2,29 @@
     import { useAppStore } from '@/stores';
     import { storeToRefs } from 'pinia';
     import { read_order_details , read_users, read_order_items_by_orderdetail_id, read_albums, update_order_detail} from '@/services/crud';
-    import { computed, onMounted, ref } from 'vue';
-    import { Album, OrderDetail, type OrderItem } from '@/models';
-    import * as Yup from 'yup';
-    import {toast_function} from '@/services/crud'
-    import InputField from '@/components/auth/InputField.vue'
+    import { onMounted, ref } from 'vue';
+    import { Album, type OrderDetail,type User,OrderItem } from '@/models';
 
     let choose_me_edit_or_show = ref(true)
-    let chosen_order_items = ref<OrderItem[]>([])
-    // let chosen_order_detail_id = ref(0)
+    let chosen_order_items = ref<OrderItem[]>()
     let chosen_order_detail = ref<OrderDetail>()
 
     const { list_order_detail, list_user , list_album} = storeToRefs(useAppStore())
     
     const get_order_details = async () => {
         let list_order_details = await read_order_details()
-        list_order_detail.value =  list_order_details
+        list_order_detail.value =  list_order_details as OrderDetail[]
         console.log(list_order_detail.value)
     }
 
     const read_all_albums = async() => {
-        list_album.value = await read_albums()
+        list_album.value = await read_albums() as Album[]
     }
     // fill list_user store to users in db
     const get_user_detail = async () => {
-        list_user.value = await read_users();
-        console.log("list user: ")
-        console.log(list_user.value)
+        list_user.value = await read_users() as User[]
+        // console.log("list user: ")
+        // console.log(list_user.value)
     }
     onMounted(() => {
         read_all_albums()
@@ -53,10 +49,15 @@
         choose_me_edit_or_show.value = true
         chosen_order_detail.value= order_detail
         // console.log("id order: ",order_detail.id)
-        let orders_items = await read_order_items_by_orderdetail_id(order_detail.id)
-        chosen_order_items.value = orders_items
+        let orders_items = await read_order_items_by_orderdetail_id(order_detail.id!)
+        // orders_items.forEach(element => {
+        //     chosen_order_items.value!.push(element)
+        // });
+        chosen_order_items.value! = orders_items
+        // chosen_order_items.value = orders_items
         // console.log('corresponding order items: ')
         // console.log(chosen_order_items.value)
+        // return orders_items
     }
 
      // get image source
@@ -227,7 +228,7 @@
                                                 <th>{{item.id}}</th>
                                                 <td>
                                                     <img
-                                                        :src=getImage((check_me_album(item.album_id)).cover)
+                                                        :src=getImage((check_me_album(item.album_id)).cover!)
                                                         style="height:80px; width:120px;"
                                                         class="img-fluid rounded-3" alt="Cotton T-shirt">
                                                     <p></p>

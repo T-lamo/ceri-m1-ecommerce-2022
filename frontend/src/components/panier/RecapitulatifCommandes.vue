@@ -22,13 +22,13 @@
 </script>
 <template>
     <div class="row-cols-3" v-for="product in list_album">
-        <div class="col" v-if="check_id_album(product.id)">
+        <div class="col" v-if="check_id_album(product.id!)">
             <div class="card m-3" style="width: 16rem;" >
                 <img :src=getImage(product.cover!) class="card-img-top" alt="..." style="height:180px;">
                         <div class="card-body">
                             <!-- <h5 class="card-title">Titre de l'album: {{product.title}}</h5> -->
                             <p class="card-text">Titre de l'album: {{product.title}}</p>
-                            <p class="card-text">Quantité: {{check_id_album(product.id)}}</p>
+                            <p class="card-text">Quantité: {{check_id_album(product.id!)}}</p>
                         </div>                
                        
             </div>

@@ -3,11 +3,7 @@
     import { storeToRefs } from 'pinia';
     import { onMounted, ref } from 'vue';
     import { read_artists, read_albums, read_categories, update_artist, toast_function, create_artist} from '@/services/crud';
-    import { Album, Artist } from '@/models';
-    import * as Yup from 'yup';
-    import { Form, useField } from 'vee-validate';
-    import { validate } from 'vee-validate';
-    import InputField from "@/components/auth/InputField.vue" 
+    import type { Album, Artist, Category } from '@/models';
     import Datepicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css';
     
@@ -24,9 +20,9 @@
 
     // initialize list of album, category and artist in the store
     const onLoad = (async () => {
-        list_artist.value = await read_artists()
-        list_album.value = await read_albums()
-        list_category.value = await read_categories()
+        list_artist.value = await read_artists() as Artist[]
+        list_album.value = await read_albums() as Album []
+        list_category.value = await read_categories() as Category []
     })
 
     onMounted(() => {
@@ -59,7 +55,7 @@
     let firstname = ref("")
     let lastname = ref("")
     let cover = ref("")
-    let date_of_birth = ref(new Date())
+    let date_of_birth = ref("" + (new Date()).toString())
 
     //on click edit button
     const edit_artist = (artist:Artist) => {
@@ -69,12 +65,10 @@
         display_info_or_edit.value = false;
         chosen_artist.value = artist
         firstname.value = artist.firstname
-        // console.log("fistname: " + firstname)
         lastname.value = artist.lastname
         cover.value = artist.cover!
-        date_of_birth.value = artist.date_of_birth!
+        date_of_birth.value = "" + artist.date_of_birth?.toString()
         console.log(chosen_artist.value.firstname)
-        // firstname = chosen_artist.value.firstname
     }
 
     // update artist
@@ -128,7 +122,7 @@
         firstname.value = ""
         lastname.value = ""
         cover.value = ""
-        date_of_birth.value = new Date()
+        date_of_birth.value = (new Date()).toString()
 
     }
     
@@ -277,7 +271,7 @@
                             </div>
 
                             <div class="text-center pt-1 mb-5 pb-1">
-                                <button  class="btn btn-outline-warning btn-block" @click="onUpdateAddArtist(id_choose)">
+                                <button  class="btn btn-outline-warning btn-block" @click="onUpdateAddArtist()">
                                     {{title_update_or_add}}
                                 </button>
                             </div>

@@ -35,6 +35,7 @@ export async function read_songs(): Promise<ISong[]> {
   return await (await fetch(`/api/song`)).json();
 }
 
+
 export async function read_cart_items(): Promise<ICartItem[]> {
   return await (await fetch(`/api/cart_item`)).json();
 }
@@ -67,7 +68,7 @@ export async function read_order_items(): Promise<IOrderItem[]> {
   return await (await fetch(`/api/order_item`)).json();
 }
 
-export async function read_order_items_by_orderdetail_id(data:number): Promise<IOrderDetail> {
+export async function read_order_items_by_orderdetail_id(data:number): Promise<IOrderItem[]> {
   return await (await fetch(`/api/order_item_by_orderdetailid/${data}`)).json();
 }
 

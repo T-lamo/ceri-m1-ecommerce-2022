@@ -6,7 +6,7 @@
    import { ref } from "vue"
    import { useAppStore } from '@/stores';
    import { storeToRefs } from 'pinia';
-   import type { CartItem } from '@/models';
+   import type { CartItem, OrderDetail } from '@/models';
    import { create_order_detail, read_lastone_order_detail_byuserid,create_order_item } from '@/services/crud';
 
    const {list_cart_item, total_price, list_album, current_user, current_order_detail} = storeToRefs(useAppStore())
@@ -27,7 +27,7 @@
     let last_order_detail = await read_lastone_order_detail_byuserid(current_user.value?.id!)
     
     // update current_order_detail in store
-    current_order_detail.value = last_order_detail
+    current_order_detail.value = last_order_detail as OrderDetail
     // current_order_detail.value?.delivery_status = last_order_detail.delivery_status
 
     // create order items for the order detail

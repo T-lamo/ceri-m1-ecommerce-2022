@@ -4,7 +4,7 @@
     import { useAppStore } from '../../stores';
     import { onMounted } from 'vue';
     import { useRoute } from 'vue-router';
-    import { Artist } from '../../models';
+    import type { Artist } from '../../models';
     import OneArticle from '../album/OneArticle.vue';
 
     const route = useRoute()
@@ -14,7 +14,7 @@
     const { one_artist } = storeToRefs(useAppStore())
     onMounted(async() => {
 
-       one_artist.value = (await read_one_artist(id_router))
+       one_artist.value = (await read_one_artist(id_router)) as Artist
        
     })
     const getImage = (imagePath:string) => {
@@ -22,22 +22,27 @@
     }
 </script>
 <template>
-    <div class="container">
-        <h4 class="text-center">Artist Detail: {{$route.params.id}}</h4>
+    <div class="container pt-4">
+        <button class="btn btn-transparent">
+            <router-link to="/artists" style="color:#bdc3c7;text-decoration: none;" >
+                <font-awesome-icon icon="fa-solid fa-arrow-left-long" size="lg" :style="{ color: 'black'}"/>
+                Back  
+            </router-link>
+        </button>
+        <h4 class="text-center">Artist Detail # {{$route.params.id}}</h4>
         <br>
         <div class="container-fluid py-2 px-5 my-3 row">
             <div class="col">
-                <img class="rounded-circle" :src=getImage(one_artist?.cover)>
+                <img class="rounded-circle" :src=getImage(one_artist?.cover!)>
             </div>
             <div class="col">
-                <p>{{one_artist?.firstname}}</p>
-                <p>{{one_artist?.lastname}}</p>
-                <p>{{one_artist?.date_of_birth}}</p>
+                <p><b>Firstame:</b> {{one_artist?.firstname}}</p>
+                <p><b>Lastname: </b>{{one_artist?.lastname}}</p>
+                <p><b>Born in: </b>{{one_artist?.date_of_birth}}</p>
             </div>
            
         </div>
-        <!-- a revoir ????-->
-        <h2>Album associes</h2>
+        <h2 class="text-center">Associated albums:</h2>
         <hr class="dropdown-divider">
         <div class="container-fluid" style="display:flex;">
         
@@ -55,13 +60,5 @@
     width: 100px;
     height: 100px;
     border-radius: 50px 50px 50px 50px;
-}
-.card-body img {
-    height: 30px;
-    width: 30px;
-}
-.album_cover {
-    /* width; */
-    height: 180px;
 }
 </style>

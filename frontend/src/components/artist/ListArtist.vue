@@ -15,8 +15,8 @@
 </script>
 
 <template>
-    <div class="container-fluid py-2 px-5 my-3">
-        <span><i>Liste des artistes <font-awesome-icon icon="fa-solid fa-circle-plus" size="lg" :style="{ color: '#1B1464' }"/></i></span>
+    <div class="container-fluid py-2 px-5 my-3 text-center">
+        <span><i>List of singers</i></span>
         <hr class="dropdown-divider">
         <div class="row">
             <OneArtistDetail
@@ -26,6 +26,3 @@
         </div>
     </div>
 </template>
-<style scoped>
-
-</style>
