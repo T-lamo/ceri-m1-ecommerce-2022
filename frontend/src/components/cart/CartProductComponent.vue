@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import ListCartProduct from "./ListCartProductComponent.vue";
+import ListCartProductComponent from "./ListCartProductComponent.vue";
 </script>
 
 <template>
   <div class="container">
     <h2>Panier</h2>
-    <ListCartProduct />
+    <ListCartProductComponent />
     <button class="btn btn-success">Commander</button>
     <button class="btn btn-primary">Modifier</button>
   </div>

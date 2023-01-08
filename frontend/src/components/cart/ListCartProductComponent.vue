@@ -4,7 +4,7 @@
   <div class="container">
     <ul class="container">
       <li>
-        <Cart product="{item}" />
+        <CartComponent product="{item}" />
       </li>
     </ul>
     <h1>Total: 0$</h1>

@@ -30,7 +30,7 @@ export function search_engine(search_text: string) {
 
   // Search the index and print the results
   console.log("search text", search_text);
-  return index.search(search_text).then((hits: any) => hits);
+  return index.search(search_text).then(({ hits }) => hits);
 }
 
 export function algolia_insert(objects: any) {
@@ -52,11 +52,11 @@ export function algolia_insert(objects: any) {
   //     objectID: "myID2",
   //   },
   // ];
-  objects = objects.map((data: any) => {
-    return { ...data, objectID: data.id };
-  });
+  objects = objects.map((data: any)=> {
+    return {...data, objectID:data.id}
+  })
   // console.log(result)
-  index.saveObjects(objects).then((objectIDs: any) => {
+  index.saveObjects(objects).then(({ objectIDs }) => {
     console.log(objectIDs);
   });
 }

@@ -1,10 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import CartComponent from "./../cart/CartComponent.vue";
+</script>
 
 <template>
   <div class="container">
     <ul class="container">
       <a href="/product-details/{item.id}">
-        <li>item</li>
+        <li>
+          <CartComponent></CartComponent>
+        </li>
+        <li>
+          <CartComponent></CartComponent>
+        </li>
       </a>
     </ul>
   </div>

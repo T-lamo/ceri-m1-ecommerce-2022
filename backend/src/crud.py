@@ -41,16 +41,20 @@ class Database(metaclass=DatabaseSingletonMeta):
     def __init__(self):
         settings = Settings()
         print(settings.DATABASE_ADDRESS)
-        self.db = settings.DATABASE_NAME    
-        self.user = settings.DATABASE_USER
-        self.password = settings.DATABASE_PASSWORD
-        self.host = settings.DATABASE_ADDRESS
+        # self.db = settings.DATABASE_NAME    
+        # self.user = settings.DATABASE_USER
+        # self.password = settings.DATABASE_PASSWORD
+        # self.host = settings.DATABASE_ADDRESS
         # print("test", settings.DATABASE_ADDRESS)
-        # self.db = "ecom_db"
-        # self.user = 'root'
-        # self.password = 'mypass'
-        # self.host = 'db'
-        
+        self.db = "ecom_db"
+        self.user = 'root'
+        self.password = 'mypass'
+        self.host = 'db'
+        # self.db = "uapv2201069"
+        # self.user = 'uapv2201069'
+        # self.password = 'WmAsN1'
+        # self.host = 'pedago.univ-avignon.fr'
+      
       
 
         mysql_url = f"mysql+pymysql://{self.user}:{self.password}@{self.host}/{self.db}?charset=utf8mb4"

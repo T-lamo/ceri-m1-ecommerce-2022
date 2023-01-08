@@ -15,10 +15,16 @@ import SearchComponent from "./components/common/SearchComponent.vue";
     <div class="sidebar">
       <SidebarComponent />
     </div>
-    <nav class="main">
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-    </nav>
+
+    <div class="main">
+      Hello
+
+      <nav>
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/about">About</RouterLink>
+      </nav>
+      <RouterView />
+    </div>
 
     <div class="footer">
       <FooterComponent />
@@ -27,8 +33,6 @@ import SearchComponent from "./components/common/SearchComponent.vue";
       <SearchComponent />
     </div>
   </div>
-
-  <RouterView />
 </template>
 
 <style lang="scss" scoped>

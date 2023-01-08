@@ -13,10 +13,10 @@
 <style lang="scss" scoped>
 .container {
   background: var(--gray-1);
-  min-width: 300px;
+  width: 300px;
   position: fixed;
   top: calc(70px);
-  height: 100vh;
+  min-height: 100vh;
   font-size: large;
   font-weight: 700;
   ul {
