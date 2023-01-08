@@ -51,6 +51,12 @@ europe-west1-docker.pkg.dev/ceri-m1-ecommerce-2022/greenfish
 ## stop mysql service if it is running
 sudo systemct stop mysql
 
+## connect to database from terminal
+mysql -u greenfish -p --host 127.0.0.1
 
 ## cloud run service basic
 google cloud ressource
+
+## pydantic read env
+
+https://lynn-kwong.medium.com/how-to-use-pydantic-to-read-environment-variables-and-secret-files-in-python-8a6b8c56381c

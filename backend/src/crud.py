@@ -10,9 +10,10 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
-    DATABASE_ADDRESS: str = "localhost:3306"
-    DATABASE_USER: str ="tlamo"
-    DATABASE_PASSWORD: int = 50
+    DATABASE_ADDRESS: str = ""
+    DATABASE_USER: str =""
+    DATABASE_PASSWORD: str = ""
+    DATABASE_NAME: str=""
 
 
 class DatabaseSingletonMeta(type):
@@ -39,18 +40,18 @@ class Database(metaclass=DatabaseSingletonMeta):
 
     def __init__(self):
         settings = Settings()
-        # print(settings.DATABASE_ADDRESS)
-        # self.db = "greenfish-51TsfXfC"
-        # self.user = 'greenfish'
-        # self.password = 'CwNw54qKkgl6AoGO'
-        # self.host = 'localhost:3306'
-        print("test", settings.DATABASE_ADDRESS)
-        self.db = "ecom_db"
-        self.user = 'root'
-        self.password = 'mypass'
-        self.host = 'db'
+        print(settings.DATABASE_ADDRESS)
+        self.db = settings.DATABASE_NAME    
+        self.user = settings.DATABASE_USER
+        self.password = settings.DATABASE_PASSWORD
+        self.host = settings.DATABASE_ADDRESS
+        # print("test", settings.DATABASE_ADDRESS)
+        # self.db = "ecom_db"
+        # self.user = 'root'
+        # self.password = 'mypass'
+        # self.host = 'db'
         
-
+      
 
         mysql_url = f"mysql+pymysql://{self.user}:{self.password}@{self.host}/{self.db}?charset=utf8mb4"
         self.engine = create_engine(mysql_url, echo=True)
@@ -237,8 +238,8 @@ class Database(metaclass=DatabaseSingletonMeta):
             return session.exec(select(OrderDetail).where(OrderDetail.user_id == user_id).order_by(OrderDetail.id.desc())).first()
 
     def insert_order_detail(self, item:OrderDetail):
-        data = OrderDetail(total=item['total'], user_id=item['user_id'],payment_status=item['payment_status'],send_status = item['send_status'],
-        delivery_status=item['delivery_status'], orders_status=item['orders_status'],created_date=datetime.now())
+        
+        data = OrderDetail(total=item['total'], user_id=item['user_id'],payment_status=item['payment_status'],delivery_status=item['delivery_status'],orders_status=item['orders_status'], created_date=datetime.now())
         session = Session(self.engine)
         session.add(data)
         session.commit()
@@ -254,6 +255,14 @@ class Database(metaclass=DatabaseSingletonMeta):
                 orders_status = item['orders_status'],
                 created_date= datetime.now())
             results = session.exec(statement)
+            update = results.one()
+            update.total=item['total']
+            update.user_id=item['user_id']
+            update.payment_status=item['payment_status']
+            update.delivery_status=item['delivery_status']
+            update.orders_status=item['orders_status']
+            update.created_date= datetime.now()
+            session.add(update)
             session.commit()
 
     def delete_order_detail(self,id):
@@ -310,18 +319,24 @@ class Database(metaclass=DatabaseSingletonMeta):
             return session.exec(select(PaymentDetail).where(PaymentDetail.id == id)).first()
             
     def insert_payment_detail(self, item:PaymentDetail):
-        data = PaymentDetail(amount=item['amount'], status=item['status'],  order_detail_id=item['order_detail_id'],created_date=datetime.now())
+        data = PaymentDetail(name=item['name'], amount=item['amount'],credit_card_number=item['credit_card_number'], status=item['status'],provider=['provider'],expiration_date=['expiration_date'],cvv=item['cvv'],order_detail_id=item['order_detail_id'], created_date=datetime.now())
         session = Session(self.engine)
         session.add(data)
         session.commit()
+
+     
 
     def update_payment_detail(self,item:PaymentDetail, id):
         with Session(self.engine) as session:
             statement = select(PaymentDetail).where(PaymentDetail.id == id)
             results = session.exec(statement)
             update = results.one()
+            update.name= item['name']
             update.amount=item['amount']
+            update.credit_card_number= item['credit_card_number']
             update.status=item['status'] 
+            update.provider=item['provider']
+            update.cvv= item['cvv']
             update.order_detail_id=item['order_detail_id'] 
             update.created_date= datetime.now()
             session.add(update)

@@ -1,75 +1,88 @@
 version: "3.9"
 services:
-    frontend:
-      container_name: frontend
-      build:
-        context: ./frontend
-        dockerfile: Dockerfile.dev.yml
-      volumes: 
-        - type: bind
-          source: ./frontend
-          target: /home/node/app
-        - type: volume
-          target: /home/node/app/node_modules
-      depends_on:
-          - frontend_test
-      ports:
-          - 8001:8001
+  cloudsql-proxy:
+    container_name: cloudsql-proxy
+    image: gcr.io/cloudsql-docker/gce-proxy:1.11
+    command: /cloud_sql_proxy --dir=/cloudsql -instances=ceri-m1-ecommerce-2022:europe-west1:mysql-primary=tcp:0.0.0.0:3306 -credential_file=/secrets/cloudsql/key.json
+    volumes:
+      - ./key.json:/secrets/cloudsql/key.json
+    ports:
+      - 3306:3306
+    restart: always
 
-    backend:
-      container_name: backend
-      build: 
-        context: ./backend
-        dockerfile: Dockerfile.yml
-      env_file:
-        - ./backend/.env
-      ports:
-          - 8000:8000
-      depends_on:
-        - db
-        - frontend_test
+  frontend:
+    container_name: frontend
 
-    reverse_proxy:
-      build: 
-        context: ./reverse_proxy
-        dockerfile: Dockerfile
-      ports:
-        - 80:80
-      depends_on:
-        - db
-        - backend
-    
-    db: 
-      container_name: db
-      build:
-        context: ./db
-        dockerfile: Dockerfile
-      restart: always
-      volumes: 
-        - type: volume
-          source: ecom_db_backup
-          target: /var/lib/mysql 
-        - type: bind
-          source: ./db
-          target: /app
-      env_file: ./db/.env
-      ports:
-        - 3307:3306
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev.yml
+    volumes:
+      - type: bind
+        source: ./frontend
+        target: /home/node/app
+      - type: volume
+        target: /home/node/app/node_modules
 
-    adminer:
-      image: adminer
-      restart: always
-      ports:
-        - 8080:8080
+    depends_on:
+      - frontend_test
+    ports:
+      - 8001:8001
 
-    frontend_test:
-        container_name: frontend_test
-        build:
-          context: ./frontend
-          dockerfile: Dockerfile.dev.yml
-        command: ["npm", "run", "test:unit"]
-       
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.yml
+    env_file:
+      - ./backend/.env
+    ports:
+      - 8000:8000
+    depends_on:
+      # - db
+      - frontend_test
+    restart: always
 
-volumes:
-   ecom_db_backup:
-     external: true
+
+  reverse_proxy:
+    build:
+      context: ./reverse_proxy
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      # - db
+      - backend
+
+  # db: 
+  #   container_name: db
+  #   build:
+  #     context: ./db
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   volumes: 
+  #     - type: volume
+  #       source: ecom_db_backup
+  #       target: /var/lib/mysql 
+  #     - type: bind
+  #       source: ./db
+  #       target: /app
+  #   env_file: ./db/.env
+  #   ports:
+  #     - 3307:3306
+
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+
+  frontend_test:
+    container_name: frontend_test
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev.yml
+    command: [ "npm", "run", "test:unit" ]
+
+# volumes:
+#    ecom_db_backup:
+#      external: true

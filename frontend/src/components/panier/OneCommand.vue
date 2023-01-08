@@ -1,50 +1,60 @@
 <script lang="ts" setup>
-    import { Album, type CartItem } from "@/models";
-    import { computed, ref } from "vue"
-    import { defineProps } from "vue";
-    import { useAppStore } from '@/stores';
-    import { storeToRefs } from 'pinia';
-    import { delete_cart_item_by_shopsession_albumid, read_cart_items_by_sessionid, toast_function } from "@/services/crud"; 
-    import Swal from "sweetalert2";
+import { Album, type CartItem } from "@/models";
+import { computed, ref } from "vue";
+import { defineProps } from "vue";
+import { useAppStore } from "@/stores";
+import { storeToRefs } from "pinia";
+import {
+  delete_cart_item_by_shopsession_albumid,
+  read_cart_items_by_sessionid,
+  toast_function,
+} from "@/services/crud";
+import Swal from "sweetalert2";
 
-    // list of stores used in this section
-    const { list_promo, list_cart_item, list_album, current_user, total_price, current_shopping_session } = storeToRefs(useAppStore())
+// list of stores used in this section
+const {
+  list_promo,
+  list_cart_item,
+  list_album,
+  current_user,
+  total_price,
+  current_shopping_session,
+} = storeToRefs(useAppStore());
 
-    // define props
-    const props = defineProps<{
-        item:CartItem,
-    }>()
+// define props
+const props = defineProps<{
+  item: CartItem;
+}>();
 
-    // the quantity of product
-    const qty_cart = ref(props.item.qty)
+// the quantity of product
+const qty_cart = ref(props.item.qty);
 
-    const check_me_album = () => {
-        let my_selected_album = new Album;
-        list_album.value.forEach((element:Album) => {
-          if (element.id == props.item.album_id) {
-            my_selected_album = element
-          }
-        })
-        return my_selected_album
+const check_me_album = () => {
+  let my_selected_album = new Album();
+  list_album.value.forEach((element: Album) => {
+    if (element.id == props.item.album_id) {
+      my_selected_album = element;
     }
-    // modify quantity of product in store
-    const handleChange = (() => {
-        list_cart_item.value.forEach((element) => {
-            if (element.album_id == props.item.album_id) {
-                element.qty = qty_cart.value   
-                // update cart item in db
-                 
-                console.log("for : ",element.album_id)
-                console.log("change qty here: ",element.qty)
-                
-            }    
-        })
-    })
+  });
+  return my_selected_album;
+};
+// modify quantity of product in store
+const handleChange = () => {
+  list_cart_item.value.forEach((element) => {
+    if (element.album_id == props.item.album_id) {
+      element.qty = qty_cart.value;
+      // update cart item in db
 
-    // get image source
-    const getImage = (imagePath:string) => {
-        return (imagePath);
+      console.log("for : ", element.album_id);
+      console.log("change qty here: ", element.qty);
     }
+  });
+};
+
+// get image source
+const getImage = (imagePath: string) => {
+  return imagePath;
+};
 
     //delete cart item
     const deleteCartItem = async (album_id:number) => {
@@ -74,7 +84,7 @@
 </script>
 
 <template>
-<div>
+  <div>
     <!-- First item -->
     <div class="card rounded-3 mb-4">
         <div class="card-body p-4">
@@ -99,30 +109,41 @@
                 class="form-control form-control-sm"/>
               <!-- <span>{{qty_cart}}</span> -->
 
-              <button class="btn btn-link px-2"
-                onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                <i class="fas fa-plus"></i>
-              </button>
-            </div>
-            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-              <h5 class="mb-0"> <p>{{(check_me_album()).price * qty_cart }}</p></h5>
-            </div>
-            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-              <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
-            </div>
+            <button
+              class="btn btn-link px-2"
+              onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+            >
+              <i class="fas fa-plus"></i>
+            </button>
           </div>
-          <div class="text-end">
+          <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+            <h5 class="mb-0">
+              <p>{{ check_me_album().price * qty_cart }}</p>
+            </h5>
+          </div>
+          <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+            <a href="#!" class="text-danger"
+              ><i class="fas fa-trash fa-lg"></i
+            ></a>
+          </div>
+        </div>
+        <div class="text-end">
           <!-- <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a> -->
-              <!-- <router-link to="/list_album_achat">    
+          <!-- <router-link to="/list_album_achat">    
                   <font-awesome-icon icon="fa-solid fa-edit" size="lg" :style="{ color: '#1B1464' }"/>
               </router-link> &nbsp;&nbsp; -->
-              <button class="btn bg-transparent" @click="deleteCartItem(props.item.album_id)"> 
-                  <font-awesome-icon icon="fa-solid fa-trash" size="lg" :style="{ color: 'red' }"/>
-              </button>
-          </div>
+          <button
+            class="btn bg-transparent"
+            @click="deleteCartItem(props.item.album_id)"
+          >
+            <font-awesome-icon
+              icon="fa-solid fa-trash"
+              size="lg"
+              :style="{ color: 'red' }"
+            />
+          </button>
+        </div>
       </div>
-        
+    </div>
   </div>
-</div>
-        
 </template>

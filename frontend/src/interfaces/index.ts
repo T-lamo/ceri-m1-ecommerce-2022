@@ -70,10 +70,12 @@ export interface IOrderItem {
 }
 export interface IPaymentDetail {
   id?: number;
-  amount?: number;
+  amount: number;
+  name: string;
+  provider: string;
+  credit_card_number: string;
   status: string;
   created_date?: Date;
-  order_detail_id?: number
 }
 
 export interface IShoppingSession {

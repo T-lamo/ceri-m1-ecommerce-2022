@@ -114,7 +114,6 @@ export class OrderDetail implements IOrderDetail {
   constructor(fields: Partial<IOrderDetail>) {
     Object.assign(this, fields);
   }
- 
 }
 export class OrderItem implements IOrderItem {
   id?: number;
@@ -128,9 +127,15 @@ export class OrderItem implements IOrderItem {
 }
 export class PaymentDetail implements IPaymentDetail {
   id?: number;
+  name = "";
+  amount = 0;
+  credit_card_number = "";
+  provider = "";
   status = "";
+  order_detail_id = 0;
+  expiration_date = "";
+  cvv = "";
   created_date?: Date;
-  order_detail_id?: number;
   constructor(fields: Partial<IPaymentDetail>) {
     Object.assign(this, fields);
   }

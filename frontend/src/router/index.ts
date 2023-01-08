@@ -19,16 +19,16 @@ import { Chart } from 'chart.js'
 
 
 const UserInfo = {
-  template: '<div><p>User {{ $route.params.id }}</p></div>'
-}
+  template: "<div><p>User {{ $route.params.id }}</p></div>",
+};
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/home',
-      name: 'home',
-      component: Homepage
+      path: "/home",
+      name: "home",
+      component: Homepage,
     },
     {
       path: '/album_selected/:id',
@@ -36,14 +36,19 @@ const router = createRouter({
       component: OneAlbumDetail
     },
     {
-      path: '/panier',
-      name: 'panier',
-      component: Panier_Multistep
+      path: "/panier",
+      name: "panier",
+      component: Panier_Multistep,
     },
     {
-      path: '/artist_selected/:id',
-      name:  'artist',
-      component: ArtistDetail
+      path: "/artist_selected/:id",
+      name: "artist",
+      component: ArtistDetail,
+    },
+    {
+      path: "/",
+      name: "login",
+      component: Authentification,
     },
     {
       path: '/',
@@ -86,59 +91,52 @@ const router = createRouter({
       
       children: [
         {
-          path: 'orders',
-          name: 'orders',
-          components : {
+          path: "orders",
+          name: "orders",
+          components: {
             orders_name: Orders,
-          } 
-    
+          },
         },
-        { 
-          path:'customers',
-          name: 'customers',
+        {
+          path: "customers",
+          name: "customers",
           components: {
-            customers_name: Customers 
-          } 
-          
+            customers_name: Customers,
+          },
         },
-        { 
-          path:'admin_albums',
-          name: 'admin_albums',
+        {
+          path: "admin_albums",
+          name: "admin_albums",
           components: {
-            albums_name: Albums 
-          } 
-          
+            albums_name: Albums,
+          },
         },
-        { 
-          path:'admin_artists',
-          name: 'admin_customers',
+        {
+          path: "admin_artists",
+          name: "admin_customers",
           components: {
-            artists_name: Artists 
-          } 
-          
+            artists_name: Artists,
+          },
         },
-        { 
-          path:'admin_cat',
-          name: 'admin_cat',
+        {
+          path: "admin_cat",
+          name: "admin_cat",
           components: {
-            cat_name: Category 
-          } 
-          
+            cat_name: Category,
+          },
         },
-        { 
-          path:'admin_charts',
-          name: 'admin_charts',
+        {
+          path: "admin_charts",
+          name: "admin_charts",
           components: {
-            charts_name: Charts 
-          } 
-          
+            charts_name: Charts,
+          },
         },
-
-      ]
+      ],
     },
     
   ],
   strict: true,
-})
+});
 
 export default router;

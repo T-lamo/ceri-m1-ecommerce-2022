@@ -12,7 +12,7 @@ Les instructions sont disponibles [ici](https://github.com/Faylixe/ceri-m1-ecomm
 
 |             |        |
 | ----------- | ------ |
-| Nom         | _FILL_ |
+| Nom         | greenfish |
 | Identifiant | _FILL_ |
 
 <br>
@@ -24,6 +24,6 @@ Les instructions sont disponibles [ici](https://github.com/Faylixe/ceri-m1-ecomm
 
 | Role                      | Membre |
 | ------------------------- | ------ |
-| Backend engineer          | _FILL_ |
-| Frontend engineer         | _FILL_ |
-| Site reliability engineer | _FILL_ |
+| Backend engineer          | Amos DORCEUS |
+| Frontend engineer         | Faraniaina Rabarisoa |
+| Site reliability engineer | Amos DORCEUS |
