@@ -29,7 +29,7 @@ data "google_secret_manager_secret" "password" {
 
 
 resource "google_cloud_run_service" "backend" {
-  name="backend"
+  name="greenfish-backend"
   location = "europe-west1"
 
   template {
@@ -80,7 +80,7 @@ resource "google_cloud_run_service" "backend" {
 
 
 resource "google_cloud_run_service" "frontend" {
-  name="frontend"
+  name="greenfish-frontend"
   location = "europe-west1"
   template {
 
@@ -103,6 +103,20 @@ resource "google_cloud_run_service" "frontend" {
   }
 }
 
+
+resource "google_cloud_run_service_iam_member" "backend" {
+  location = google_cloud_run_service.backend.location
+  service = google_cloud_run_service.backend.name
+  role    = "roles/run.invoker"
+  member  = "allUsers"
+}
+
+resource "google_cloud_run_service_iam_member" "frontend" {
+  location = google_cloud_run_service.frontend.location
+  service = google_cloud_run_service.frontend.name
+  role    = "roles/run.invoker"
+  member  = "allUsers"
+}
 output "back_url" {
   value = google_cloud_run_service.backend.status[0].url
 }
@@ -110,6 +124,7 @@ output "back_url" {
 output "front_url" {
   value = google_cloud_run_service.frontend.status[0].url
 }
+
 
 
 
