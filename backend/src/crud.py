@@ -1,5 +1,7 @@
 from datetime import datetime
 from sqlalchemy import update, Table
+
+from src.config.conf import Settings
 from .models import Album, Artist, CartItem, Category, OrderDetail, OrderItem, PaymentDetail, Promo, ShoppingSession, Song, User, UserAddress
 
 
@@ -9,11 +11,7 @@ from sqlmodel import Field, Session, SQLModel, create_engine,select, func
 from pydantic import BaseSettings
 
 
-class Settings(BaseSettings):
-    DATABASE_ADDRESS: str = ""
-    DATABASE_USER: str =""
-    DATABASE_PASSWORD: str = ""
-    DATABASE_NAME: str=""
+
 
 
 class DatabaseSingletonMeta(type):
