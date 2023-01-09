@@ -4,16 +4,25 @@ from src.config.conf import Settings
 class Index():
     def __init__(self):
         self.client = SearchClient.create(Settings().ALGOLIA_APP_ID, Settings().ALGOLIA_KEY)
-        self.index = self.client.init_index("test-app")
+        self.index = self.client.init_index("vinyl-index")
 
     def make_search(self,text) -> dict:
         results = self.index.search(text)
-        return results
+        return results["hits"]
 
-    def insert_to_index(self):
-        record = {"objectID": 2, "name": "test_recor", "msg": "test"}
-        print(record)
-        # res=self.index.add_object(record).wait()
-        #print("res",res)
+    def insert_to_index(self, record):
+        record["objectID"] = record['id']
+        res= self.index.save_object(record)
+        return res
 
-        pass
+    def init_album_index(self, objects):
+        res=self.index.save_objects(objects,{"autoGenerateObjectIDIfNotExist":True})
+        return res
+        # if res["objectIDs"]:
+        #     return True
+        # else:
+        #     return False
+
+    
+
+       

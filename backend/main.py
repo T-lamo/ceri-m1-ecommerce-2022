@@ -1,4 +1,5 @@
 from typing import Union
+from src.model_type import AlbumModel
 from src.searchengine.index import Index
 from src.models import Artist, Album, CartItem, OrderDetail, OrderItem, PaymentDetail, ShoppingSession, Song, Category, User, Promo, UserAddress
 
@@ -294,10 +295,16 @@ def delete_song(id: int):
 def search_item(text: str):
     return Index().make_search(text)
 
-@app.get("/api/index/add")
-def search_item(text: str):
-    return Index().insert_to_index()
+@app.post("/api/index/add/album")
+def add_album_to_index(obj: dict):
+    #AlbumModel(obj.id, obj.title, obj.release_date, obj.cover, obj.artist_id, obj.price, obj.stock_qty,obj.description, obj.category_id, obj.created_date)
+    return Index().insert_to_index(obj)
+       
 
+@app.post("/api/index/add/albums")
+def add_all_to_index(obj: dict):
+    return Index().init_album_index(obj)
+      
 # @app.post("/api/login")
 # def read_user(data: Login):
 #     return db.login(data)
