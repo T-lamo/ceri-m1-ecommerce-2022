@@ -133,18 +133,11 @@
 
         <div class="card m-3" style="width: 16rem;">
           <div class="d-flex justify-content-between p-3">
-            <div class="d-grid gap-2 justify-content-md-end">
+            <div class="d-grid justify-content-md-end">
 
                 <button class="btn btn-outline-warning" @click="add_me_to_cart(props.item.id!)">
                     <font-awesome-icon icon="fa-solid fa-cart-shopping" size="lg" :style="{ color: '#f0932b'}"/>
                 </button>
-            </div>
-            <div
-              class="bg-warning rounded-circle d-flex align-items-center justify-content-center shadow-1-strong"
-              style="width: 35px; height: 35px;">
-              <p class="mb-0 small fa_heart">
-                <font-awesome-icon icon="fa-solid fa-heart" size="lg" :style="{ color: 'rgb(223, 249, 251)'}"/>
-              </p>
             </div>
           </div>
           <div class="image_product">

@@ -1,14 +1,15 @@
 <script lang="ts" setup>
-  import { ref, watch } from 'vue';
+  import { onMounted, ref, watch } from 'vue';
   import { useAppStore } from '@/stores';
   import { storeToRefs } from "pinia";
   import { useRouter } from 'vue-router';
-  import { toast_function } from '@/services/crud';
-  import type { User } from '@/models';
+  import { search_record_albums, toast_function } from '@/services/crud';
+  import type { Album, User } from '@/models';
+  import SearchAlbumList from '../search/SearchAlbumList.vue';
 
   const router = useRouter()
 
-  const {list_cart_item, isAdminStore } = storeToRefs(useAppStore())
+  const {list_cart_item, isAdminStore , searchItems} = storeToRefs(useAppStore())
 
   // let isAdminStore = ref(Boolean(localStorage.getItem('isAdmin'))); 
 
@@ -17,13 +18,16 @@
     console.log("watch isadminstore")
   })
 
-  let user_from_localstorage:string;
-  let user_obj:User;
+  // onMounted(() => {
+    let user_from_localstorage:string;
+    let user_obj:User;
 
-  user_from_localstorage = localStorage.getItem("userId")!
-  user_obj = JSON.parse(user_from_localstorage!)    
-    
-  const isLoggedIn_from_localstorage = Boolean(localStorage.getItem("isLoggedIn"))
+    user_from_localstorage = localStorage.getItem("userId")!
+    user_obj = JSON.parse(user_from_localstorage!)    
+      
+    const isLoggedIn_from_localstorage = Boolean(localStorage.getItem("isLoggedIn"))
+  // })
+  
   // let isAdminUser_from_localstorage = Boolean(localStorage.getItem("isAdmin"))
 
   const onLogout = (() => {
@@ -42,6 +46,24 @@
     console.log(localStorage.getItem("isAdmin"))
     toast_function('You are logged out successfully!!','success')
   })
+
+  // input search
+  let input_search = ref("")
+  let show_search_result = ref(false)
+  watch(input_search,async () => {
+    console.log("value de show_search_result: ", input_search.value.length)
+    console.log(show_search_result.value)
+    if (input_search.value.length == 0) {
+      // reinititalize store
+      searchItems.value = []
+      // not display block result component
+      show_search_result.value = false
+    } else {
+        searchItems.value = await search_record_albums(input_search.value) as Album[] 
+        show_search_result.value = true
+      }
+  })
+
 
 </script>
 <template>
@@ -127,33 +149,8 @@
                         </li>
                     </ul>
                   </li>
-
-
               </ul>
-
               <hr>
-              <!-- <div class="dropdown pb-4">
-                  <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                      <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" class="rounded-circle">
-                      <span class="d-none d-sm-inline mx-1">{{user_obj?.firstname}} Test {{user_obj?.username}}</span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                      <li><a class="dropdown-item" href="#">New project...</a></li>
-                      <li><a class="dropdown-item" href="#">Settings</a></li>
-                      <li><a class="dropdown-item" href="#">Profile</a></li>
-                      <li>
-                          <hr class="dropdown-divider">
-                      </li>
-                      <li>
-                          <a class="dropdown-item" href="#">
-                            <button class="btn btn-warning" @click="onLogout">
-                              Sign out
-                            </button> 
-                          </a>
-                      </li>
-                  </ul>
-              </div> -->
-              
           </div>
       </div>
       <div class="col-md-8">
@@ -164,14 +161,10 @@
         <router-view name="cat_name"></router-view>
         <router-view name="charts_name"></router-view>
       </div>
-      <!-- <div class="col-md-4">
-        <router-view name="customers_name"></router-view>
-        <p>Recap</p>
-      </div> -->
   </div>
   
 </div>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-else> <!-- v-if="current_user?.is_admin == false"-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-else>
   <div class="container-fluid">
     <a class="navbar-brand px-2" href="#">
       Logo
@@ -187,35 +180,40 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#" v-if="user_obj?.is_admin">
-            <router-link to="/admin" style="color:#bdc3c7;text-decoration: none;">Admin</router-link>
+          <a class="nav-link active" href="#">
+            <router-link to="/categories" style="color:#bdc3c7;text-decoration: none;">Categories</router-link>
           </a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            List
+        <li class="nav-item">
+          <a class="nav-link active" href="#">
+            <router-link to="/artists" style="color:#bdc3c7;text-decoration: none;">Singers</router-link>
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li>
-              <a class="dropdown-item" href="#"><router-link to="/categories" style="color:black;text-decoration: none;">Categories</router-link></a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="#"><router-link to="/artists" style="color:black;text-decoration: none;">Singers</router-link></a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="#"><router-link to="/albums" style="color:black;text-decoration: none;">Albums</router-link></a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-              <a class="dropdown-item" href="#"><router-link to="/promo" style="color:black;text-decoration: none;">Promo</router-link></a>
-            </li>
-          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <router-link to="/albums" style="color:#bdc3c7;text-decoration: none;">Albums</router-link>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <router-link to="/promo" style="color:#bdc3c7;text-decoration: none;">Promo</router-link>
+          </a>
         </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-warning me-4" type="submit">Search</button>
-      </form>
+      
+        <div class="row">
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="input_search">
+            <button class="btn btn-outline-warning me-4" type="submit">Search</button>
+          </form>
+            <div v-if="show_search_result">
+              <SearchAlbumList
+                :searchItems = searchItems
+                    />
+            </div>
+        </div>
+        
+          
       <div class=".col-4 icon_header me-4 py-2 my-2">
         <!-- Link  to shop -->
         <a href="#">
@@ -277,6 +275,7 @@
         </div>
     </div>
   </div>
+
 </nav>
 
 </template>
