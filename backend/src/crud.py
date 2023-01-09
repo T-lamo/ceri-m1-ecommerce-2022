@@ -45,11 +45,11 @@ class Database(metaclass=DatabaseSingletonMeta):
         self.user = settings.DATABASE_USER
         self.password = settings.DATABASE_PASSWORD
         self.host = settings.DATABASE_ADDRESS
-        # print("test", settings.DATABASE_ADDRESS)
-        # self.db = "ecom_db"
-        # self.user = 'root'
-        # self.password = 'mypass'
-        # self.host = 'db'
+        print("test", settings.DATABASE_ADDRESS)
+        self.db = "ecom_db"
+        self.user = 'root'
+        self.password = 'mypass'
+        self.host = 'db'
         
       
 
