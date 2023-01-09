@@ -38,7 +38,7 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      # - db
+      - db
       - frontend_test
     restart: always
 
@@ -50,31 +50,31 @@ services:
     ports:
       - 80:80
     depends_on:
-      # - db
+      - db
       - backend
 
-  # db: 
-  #   container_name: db
-  #   build:
-  #     context: ./db
-  #     dockerfile: Dockerfile
-  #   restart: always
-  #   volumes: 
-  #     - type: volume
-  #       source: ecom_db_backup
-  #       target: /var/lib/mysql 
-  #     - type: bind
-  #       source: ./db
-  #       target: /app
-  #   env_file: ./db/.env
-  #   ports:
-  #     - 3307:3306
+  db: 
+    container_name: db
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    restart: always
+    volumes: 
+      - type: volume
+        source: ecom_db_backup
+        target: /var/lib/mysql 
+      - type: bind
+        source: ./db
+        target: /app
+    env_file: ./db/.env
+    ports:
+      - 3307:3306
 
-  # adminer:
-  #   image: adminer
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 
   frontend_test:
     container_name: frontend_test
@@ -83,6 +83,6 @@ services:
       dockerfile: Dockerfile.dev.yml
     command: [ "npm", "run", "test:unit" ]
 
-# volumes:
-#    ecom_db_backup:
-#      external: true
+volumes:
+   ecom_db_backup:
+     external: true
