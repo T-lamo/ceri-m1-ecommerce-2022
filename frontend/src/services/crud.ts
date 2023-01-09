@@ -71,7 +71,7 @@ export async function read_order_items(): Promise<IOrderItem[]> {
 
 export async function read_order_items_by_orderdetail_id(
   data: number
-): Promise<IOrderDetail> {
+): Promise<IOrderItem[]> {
   return await (await fetch(`/api/order_item_by_orderdetailid/${data}`)).json();
 }
 
@@ -117,6 +117,12 @@ export async function read_lastone_order_detail_byuserid(
   data: number
 ): Promise<IOrderDetail> {
   return await (await fetch(`/api/order_detail_byid/${data}`)).json();
+}
+
+export async function search_record_albums(
+  data: string
+): Promise<IAlbum[]> {
+  return await (await fetch(`/api/index/search/${data}`)).json();
 }
 
 export async function read_one_payment_detail(
@@ -168,6 +174,7 @@ export async function create_artist(data: IArtist): Promise<IArtist> {
   };
   return await (await fetch(`/api/artist`, config)).json();
 }
+
 
 export async function create_album(data: IAlbum): Promise<IAlbum> {
   const config = {
@@ -471,7 +478,7 @@ export async function delete_user(data: number): Promise<any> {
 
 export function toast_function(message: string, type: string) {
   const $toast = useToast();
-  let instance = $toast.open({
+  const instance = $toast.open({
     message: message,
     type: type,
     duration: 2500,
@@ -479,4 +486,26 @@ export function toast_function(message: string, type: string) {
   });
 
   return instance;
+}
+
+export async function make_search(data: string): Promise<IAlbum[]> {
+  return await (await fetch(`/api/index/search/${data}`)).json();
+}
+
+export async function index_insert_album(data: IAlbum): Promise<Boolean> {
+  const config = {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: content_type,
+  };
+  return await (await fetch(`/api/index/add/album`, config)).json();
+}
+
+export async function index_insert_albums(data: IAlbum[]): Promise<Boolean> {
+  const config = {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: content_type,
+  };
+  return await (await fetch(`/api/index/add/albums`, config)).json();
 }

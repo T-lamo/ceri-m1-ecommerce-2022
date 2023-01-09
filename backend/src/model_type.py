@@ -1,12 +1,13 @@
 class AlbumModel():
-    def __init__(self, id, title,rel_date,cover, art_id, price, stck_id, desc, cat_id, c_date):
-        self.id = id
-        self.title = title
-        self.release_date = rel_date
-        self.cover = cover
-        self.artist_id = art_id
-        self.price = price
-        self.stock_qty = stck_id
-        self.description = desc
-        self.category_id = cat_id
-        self.created_date = c_date  
+    def __init__(self,id,title,release_date,cover,artist_id,price,stock_qty,description,category_id,created_date):
+
+        self.id=id
+        self.title=title
+        self.release_date=release_date
+        self.cover =cover
+        self.artist_id=artist_id
+        self.price=price
+        self.stock_qty=stock_qty
+        self.description=description
+        self.category_id =category_id
+        self.created_date = created_date 

@@ -133,6 +133,7 @@ export class PaymentDetail implements IPaymentDetail {
   provider = "";
   status = "";
   order_detail_id = 0;
+  
   expiration_date = "";
   cvv = "";
   created_date?: Date;

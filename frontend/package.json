@@ -25,6 +25,7 @@
     "bcrypt": "^5.1.0",
     "bootstrap": "^5.2.2",
     "chart.js": "^4.1.1",
+    "instantsearch.js": "^4.49.3",
     "jquery": "^3.6.1",
     "mdb-vue-ui-kit": "^3.0.0",
     "pinia": "^2.0.23",

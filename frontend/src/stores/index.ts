@@ -17,19 +17,18 @@ import type {
 import { ref } from "vue";
 
 export const useAppStore = defineStore("app", () => {
-  // const list_artist = ref<number[]>([1, 3]);
+  const searchItems = ref<Album[]>([]);
+  const isAdminStore = ref(Boolean(localStorage.getItem('isAdmin'))); 
   const current_user = ref<User>();
   const last_shopping_session = ref<ShoppingSession>();
   const current_shopping_session = ref<ShoppingSession>();
   const shipping_chosen = ref<UserAddress>();
   const current_order_detail = ref<OrderDetail>();
   const current_payement = ref<PaymentDetail>();
-  // const one_command = ref<Album>();
-  // const temporary_command = ref<String>([]);
+  const one_artist = ref<Artist>();
   const total_price = ref(0);
   const list_artist = ref<Artist[]>([]);
   const list_album = ref<Album[]>([]);
-  const isLoggedIn = ref<boolean>();
   const list_song = ref<Song[]>([]);
   const list_cart_item = ref<CartItem[]>([]);
   const list_order_detail = ref<OrderDetail[]>([]);
@@ -44,10 +43,11 @@ export const useAppStore = defineStore("app", () => {
   const list_category = ref<Category[]>([]);
 
   return {
+    searchItems,
+    isAdminStore,
     current_user,
-    // one_command,
+    one_artist,
     total_price,
-    isLoggedIn,
     last_shopping_session,
     current_shopping_session,
     current_order_detail,
