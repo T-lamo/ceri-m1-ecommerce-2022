@@ -1,9 +1,8 @@
 <script lang="ts" setup>
     import { Chart as ChartJS,Title,Tooltip,Legend,ArcElement,BarElement,CategoryScale,LinearScale } from 'chart.js'
     import { Bar, Pie } from 'vue-chartjs'
-    import { read_turnover_per_month, read_pie_order_details } from '@/services/crud';
-import { onMounted } from 'vue';
-    // import * as chartConfig from './chartts/chartsconfigs.js'
+    import { read_turnover_per_month } from '@/services/crud';
+    import { onMounted } from 'vue';
 
     onMounted(async () => {
         // let pie = await read_pie_order_details()

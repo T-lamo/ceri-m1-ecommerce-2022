@@ -13,14 +13,19 @@
             return res;
         })
     })
-    // console.log(list_category.value)
     
     
 </script>
 
 <template>
-    <div class="card_container container-fluid py-2 px-5 my-3">
-            <span><i>List des categories</i></span>
+    <div class="card_container container-fluid py-2 px-2 my-2 text-center">
+            <button class="btn btn-transparent">
+                <router-link to="/categories" style="color:#bdc3c7;text-decoration: none;" >
+                    <font-awesome-icon icon="fa-solid fa-arrow-left-long" size="lg" :style="{ color: 'black'}"/>
+                    Back  
+                </router-link>
+            </button>
+            <span><i>Our category of albums</i></span>
             <hr class="dropdown-divider">
         <div class="row"> 
             <div class="card m-3"  style="width: 14rem;" v-for="item in list_category" :key="item.id"><!-- v-for="item in list_category.value" :key="item.id"-->

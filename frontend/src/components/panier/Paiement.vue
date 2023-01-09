@@ -4,12 +4,12 @@
     import InputField from '../auth/InputField.vue';
     import { storeToRefs } from 'pinia';
     import { useAppStore } from '@/stores';
-    import { CartItem, OrderDetail, PaymentDetail } from '@/models';
-    import { create_order_detail, read_lastone_order_detail_byuserid, create_payment_detail, toast_function, read_cart_items_by_sessionid} from '../../services/crud'
+    import { PaymentDetail } from '@/models';
+    import {  read_lastone_order_detail_byuserid, create_payment_detail, toast_function} from '../../services/crud'
     import Swal from 'sweetalert2';
     
 
-    const { list_cart_item, current_user, total_price, current_order_detail, current_shopping_session, current_payement }  = storeToRefs(useAppStore())
+    const { list_cart_item, current_user, total_price, current_order_detail, current_payement }  = storeToRefs(useAppStore())
 
     /** on invalid submit button */
     const onInvalidSubmit = () => {
@@ -53,12 +53,12 @@
                         'success'
                     )
                     // create payement detail
-                    let res = await create_payment_detail(my_paiement) 
+                    let res = await create_payment_detail(my_paiement) as PaymentDetail
 
                     console.log("create a payement")
                     
                     // update order detail ????
-                    current_order_detail.value.payment_status = true
+                    current_order_detail.value!.payment_status = true 
 
                     
 

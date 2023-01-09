@@ -1,80 +1,84 @@
 <script lang="ts" setup>
-import { defineProps } from 'vue';
-import type { Album } from '../../models';
-const props = defineProps<{
-    item:Album,
-}>()
+    import { defineProps } from 'vue';
+    import { onMounted } from 'vue'
+    import { read_songs , read_one_album, read_albums} from '../../services/crud'
+    import  { Album, type Song } from '../../models'
+    import { useRoute } from 'vue-router'
+    import { storeToRefs } from 'pinia'
+    import { useAppStore } from '@/stores'
+    import OneSong from '../songs/OneSong.vue'
+    
+    const { list_song, list_album} = storeToRefs(useAppStore())
 
-const getImage = (imagePath:string) => {
-    return (imagePath);
-}
-const getDate = (str:string) => {
-        const date = new Date(str)
-        return date
-}
-let dateOfRelease:Date;
-dateOfRelease = getDate(props.item.release_date)
-// const my_date_of_release:string = dateOfRelease.getDay()+"+""+
-console.log('date below: '+dateOfRelease.getDate())
-console.log(dateOfRelease.getDay())
-console.log(dateOfRelease.getMonth())
-console.log(dateOfRelease.getFullYear())
+    onMounted(async() => {
+        list_song.value = await read_songs() as Song[]
+        list_album.value = await read_albums() as Album[]
+    })
+
+    const route = useRoute()
+    const value = route.params.id
+    let id_router:number = parseInt(value[0])
+
+    const readOneAlbum = ():Album => {
+        let res = new Album
+        list_album.value.forEach((element) => {
+            if (element.id == id_router) 
+                res = element
+        })
+        return res
+    }
+    
+    const returnSongsOneAlbum = (): Array<Song> => {
+        let res:Array<Song> = []
+        list_song.value.forEach((element) => {
+            if (element.album_id == id_router) 
+                res.push(element)
+        })
+        return res
+    }
+
+    const getImage = (imagePath:string) => {
+        return (imagePath);
+    }
+
 
 </script>
 <template>
     
-        <div class="card m-3 py-2 px-2 my-2" style="width: 14rem;">
-                <div class="card_title" style="background-color: rgba(0, 0, 0, 0.5)">
-                    <img :src=getImage(props.item.cover) class="album_cover card-img-top rounded" alt="album picture">
-                    <!-- Text Overlay -->
-                    <div class="card-img" style="font-weight:500;">
-                        <div class="card-text">
-                            <p class="card-title text-white text-center pt-2">{{props.item.title}}</p>
-                            <p class="text-white text-center align-self-center">{{props.item.release_date}}</p>
-                        </div>
-                        
-                        <p class="text-white text-center align-self-center">
-                            <a href="#">
-                                <router-link to="/album_detail">
-                                    <font-awesome-icon icon="fa-solid fa-angles-down" size="lg" :style="{ color: 'white' }" class="icon_show_album"/>
-                                </router-link>
-                            </a>
-                        </p>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <img src="https://cdn.pixabay.com/photo/2018/08/28/13/29/avatar-3637561__340.png" class="rounded-circle" alt="user">
-                        &nbsp;&nbsp;
-                        <p class="description_paragraph">{{props.item.artist_id}}</p>
-                    
-                    </div>
-                </div>
-                <div class="card-footer row">
-                    <a href="#">
-                        <font-awesome-icon icon="fa-solid fa-star" size="lg" :style="{ color: 'black' }"/>
-                    </a>
-                    <a>
-                        <font-awesome-icon icon="fa-solid fa-heart" size="lg" :style="{ color: 'black' }"/>
-                    </a>
-                    <a>
-                            <font-awesome-icon icon="fa-solid fa-angles-right" size="lg" :style="{ color: 'black' }"/>
-                    </a>
-                    <a>
-                            <font-awesome-icon icon="fa-solid fa-cart-shopping" size="lg" :style="{ color: 'orange' }"/>
-                    </a>
-                    <p>{{props.item.price}}</p>
-                </div>
+    <div class="container pt-4">
+        <button class="btn btn-transparent">
+            <router-link to="/albums" style="color:#bdc3c7;text-decoration: none;" >
+                <font-awesome-icon icon="fa-solid fa-arrow-left-long" size="lg" :style="{ color: 'black'}"/>
+                Back  
+            </router-link>
+        </button>
+        <h4 class="text-center">Album Detail # {{$route.params.id}}</h4>
+        <br>
+        <div class="container-fluid py-2 px-5 my-3 row">
+            <div class="col">
+                <img class="img-fluid" :src=getImage(readOneAlbum().cover!)>
             </div>
-    <!-- </div> -->
+            <div class="col">
+                <p><b>Title:</b>{{readOneAlbum().title}}</p>
+                <p><b>Description: </b>{{readOneAlbum().description}}</p>
+                <p><b>Singers: </b>{{readOneAlbum().artist_id}}</p>
+                <p><b>Price: $</b>{{readOneAlbum().price}}</p>
+            </div>
+        
+        </div>
+        <h2 class="text-center">Associated songs:</h2>
+        <hr class="dropdown-divider">
+        <div class="container-fluid" style="display:flex;">
+        
+            <OneSong
+                v-for="item in returnSongsOneAlbum()" :key="item.id"
+                :item = item
+                    />
+        </div>
+    </div>
 </template>
 <style scoped>
-.card-body img {
-    height: 30px;
-    width: 30px;
-}
-.album_cover {
-    /* width; */
-    height: 180px;
+.col img {
+    width: auto;
 }
 </style>

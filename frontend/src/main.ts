@@ -1,3 +1,5 @@
+/// <reference path="./algolia.d.ts" />
+
 import { createApp  } from 'vue'
 import App from './App.vue'
 import { loadFonts } from './plugins/webfontloader'
@@ -21,13 +23,15 @@ faGlobe,
 faCheck,
 faX,
 faEye,
-faCat} from '@fortawesome/free-solid-svg-icons'
+faCat,
+faBars,
+faChevronDown} from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faTwitter, faTwitch, faLinkedin, faGoogle } from '@fortawesome/free-brands-svg-icons'
 /* add icons to the library */
-library.add(faUserSecret,faUser,faCartShopping,faCommentSms,faMagnifyingGlass,
+library.add(faUserSecret,faUser,faCommentSms,faMagnifyingGlass,
 faArrowLeftLong,faArrowRightLong,faStar,faHeart,faAnglesRight,faAnglesDown,
 faFacebook, faTwitch,faTwitter,faLinkedin,faGoogle,faCirclePlus,faCartShopping, faTrash,faPenToSquare,faPlus,faMinus,
-faCircleCheck, faHouseUser, faChartPie, faBagShopping, faRecordVinyl, faUserTie, faUsers , faGlobe, faCheck,faX, faEye, faCat)
+faCircleCheck, faHouseUser, faChartPie, faBagShopping, faRecordVinyl, faUserTie, faUsers , faGlobe, faCheck,faX, faEye, faCat, faBars, faChevronDown)
 
 import router from "./router";
 
@@ -47,13 +51,23 @@ loadFonts()
 // import "./assets/scss/_mixins.scss";
 // import "./assets/scss/debug.scss";
 
+/** algolia search */
+// import algoliasearch from 'algoliasearch/lite';
+// import * as VueInstantSearch from 'vue-instantsearch';
+
+
+// const searchClient = algoliasearch(
+//   'HWG44CLCK1',
+//   '0b4f81889da3c4fa1304d66b18354fc4'
+// );
+
 /** datepicker */
-import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
 const pinia = createPinia()
 const app = createApp(App)
   .use(ToastPlugin)
+  // .use(VueInstantSearch)
   .use(VueSweetalert2)
   .use(router)
   .use(pinia)
@@ -62,6 +76,5 @@ const app = createApp(App)
   })
   .component(
     'font-awesome-icon', FontAwesomeIcon,
-    'Datepicker', Datepicker
   )
   .mount("#app")

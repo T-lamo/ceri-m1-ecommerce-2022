@@ -9,8 +9,8 @@
 }
 </script>
 <template>
-    <div class="card m-3" style="width: 14rem; background: black;"><!-- v-for="item in list_artist" :key="item.id" -->
-                <img :src=getImage(props.item.cover) class="rounded-circle">
+    <div class="card m-3" style="width: 14rem; background: black;">
+                <img :src=getImage(props.item.cover!) class="rounded-circle">
                 <div class="card-body">
                     <p>{{props.item.lastname }}</p>
                     <p>{{props.item.firstname}}</p>

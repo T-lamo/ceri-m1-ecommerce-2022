@@ -50,13 +50,9 @@
 </script>
 
 <template >
-    <div class="container-fluid py-2 px-5 my-2">
-    <!-- <div class="py-2 px-2"> -->
+    <div class="container-fluid py-2 px-5 my-2 text-center">
         <span><i>
-            Liste des promos 
-            <router-link to="/promo">    
-                <font-awesome-icon icon="fa-solid fa-circle-plus" size="lg" :style="{ color: '#1B1464' }"/>
-            </router-link>
+            Promotions 
         </i>
         </span>
         <hr class="dropdown-divider">

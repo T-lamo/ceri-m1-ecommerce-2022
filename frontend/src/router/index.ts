@@ -1,19 +1,22 @@
-import { createRouter, createWebHistory } from "vue-router";
-import Homepage from "../components/Homepage.vue";
-import AlbumDetail from "../components/album/AlbumDetail.vue";
-import ListAlbumAchat from "../components/album/ListAlbumAchat.vue";
-import ArtistDetail from "../components/artist/ArtistDetail.vue";
-import Authentification from "../components/auth/Authentification.vue";
-import Panier_Multistep from "../components/panier/Panier_Multistep.vue";
-import OneArticle from "../components/album/OneArticle.vue";
-import LoginssotestVue from "../components/auth/Loginssotest.vue";
-import Promo from "../components/promo/Promo.vue";
-import Charts from "@/components/admin/Charts.vue";
-import Customers from "@/components/admin/Customers.vue";
-import Orders from "@/components/admin/Orders.vue";
-import Albums from "@/components/admin/Albums.vue";
-import Artists from "@/components/admin/Artists.vue";
-import Category from "@/components/admin/Category.vue";
+import { createRouter, createWebHistory } from 'vue-router'
+import Homepage from '../components/Homepage.vue'
+import ArtistDetail from '../components/artist/ArtistDetail.vue'
+import Authentification from '../components/auth/Authentification.vue'
+import Panier_Multistep from '../components/panier/Panier_Multistep.vue'
+import OneArticle from '../components/album/OneArticle.vue'
+import OneAlbumDetail from '@/components/album/OneAlbumDetail.vue'
+import Promo from '../components/promo/Promo.vue'
+import Charts from '@/components/admin/Charts.vue'
+import Customers from '@/components/admin/Customers.vue'
+import Orders from '@/components/admin/Orders.vue'
+import Albums from '@/components/admin/Albums.vue'
+import Artists from '@/components/admin/Artists.vue'
+import Category from '@/components/admin/Category.vue'
+import ListArtist from '@/components/artist/ListArtist.vue'
+import ListAlbum from '@/components/album/ListAlbum.vue'
+import ListCategory from '@/components/category/ListCategory.vue'
+import { Chart } from 'chart.js'
+
 
 const UserInfo = {
   template: "<div><p>User {{ $route.params.id }}</p></div>",
@@ -28,18 +31,9 @@ const router = createRouter({
       component: Homepage,
     },
     {
-      path: "/album_detail",
-      name: "album_detail",
-      component: AlbumDetail,
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      // component: () => import('../views/DetailAlbumView.vue')
-    },
-    {
-      path: "/list_album_achat",
-      name: "list_album_achat",
-      component: ListAlbumAchat,
+      path: '/album_selected/:id',
+      name: 'album_selected',
+      component: OneAlbumDetail
     },
     {
       path: "/panier",
@@ -57,28 +51,44 @@ const router = createRouter({
       component: Authentification,
     },
     {
-      path: "/onearticle",
-      name: "onearticle",
-      component: OneArticle,
+      path: '/',
+      name: 'login',
+      component: Authentification
     },
     {
-      path: "/loginsso",
-      name: "loginsso",
-      component: LoginssotestVue,
+      path: '/onearticle',
+      name: 'onearticle',
+      component: OneArticle
     },
     {
-      path: "/promo",
-      name: "promo",
-      component: Promo,
+      path: '/promo',
+      name:'promo',
+      component:Promo
     },
     {
-      path: "/user/:id",
-      name: "user",
-      component: UserInfo,
+      path: '/albums',
+      name:'albums',
+      component: ListAlbum
     },
     {
-      path: "/admin",
-      name: "admin",
+      path: '/artists',
+      name: 'artists',
+      component: ListArtist
+    },
+    {
+      path: '/categories',
+      name: 'categories',
+      component: ListCategory
+    },
+    {
+      path:'/user/:id', 
+      name: 'user',
+      component: UserInfo
+    },
+    {
+      path:'/admin', 
+      name: 'admin',
+      
       children: [
         {
           path: "orders",
@@ -124,6 +134,7 @@ const router = createRouter({
         },
       ],
     },
+    
   ],
   strict: true,
 });
