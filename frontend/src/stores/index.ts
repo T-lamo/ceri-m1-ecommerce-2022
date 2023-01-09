@@ -17,6 +17,7 @@ import type {
 import { ref } from "vue";
 
 export const useAppStore = defineStore("app", () => {
+  const searchItems = ref<Album[]>([]);
   const isAdminStore = ref(Boolean(localStorage.getItem('isAdmin'))); 
   const current_user = ref<User>();
   const last_shopping_session = ref<ShoppingSession>();
@@ -42,6 +43,7 @@ export const useAppStore = defineStore("app", () => {
   const list_category = ref<Category[]>([]);
 
   return {
+    searchItems,
     isAdminStore,
     current_user,
     one_artist,

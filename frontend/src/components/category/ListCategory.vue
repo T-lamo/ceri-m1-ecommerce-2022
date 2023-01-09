@@ -19,12 +19,12 @@
 
 <template>
     <div class="card_container container-fluid py-2 px-2 my-2 text-center">
-            <button class="btn btn-transparent">
+            <!-- <button class="btn btn-transparent">
                 <router-link to="/categories" style="color:#bdc3c7;text-decoration: none;" >
                     <font-awesome-icon icon="fa-solid fa-arrow-left-long" size="lg" :style="{ color: 'black'}"/>
                     Back  
                 </router-link>
-            </button>
+            </button> -->
             <span><i>Our category of albums</i></span>
             <hr class="dropdown-divider">
         <div class="row"> 

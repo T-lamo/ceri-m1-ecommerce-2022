@@ -119,6 +119,12 @@ export async function read_lastone_order_detail_byuserid(
   return await (await fetch(`/api/order_detail_byid/${data}`)).json();
 }
 
+export async function search_record_albums(
+  data: string
+): Promise<IAlbum[]> {
+  return await (await fetch(`/api/index/search/${data}`)).json();
+}
+
 export async function read_one_payment_detail(
   data: number
 ): Promise<IPaymentDetail> {
@@ -168,6 +174,7 @@ export async function create_artist(data: IArtist): Promise<IArtist> {
   };
   return await (await fetch(`/api/artist`, config)).json();
 }
+
 
 export async function create_album(data: IAlbum): Promise<IAlbum> {
   const config = {
