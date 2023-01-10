@@ -4,3 +4,5 @@
 __pycache__
 key.json
 package-lock.json
+/frontend/src_2
+ backend/src/config/conf.py

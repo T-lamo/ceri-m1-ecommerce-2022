@@ -3,30 +3,32 @@ import { watch, watchEffect, ref } from "vue";
 import { useAppStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import { RouterLink, RouterView, useRouter } from "vue-router";
-import { toast_function } from "@/services/crud";
-import type { User } from "@/models";
+import { index_make_search, toast_function } from "@/services/crud";
+import type { Album, User } from "@/models";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
   const router = useRouter()
 
-  const {list_cart_item, isAdminStore , searchItems} = storeToRefs(useAppStore())
+const { list_cart_item, isAdminStore, searchItems } = storeToRefs(
+  useAppStore()
+);
 
-  // let isAdminStore = ref(Boolean(localStorage.getItem('isAdmin'))); 
+// let isAdminStore = ref(Boolean(localStorage.getItem('isAdmin')));
+let user_from_localstorage: string;
+let user_obj = ref<User>();
+let search_text = ref<String>("");
+// watch(isAdminStore, () => {
 
   watch(isAdminStore, (newValue, oldValue) => {
     localStorage.setItem("isAdmin","false")
     console.log("watch isadminstore")
   })
 
-  // onMounted(() => {
-    let user_from_localstorage:string;
-    let user_obj:User;
-
     user_from_localstorage = localStorage.getItem("userId")!
     user_obj = JSON.parse(user_from_localstorage!)    
       
-    const isLoggedIn_from_localstorage = Boolean(localStorage.getItem("isLoggedIn"))
-  // })
+  //   const isLoggedIn_from_localstorage = Boolean(localStorage.getItem("isLoggedIn"))
+  // // })
   
   // let isAdminUser_from_localstorage = Boolean(localStorage.getItem("isAdmin"))
 
@@ -65,6 +67,31 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
   // })
 
 
+
+//alternative 1
+
+watch(search_text, (newValue, oldValue) => {
+  if (newValue.toString().trim().length == 0) {
+    console.log("the value of the length est:", newValue.toString().length);
+    searchItems.value = [];
+  } else {
+    index_make_search(newValue.toString())
+      .then((data: any) => {
+        console.log("datattttt", data);
+        searchItems.value = data;
+      })
+      .catch((err) => {
+        console.log("SearchError", err);
+        searchItems.value = [];
+      });
+  }
+
+  console.log("test watcher", newValue);
+});
+//alternative 2
+function submitForm() {
+  console.log("test", search_text);
+}
 </script>
 <template>
 
@@ -268,6 +295,43 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
                   </ul>
               </li>
             </ul>
+<<<<<<< HEAD
+=======
+          </li>
+        </ul>
+        <form v-on:submit.prevent="submitForm" class="d-flex">
+          <input
+            class="form-control me-2"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            v-model="search_text"
+          />
+          <button class="btn btn-outline-warning me-4" type="submit">
+            Search
+          </button>
+        </form>
+        <div class=".col-4 icon_header me-4 py-2 my-2">
+          <!-- Link  to shop -->
+          <a href="#">
+            <router-link
+              to="/panier"
+              class="router_link_class"
+              v-if="isLoggedIn_from_localstorage"
+            >
+              <font-awesome-icon
+                icon="fa-solid fa-cart-shopping"
+                size="2x"
+                :style="{ color: 'white' }"
+              />
+              <!-- <span>hello </span> -->
+              <span class="badge rounded-pill bg-danger">
+                {{ list_cart_item.length }}
+                <!-- <span class="visually-hidden">unread messages</span> -->
+              </span>
+            </router-link>
+          </a>
+>>>>>>> ec76d617b18f53fb6eb36bc12e9a3ab0e0b682a2
         </div>
     </div>
   </div>

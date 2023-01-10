@@ -4,8 +4,9 @@
     import { useAppStore } from '@/stores';
     import { storeToRefs } from 'pinia';
     import { onMounted, ref } from 'vue';
-    import { read_albums, read_categories, read_artists, create_album, update_album, toast_function, delete_album} from '@/services/crud';
-    import type { Album, Artist, Category } from '@/models';
+    import { read_albums, read_categories, read_artists, create_album,
+    read_song_by_albumid,update_album, toast_function, delete_album} from '@/services/crud';
+    import type { Album, Artist, Category, Song } from '@/models';
     import Datepicker from '@vuepic/vue-datepicker';
     import '@vuepic/vue-datepicker/dist/main.css';
     import Swal from 'sweetalert2'
@@ -16,6 +17,7 @@
     let title_edit_or_add = ref("")
     let title_update_or_add = ref("")
     let id_choose = ref(0)
+    let arr_songs = ref<Song[]>([])
 
     const { list_album,list_category, list_artist} = storeToRefs(useAppStore())
 
@@ -74,6 +76,12 @@
         stock_qty.value = item.stock_qty
         description.value = item.description
         category_id.value = item.category_id
+
+    }
+
+    const onCLickShowSongs = async (item:Album) => {
+        
+        arr_songs.value =  await read_song_by_albumid(item.id!)
 
     }
 
@@ -217,7 +225,7 @@
                                     <button @click="onCLickEdit(item) ">
                                         <font-awesome-icon icon="fa-solid fa-edit" :style="{ color: '#2980b9'}" />
                                     </button>
-                                    <button @click="onCLickSowSongs(item) ">
+                                    <button @click="onCLickShowSongs(item) ">
                                         <font-awesome-icon icon="fa-solid fa-music" :style="{ color: '#2980b9'}" />
                                     </button>
                                 </td>
