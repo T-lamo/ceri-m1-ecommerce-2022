@@ -217,6 +217,9 @@
                                     <button @click="onCLickEdit(item) ">
                                         <font-awesome-icon icon="fa-solid fa-edit" :style="{ color: '#2980b9'}" />
                                     </button>
+                                    <button @click="onCLickSowSongs(item) ">
+                                        <font-awesome-icon icon="fa-solid fa-music" :style="{ color: '#2980b9'}" />
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>

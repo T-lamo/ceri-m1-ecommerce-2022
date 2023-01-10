@@ -159,10 +159,10 @@
 
             <div class="d-flex justify-content-between mb-3">
               <h5 class="mb-0 fs-6">{{props.item.title}}</h5>
-              <h5 v-if="promo && !chek_if_exist_in_promo" class="text-dark mb-0">$  {{props.item.price - (return_promo().rate / 100 * props.item.price)}}</h5>
-              <h5 v-else-if="chek_if_exist_in_promo() && promo==false" class="text-dark mb-0">$  {{props.item.price - (return_promo().rate / 100 * props.item.price)}}</h5>
+              <h5  v-if="promo && !chek_if_exist_in_promo" class="text-dark mb-0 fs-6">$  {{props.item.price - (return_promo().rate / 100 * props.item.price)}}</h5>
+              <h5 v-else-if="chek_if_exist_in_promo() && promo==false" class="text-dark mb-0 fs-6">$  {{props.item.price - (return_promo().rate / 100 * props.item.price)}}</h5>
               
-              <h5 v-else class="text-dark mb-0 fs-6">$  {{props.item.price}} </h5>
+              <h5 v-else class="text-dark mb-0">$  {{props.item.price}} </h5>
               
             </div>
 

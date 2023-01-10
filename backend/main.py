@@ -71,6 +71,9 @@ async def update_album(album: Album):
 def read_song():
     return db.select_song()
 
+@app.get("/api/song_by_albumid/{id}")
+def read_song_by_albumid(id: int):
+    return db.select_song_byid(id)
 
 @app.get("/api/song/{id}")
 def read_song(id: int):

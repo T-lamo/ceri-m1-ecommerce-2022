@@ -19,7 +19,7 @@ export class Song implements ISong {
   release_date!: string;
   cover!: string;
   album_id!: number;
-
+  created_date?: Date;
   constructor(fields?: Partial<ISong>) {
     Object.assign(this, fields);
   }

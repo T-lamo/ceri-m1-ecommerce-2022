@@ -155,7 +155,11 @@ class Database(metaclass=DatabaseSingletonMeta):
     def select_one_song(self, id):
         with Session(self.engine) as session:
             return session.exec(select(Song).where(Song.id == id)).first()
-            
+
+    def select_song_byid(self, id):
+        with Session(self.engine) as session:
+            return list(session.exec(select(Song).where(Song.album_id == id)))
+
     def insert_song(self, song:Song):
         data = Song(title=song['title'], release_date=song['release_date'],  cover=song['cover'], album_id=song['album_id'], created_date=datetime.now())
         session = Session(self.engine)

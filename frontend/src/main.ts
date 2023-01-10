@@ -1,5 +1,3 @@
-/// <reference path="./algolia.d.ts" />
-
 import { createApp  } from 'vue'
 import App from './App.vue'
 import { loadFonts } from './plugins/webfontloader'
@@ -25,13 +23,14 @@ faX,
 faEye,
 faCat,
 faBars,
-faChevronDown} from '@fortawesome/free-solid-svg-icons'
+faChevronDown,
+faMusic} from '@fortawesome/free-solid-svg-icons'
 import { faFacebook, faTwitter, faTwitch, faLinkedin, faGoogle } from '@fortawesome/free-brands-svg-icons'
 /* add icons to the library */
 library.add(faUserSecret,faUser,faCommentSms,faMagnifyingGlass,
 faArrowLeftLong,faArrowRightLong,faStar,faHeart,faAnglesRight,faAnglesDown,
 faFacebook, faTwitch,faTwitter,faLinkedin,faGoogle,faCirclePlus,faCartShopping, faTrash,faPenToSquare,faPlus,faMinus,
-faCircleCheck, faHouseUser, faChartPie, faBagShopping, faRecordVinyl, faUserTie, faUsers , faGlobe, faCheck,faX, faEye, faCat, faBars, faChevronDown)
+faCircleCheck, faHouseUser, faChartPie, faBagShopping, faRecordVinyl, faUserTie, faUsers , faGlobe, faCheck,faX, faEye, faCat, faBars, faChevronDown, faMusic)
 
 import router from "./router";
 

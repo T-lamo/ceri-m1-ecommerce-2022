@@ -10,7 +10,7 @@
 </script>
 
 <template>
-    <div class="container-fluid">
+    <div>
         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
             <li>
                 <p>hello</p>

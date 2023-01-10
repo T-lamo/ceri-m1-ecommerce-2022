@@ -28,6 +28,7 @@ export interface ISong {
   release_date: string;
   cover: string;
   album_id: number;
+  created_date?: Date;
 }
 
 export interface ICategory {
@@ -73,6 +74,7 @@ export interface IPaymentDetail {
   amount: number;
   name: string;
   provider: string;
+  order_detail_id: number;
   credit_card_number: string;
   status: string;
   created_date?: Date;
