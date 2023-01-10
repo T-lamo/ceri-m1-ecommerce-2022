@@ -12,7 +12,7 @@ RUN chmod +x entrypoint.sh
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 # 
-COPY ./app /code/app
+COPY  . /app
 
 ENV PORT=8080
 
