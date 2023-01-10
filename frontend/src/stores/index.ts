@@ -1,24 +1,40 @@
 import { defineStore } from "pinia";
-import type {
+import {
   Album,
-  Artist,
-  CartItem,
-  Category,
-  OrderDetail,
-  OrderItem,
-  PaymentDetail,
-  Promo,
-  ShoppingSession,
-  Song,
-  User,
-  UserAddress,
+  type Artist,
+  type CartItem,
+  type Category,
+  type OrderDetail,
+  type OrderItem,
+  type PaymentDetail,
+  type Promo,
+  type ShoppingSession,
+  type Song,
+  type User,
+  type UserAddress,
 } from "@/models";
 
 import { ref } from "vue";
 
+const searches: Album[] = [
+  new Album({
+    title: "album1",
+    price: 10,
+    cover:
+      "https://images.unsplash.com/photo-1603884574615-7b6ec4198a8c?ixid=MnwxMDkyNjJ8MHwxfHNlYXJjaHwzNDF8fG1vdmllfGVufDB8fHx8MTY2ODY0MjgyMQ&ixlib=rb-4.0.3&w=500&h=1000",
+  }),
+  new Album({
+    title: "album2",
+    price: 10,
+    cover:
+      "https://images.unsplash.com/photo-1603884574615-7b6ec4198a8c?ixid=MnwxMDkyNjJ8MHwxfHNlYXJjaHwzNDF8fG1vdmllfGVufDB8fHx8MTY2ODY0MjgyMQ&ixlib=rb-4.0.3&w=500&h=1000",
+  }),
+];
+
 export const useAppStore = defineStore("app", () => {
-  const searchItems = ref<Album[]>([]);
-  const isAdminStore = ref(Boolean(localStorage.getItem('isAdmin'))); 
+  const searchItems = ref<Album[]>(searches);
+  const isElementInSearchItem = ref<Boolean>(false);
+  const isAdminStore = ref(Boolean(localStorage.getItem("isAdmin")));
   const current_user = ref<User>();
   const last_shopping_session = ref<ShoppingSession>();
   const current_shopping_session = ref<ShoppingSession>();
@@ -43,7 +59,6 @@ export const useAppStore = defineStore("app", () => {
   const list_category = ref<Category[]>([]);
 
   return {
-    searchItems,
     isAdminStore,
     current_user,
     one_artist,
@@ -65,5 +80,7 @@ export const useAppStore = defineStore("app", () => {
     list_order_item,
     list_user,
     list_user_address,
+    searchItems,
+    isElementInSearchItem,
   };
 });

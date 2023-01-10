@@ -3,17 +3,20 @@ import { watch, watchEffect, ref } from "vue";
 import { useAppStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import { RouterLink, RouterView, useRouter } from "vue-router";
-import { toast_function } from "@/services/crud";
-import type { User } from "@/models";
+import { index_make_search, toast_function } from "@/services/crud";
+import type { Album, User } from "@/models";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const router = useRouter();
 
-const { list_cart_item, isAdminStore } = storeToRefs(useAppStore());
+const { list_cart_item, isAdminStore, searchItems } = storeToRefs(
+  useAppStore()
+);
 
 // let isAdminStore = ref(Boolean(localStorage.getItem('isAdmin')));
 let user_from_localstorage: string;
 let user_obj = ref<User>();
+let search_text = ref<String>("");
 // watch(isAdminStore, () => {
 
 //   console.log("watch is adminstore", user_obj);
@@ -46,6 +49,31 @@ const onLogout = () => {
   console.log(localStorage.getItem("isAdmin"));
   toast_function("You are logged out successfully!!", "success");
 };
+
+//alternative 1
+
+watch(search_text, (newValue, oldValue) => {
+  if (newValue.toString().trim().length == 0) {
+    console.log("the value of the length est:", newValue.toString().length);
+    searchItems.value = [];
+  } else {
+    index_make_search(newValue.toString())
+      .then((data: any) => {
+        console.log("datattttt", data);
+        searchItems.value = data;
+      })
+      .catch((err) => {
+        console.log("SearchError", err);
+        searchItems.value = [];
+      });
+  }
+
+  console.log("test watcher", newValue);
+});
+//alternative 2
+function submitForm() {
+  console.log("test", search_text);
+}
 </script>
 <template>
   <div class="container_fluid" v-if="isAdminStore">
@@ -299,12 +327,13 @@ const onLogout = () => {
             </ul>
           </li>
         </ul>
-        <form class="d-flex">
+        <form v-on:submit.prevent="submitForm" class="d-flex">
           <input
             class="form-control me-2"
             type="search"
             placeholder="Search"
             aria-label="Search"
+            v-model="search_text"
           />
           <button class="btn btn-outline-warning me-4" type="submit">
             Search

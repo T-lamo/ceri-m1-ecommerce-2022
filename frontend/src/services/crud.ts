@@ -488,7 +488,7 @@ export function toast_function(message: string, type: string) {
   return instance;
 }
 
-export async function make_search(data: string): Promise<IAlbum[]> {
+export async function index_make_search(data: string): Promise<IAlbum[]> {
   return await (await fetch(`/api/index/search/${data}`)).json();
 }
 
@@ -507,5 +507,7 @@ export async function index_insert_albums(data: IAlbum[]): Promise<Boolean> {
     body: JSON.stringify(data),
     headers: content_type,
   };
+  console.log("is it inside index insert", data);
+  
   return await (await fetch(`/api/index/add/albums`, config)).json();
 }

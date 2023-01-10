@@ -303,6 +303,7 @@ def add_album_to_index(obj: dict):
 
 @app.post("/api/index/add/albums")
 def add_all_to_index(obj: dict):
+    print("inside api ajout to index")
     return Index().init_album_index(obj)
       
 # @app.post("/api/login")
