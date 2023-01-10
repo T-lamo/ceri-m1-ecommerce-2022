@@ -5,3 +5,4 @@ __pycache__
 key.json
 package-lock.json
 .env
+/frontend/src_2
