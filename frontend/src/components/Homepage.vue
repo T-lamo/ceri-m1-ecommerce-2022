@@ -13,7 +13,7 @@ import type { IAlbum } from "@/interfaces";
 const user_from_localstorage = localStorage.getItem("userId");
 const user_obj = JSON.parse(user_from_localstorage!);
 
-const { list_promo, list_album } = storeToRefs(useAppStore());
+const { list_promo, list_album, isAdminStore } = storeToRefs(useAppStore());
 let is_data_search_items = ref<Boolean>(false);
 const { searchItems } = storeToRefs(useAppStore());
 watch(searchItems, (newVal, oldVal) => {
@@ -86,7 +86,7 @@ const handleDate = (stringdate: string): string => {
 };
 </script>
 <template>
-  <div v-if="user_obj.is_admin == false">
+  <div v-if="isAdminStore == false">
     <div
       id="carouselExampleCaptions"
       class="carousel slide"
@@ -148,7 +148,7 @@ const handleDate = (stringdate: string): string => {
   <section
     class="page-section bg-light py-4 text-center"
     id="offer"
-    v-if="user_obj.is_admin == false"
+    v-if="isAdminStore == false"
   >
     <div class="container">
       <div class="text-center">

@@ -257,14 +257,6 @@ class Database(metaclass=DatabaseSingletonMeta):
                 orders_status = item['orders_status'],
                 created_date= datetime.now())
             results = session.exec(statement)
-            update = results.one()
-            update.total=item['total']
-            update.user_id=item['user_id']
-            update.payment_status=item['payment_status']
-            update.delivery_status=item['delivery_status']
-            update.orders_status=item['orders_status']
-            update.created_date= datetime.now()
-            session.add(update)
             session.commit()
 
     def delete_order_detail(self,id):

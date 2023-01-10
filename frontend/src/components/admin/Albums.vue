@@ -13,6 +13,7 @@
 
     // variables
     let display_edit = ref(false)
+    let display_list_song = ref(false)
     let chosen_album = ref<Album>()
     let title_edit_or_add = ref("")
     let title_update_or_add = ref("")
@@ -65,6 +66,7 @@
         id_choose.value = 1
         chosen_album.value = item
         display_edit.value = true
+        display_list_song.value = false
         title_edit_or_add.value = 'Edit'
         title_update_or_add.value = 'Update'
         // update local stores
@@ -80,7 +82,7 @@
     }
 
     const onCLickShowSongs = async (item:Album) => {
-        
+        display_list_song.value = true
         arr_songs.value =  await read_song_by_albumid(item.id!)
 
     }
@@ -89,6 +91,7 @@
         id_choose.value = 2
         // chosen_album.value = item
         display_edit.value = true
+        display_list_song.value =false
         title_edit_or_add.value = 'Add an album'
         title_update_or_add.value = 'Create'
         // update local stores
@@ -181,59 +184,59 @@
 <template>
     <div class="container-fluid pt-4">
         <button class="btn btn-outline-warning" @click="onCLickAdd">Add album</button>
-        <div class="row d-flex">
-            <div class="col-md-8">
-                <div class="table-responsive">
-                    <table class="table table-striped text-center">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Cover</th>
-                                <th>title</th>
-                                <th>Stock</th>
-                                <th>Description</th>
-                                <th>Aritst</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="item in list_album">
-                                <th>#{{item.id}}</th>
-                                <td>
-                                    <img :src="item.cover"
-                                        style="height:80px; width:120px;"
-                                        class="img-fluid rounded-3" alt="Cotton T-shirt"
-                                        />
-                                    Category: <br>
-                                    <b>{{ckeck_me_category(item.category_id!)}}</b> <br>
-                                    Price: <br>
-                                    <b>$ {{item.price}}</b>
-                                </td>
-                                <td>
-                                    {{item.title}} <br>
-                                    <center>released in: </center>
-                                    <i>{{item.release_date}}</i>
-
-                                </td>
-                                <td>{{item.stock_qty}}</td>
-                                <td>{{item.description}}</td>
-                                <td>{{check_me_artist(item.artist_id)}}</td>
-                                <td>
-                                    <button @click="onDeleteAlbum(item.id!)">
-                                        <font-awesome-icon icon="fa-solid fa-trash" :style="{ color: '#e17055'}"/> 
-                                    </button>&nbsp;
-                                    <button @click="onCLickEdit(item) ">
-                                        <font-awesome-icon icon="fa-solid fa-edit" :style="{ color: '#2980b9'}" />
-                                    </button>
-                                    <button @click="onCLickShowSongs(item) ">
-                                        <font-awesome-icon icon="fa-solid fa-music" :style="{ color: '#2980b9'}" />
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div class="row d-flex ">
+                <div class="col-md-8">
+                    <div class="table-responsive">
+                        <table class="table table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Cover</th>
+                                    <th>title</th>
+                                    <th>Stock</th>
+                                    <th>Description</th>
+                                    <th>Aritst</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in list_album">
+                                    <th>#{{item.id}}</th>
+                                    <td>
+                                        <img :src="item.cover"
+                                            style="height:80px; width:120px;"
+                                            class="img-fluid rounded-3" alt="Cotton T-shirt"
+                                            />
+                                        Category: <br>
+                                        <b>{{ckeck_me_category(item.category_id!)}}</b> <br>
+                                        Price: <br>
+                                        <b>$ {{item.price}}</b>
+                                    </td>
+                                    <td>
+                                        {{item.title}} <br>
+                                        <center>released in: </center>
+                                        <i>{{item.release_date}}</i>
+                                
+                                    </td>
+                                    <td>{{item.stock_qty}}</td>
+                                    <td>{{item.description}}</td>
+                                    <td>{{check_me_artist(item.artist_id)}}</td>
+                                    <td>
+                                        <button @click="onDeleteAlbum(item.id!)">
+                                            <font-awesome-icon icon="fa-solid fa-trash" :style="{ color: '#e17055'}"/> 
+                                        </button>&nbsp;
+                                        <button @click="onCLickEdit(item) ">
+                                            <font-awesome-icon icon="fa-solid fa-edit" :style="{ color: '#2980b9'}" />
+                                        </button>
+                                        <button @click="onCLickShowSongs(item) ">
+                                            <font-awesome-icon icon="fa-solid fa-music" :style="{ color: '#2980b9'}" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
             <div class="col-md-4" v-if="display_edit">
                 <div class="card text-center">
                     <div class="card-header">
@@ -301,8 +304,40 @@
                     </div>
 
                 </div>
-
             </div>
+
+            <div class="col-md-4" v-if="display_list_song">
+                <div class="table-responsive">
+                    <table class="table table-striped text-center">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cover</th>
+                                <th>title</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in arr_songs">
+                                <th>#{{item.id}}</th>
+                                <td>
+                                    <img :src="item.cover"
+                                        style="height:80px; width:120px;"
+                                        class="img-fluid rounded-3" alt="Cotton T-shirt"
+                                        />
+                                </td>
+                                <td>
+                                    {{item.title}} <br>
+                                    <center>released in: </center>
+                                    <i>{{item.release_date}}</i>
+
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>

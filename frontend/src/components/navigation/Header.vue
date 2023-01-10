@@ -27,8 +27,7 @@ let search_text = ref<String>("");
     user_from_localstorage = localStorage.getItem("userId")!
     user_obj = JSON.parse(user_from_localstorage!)    
       
-  //   const isLoggedIn_from_localstorage = Boolean(localStorage.getItem("isLoggedIn"))
-  // // })
+    const isLoggedIn_from_localstorage = Boolean(localStorage.getItem("isLoggedIn"))
   
   // let isAdminUser_from_localstorage = Boolean(localStorage.getItem("isAdmin"))
 
@@ -67,7 +66,7 @@ let search_text = ref<String>("");
   // })
 
 
-
+  // isAdminUser_from_localstorage = Boolean(localStorage.getItem("isAdmin"))
 //alternative 1
 
 watch(search_text, (newValue, oldValue) => {
@@ -230,13 +229,19 @@ function submitForm() {
       
         <div class="row">
           <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" v-model="input_search">
-            <button class="btn btn-outline-warning me-4" type="submit">Search</button>
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+              v-model="search_text"
+            />
+            <button class="btn btn-outline-warning me-4" type="submit" @click="submitForm">
+              Search
+            </button>
           </form>
          
         </div>
-        
-          
       <div class=".col-4 icon_header me-4 py-2 my-2">
         <!-- Link  to shop -->
         <a href="#">
@@ -251,7 +256,7 @@ function submitForm() {
         </a>
       </div>
       <!-- compte -->
-           <div class=".col-4 icon_header me-4 my-2">
+        <div class=".col-4 icon_header me-4 my-2">
             <ul class="navbar-nav me-auto mb-2">
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -295,47 +300,10 @@ function submitForm() {
                   </ul>
               </li>
             </ul>
-<<<<<<< HEAD
-=======
-          </li>
-        </ul>
-        <form v-on:submit.prevent="submitForm" class="d-flex">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-            v-model="search_text"
-          />
-          <button class="btn btn-outline-warning me-4" type="submit">
-            Search
-          </button>
-        </form>
-        <div class=".col-4 icon_header me-4 py-2 my-2">
-          <!-- Link  to shop -->
-          <a href="#">
-            <router-link
-              to="/panier"
-              class="router_link_class"
-              v-if="isLoggedIn_from_localstorage"
-            >
-              <font-awesome-icon
-                icon="fa-solid fa-cart-shopping"
-                size="2x"
-                :style="{ color: 'white' }"
-              />
-              <!-- <span>hello </span> -->
-              <span class="badge rounded-pill bg-danger">
-                {{ list_cart_item.length }}
-                <!-- <span class="visually-hidden">unread messages</span> -->
-              </span>
-            </router-link>
-          </a>
->>>>>>> ec76d617b18f53fb6eb36bc12e9a3ab0e0b682a2
-        </div>
     </div>
   </div>
 
+</div>
 </nav>
 
 </template>

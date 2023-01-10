@@ -10,7 +10,6 @@ import { onMounted, type Ref } from "vue";
 import OneArticle from "./OneArticle.vue";
 import type { Song } from "@/models";
 import type { IAlbum } from "@/interfaces";
-import { array } from "yup";
 const { list_album } = storeToRefs(useAppStore());
 onMounted(async () => {
   list_album.value = (await read_albums()).map((res: any) => {
@@ -20,7 +19,7 @@ onMounted(async () => {
     //   .catch((err) => console.log(err));
     return res;
   });
-  list_album.value.map((data, index) => arr.push(data));
+  // list_album.value.map((data, index) => arr.push(data));
 });
 </script>
 <template>

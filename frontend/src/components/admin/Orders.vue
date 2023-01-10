@@ -1,7 +1,7 @@
 <script lang="ts" setup>
     import { useAppStore } from '@/stores';
     import { storeToRefs } from 'pinia';
-    import { read_order_details , read_users, read_order_items_by_orderdetail_id, read_albums, update_order_detail} from '@/services/crud';
+    import { read_order_details , read_users, read_order_items_by_orderdetail_id, read_albums, update_order_detail, toast_function} from '@/services/crud';
     import { onMounted, ref } from 'vue';
     import { Album, type OrderDetail,type User,OrderItem } from '@/models';
 
@@ -111,13 +111,10 @@
             "total": chosen_order_detail.value?.total!,
             "user_id": chosen_order_detail.value?.user_id!
         })
-        .then(res => console.log("update successfull"))
+        .then(res => toast_function("Order status updated successfully","success"))
         .catch(error => console.log(error))
         // update order_detail
-        get_order_details()
-        
-
-        
+        get_order_details() 
     }
 
     
