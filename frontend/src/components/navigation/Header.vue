@@ -412,6 +412,7 @@ const onLogout = () => {
       </div>
     </div>
   </nav>
+  
 </template>
 <style scoped>
 * {
