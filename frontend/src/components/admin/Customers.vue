@@ -16,8 +16,6 @@
 <template>
     <div class="container-fluid pt-4">
         <div class="row d-flex ">
-            <!-- list all order details -->
-            <!-- <div class="col-md-8 justify-content-start"> -->
                 <p class="text-center">Curstomers </p>
                 <div class="table-responsive">
                     <table class="table table-striped text-center">
@@ -69,6 +67,5 @@
                     </table>
                 </div>
             </div>
-    <!-- </div> -->
     </div>
 </template>

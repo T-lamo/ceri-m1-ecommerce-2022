@@ -68,7 +68,7 @@
         lastname.value = artist.lastname
         cover.value = artist.cover!
         date_of_birth.value = "" + artist.date_of_birth?.toString()
-        console.log(chosen_artist.value.firstname)
+        
     }
 
     // update artist
@@ -83,7 +83,7 @@
             "lastname": lastname.value,
             "date_of_birth": "" + date_of_birth.value,
             "created_date": new Date()
-            // "list_album": chosen_artist.value?.list_album
+           
            })
            .then( res => 
                 toast_function("Artist " + chosen_artist.value?.firstname + " successfully updated", "success")
@@ -125,33 +125,6 @@
         date_of_birth.value = (new Date()).toString()
 
     }
-    
-    // const firstname = ref(chosen_artist.value?.firstname)
-
-    // const onInvalidSubmit = (()=> {
-    //   console.log('invalid button me')
-    //   const submitBtn = document.querySelector('.auth-btn');
-    //   submitBtn!.classList.add('invalid');
-    //   setTimeout(() => {
-    //     submitBtn!.classList.remove('invalid');
-    //   }, 1000);
-    // })
-    // artist validation schema
-    // const schema_artist = Yup.object().shape({
-    //     firstname: Yup.string().required(),
-    //     lastname: Yup.string().required(),
-    //     date_of_birth: Yup.date().required(),
-    //     cover: Yup.string().url().required()
-    // })
-
-    // const {
-    //     value,
-    //     errorMessage,
-    //     handleBlur,
-    //     handleChange
-    // } = useField('fistname','lastname')
-    
-
 </script>
 <template>
     <div class="container-fluid pt-4">

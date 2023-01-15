@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import SearchAlbumList from "./SearchAlbumList.vue";
+  import SearchAlbumList from "./SearchAlbumList.vue";
 </script>
 
 <template>

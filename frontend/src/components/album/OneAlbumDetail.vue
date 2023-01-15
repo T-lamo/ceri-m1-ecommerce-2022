@@ -15,10 +15,12 @@
         list_album.value = await read_albums() as Album[]
     })
 
+    // routing
     const route = useRoute()
     const value = route.params.id
     let id_router:number = parseInt(value[0])
 
+    // read a selected album
     const readOneAlbum = ():Album => {
         let res = new Album
         list_album.value.forEach((element) => {
@@ -28,6 +30,7 @@
         return res
     }
     
+    // return corresponding songs for a selected album
     const returnSongsOneAlbum = (): Array<Song> => {
         let res:Array<Song> = []
         list_song.value.forEach((element) => {
@@ -40,7 +43,6 @@
     const getImage = (imagePath:string) => {
         return (imagePath);
     }
-
 
 </script>
 <template>

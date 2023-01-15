@@ -59,6 +59,7 @@
     let description = ref("")
     let category_id = ref(0)
 
+    // edit selected album
     const onCLickEdit = (item:Album) => {
         id_choose.value = 1
         chosen_album.value = item
@@ -77,6 +78,7 @@
 
     }
 
+    // add an album
     const onCLickAdd = () => {
         id_choose.value = 2
         // chosen_album.value = item
@@ -94,6 +96,7 @@
         category_id.value = 1
     }
 
+    //update a selected album
     const onUpdateAddAlbum = async () => {
         if (id_choose.value == 1 ) {
             let res = await update_album({
@@ -133,7 +136,7 @@
                 toast_function("Successfully new album added","success")
             )
             .catch(error => 
-                // toast_function("Failed to add new album ","error")
+                
                 console.log(error)
             )
             
@@ -143,6 +146,7 @@
 
     }
 
+    // delete selected album
     const onDeleteAlbum = (id_album:number) => {
         Swal.fire({
             title:'Are you sure ?',

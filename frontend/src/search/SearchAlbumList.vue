@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, watchEffect } from "vue";
+import { watchEffect } from "vue";
 import { useAppStore } from "@/stores";
 import { storeToRefs } from "pinia";
 import SearchOneAlbum from "./SearchOneAlbum.vue";

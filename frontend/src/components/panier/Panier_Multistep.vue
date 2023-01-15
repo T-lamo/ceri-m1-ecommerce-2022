@@ -1,6 +1,5 @@
 <script lang="ts" setup>
    import Liste_Commandes from './Liste_Commandes.vue';
-   import RecapitulatifCommandes from './RecapitulatifCommandes.vue';
    import Paiement from './Paiement.vue';
    import Livraison from './Livraison.vue'
    import { ref } from "vue"
@@ -28,8 +27,7 @@
     
     // update current_order_detail in store
     current_order_detail.value = last_order_detail as OrderDetail
-    // current_order_detail.value?.delivery_status = last_order_detail.delivery_status
-
+ 
     // create order items for the order detail
     list_cart_item.value.forEach(async (element:CartItem) => {
             await create_order_item({
@@ -169,22 +167,6 @@
             </div>
         </div>
         <div v-if="step === 3">
-            <div>
-                <RecapitulatifCommandes
-                    />
-
-            </div>
-            <div class="col-12 text-center">
-                <button class="btn btn-secondary" @click="prev_step">
-                    Prev
-                </button>
-                &nbsp;&nbsp;
-                <button class="btn btn-outline-warning" @click="next_step(3)">
-                    Suivant
-                </button>
-            </div>
-        </div>
-        <div v-if="step === 4">
             <div class="container">
                 <h2 class="text-center pt-4">
                     <P>Bravo vous avez terminée votre commande. Allez sur le site du transporteur</P>
@@ -199,16 +181,6 @@
             </div>
         </div>
 
-      <!-- </Wizard> -->
     </div>
   </div>
 </template>
-
-<style>
-/* .multistep_container{
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-} */
-</style>

@@ -1,13 +1,10 @@
 <script lang="ts" setup>
 import OneCommand from "./OneCommand.vue";
-import { computed, ref } from "vue";
-import { read_one_album, toast_function } from "@/services/crud";
 import { useAppStore } from "@/stores";
 import { storeToRefs } from "pinia";
 
-const { list_cart_item, last_shopping_session } = storeToRefs(useAppStore());
-console.log("last_shopping_session: ");
-console.log(last_shopping_session.value);
+const { list_cart_item } = storeToRefs(useAppStore());
+
 </script>
 
 <template>

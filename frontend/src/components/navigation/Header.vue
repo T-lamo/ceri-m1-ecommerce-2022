@@ -1,51 +1,42 @@
 <script lang="ts" setup>
-import { watch, watchEffect, ref } from "vue";
-import { useAppStore } from "@/stores";
-import { storeToRefs } from "pinia";
-import { RouterLink, RouterView, useRouter } from "vue-router";
-import { toast_function } from "@/services/crud";
-import type { User } from "@/models";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+  import { watch, ref } from "vue";
+  import { useAppStore } from "@/stores";
+  import { storeToRefs } from "pinia";
+  import { RouterLink, RouterView, useRouter } from "vue-router";
+  import { toast_function } from "@/services/crud";
+  import type { User } from "@/models";
+  import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-const router = useRouter();
+  const router = useRouter();
 
-const { list_cart_item, isAdminStore } = storeToRefs(useAppStore());
+  const { list_cart_item, isAdminStore } = storeToRefs(useAppStore());
 
-// let isAdminStore = ref(Boolean(localStorage.getItem('isAdmin')));
-let user_from_localstorage: string;
-let user_obj = ref<User>();
-// watch(isAdminStore, () => {
+  let user_from_localstorage: string;
+  let user_obj = ref<User>();
 
-//   console.log("watch is adminstore", user_obj);
-// });
+  watch(isAdminStore, () => {
+    console.log("is admin store", isAdminStore.value);
+    user_from_localstorage = localStorage.getItem("userId")!;
+    user_obj.value = JSON.parse(user_from_localstorage!);
+  });
 
-watch(isAdminStore, () => {
-  console.log("is admin store", isAdminStore.value);
-  user_from_localstorage = localStorage.getItem("userId")!;
-  user_obj.value = JSON.parse(user_from_localstorage!);
-});
+  const isLoggedIn_from_localstorage = Boolean(
+    localStorage.getItem("isLoggedIn")
+  );
+  const onLogout = () => {
+    isAdminStore.value = false;
+    localStorage.setItem("isLoggedIn", "false");
+    localStorage.setItem("isAdmin", "false");
+    setTimeout(() => {
+      router.push({
+        name: "login",
+        replace: true,
+      });
+    }, 1000);
+    console.log("logged out");
 
-const isLoggedIn_from_localstorage = Boolean(
-  localStorage.getItem("isLoggedIn")
-);
-// let isAdminUser_from_localstorage = Boolean(localStorage.getItem("isAdmin"))
-
-const onLogout = () => {
-  isAdminStore.value = false;
-  localStorage.setItem("isLoggedIn", "false");
-  localStorage.setItem("isAdmin", "false");
-  setTimeout(() => {
-    router.push({
-      name: "login",
-      replace: true,
-    });
-  }, 1000);
-  console.log("logged out");
-
-  // isAdminUser_from_localstorage = Boolean(localStorage.getItem("isAdmin"))
-  console.log(localStorage.getItem("isAdmin"));
-  toast_function("You are logged out successfully!!", "success");
-};
+    toast_function("You are logged out successfully!!", "success");
+  };
 </script>
 <template>
   <div class="container_fluid" v-if="isAdminStore">
@@ -58,22 +49,6 @@ const onLogout = () => {
             class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
             id="menu"
           >
-            <!-- Charts -->
-            <li class="nav-item pt-2">
-              <a href="#" class="nav-link align-middle px-0">
-                <router-link
-                  to="/admin/admin_charts"
-                  style="color: #bdc3c7; text-decoration: none"
-                >
-                  <font-awesome-icon
-                    icon="fa-solid fa-chart-pie"
-                    size="lg"
-                    :style="{ color: '#f0932b' }"
-                  />
-                  <span class="ms-1 d-none d-sm-inline px-2">Charts</span>
-                </router-link>
-              </a>
-            </li>
             <!-- Orders -->
             <li class="nav-item pt-2">
               <a href="#" class="nav-link px-0 align-middle">
@@ -203,12 +178,11 @@ const onLogout = () => {
         <router-view name="albums_name"></router-view>
         <router-view name="artists_name"></router-view>
         <router-view name="cat_name"></router-view>
-        <router-view name="charts_name"></router-view>
       </div>
     </div>
   </div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark" v-else>
-    <!-- v-if="current_user?.is_admin == false"-->
+  
     <div class="container-fluid">
       <a class="navbar-brand px-2" href="#"> Logo </a>
       <button
@@ -323,10 +297,8 @@ const onLogout = () => {
                 size="2x"
                 :style="{ color: 'white' }"
               />
-              <!-- <span>hello </span> -->
               <span class="badge rounded-pill bg-danger">
                 {{ list_cart_item.length }}
-                <!-- <span class="visually-hidden">unread messages</span> -->
               </span>
             </router-link>
           </a>
@@ -417,7 +389,6 @@ const onLogout = () => {
 <style scoped>
 * {
   margin: 0px 0px 0px 0px;
-  /* background-color: #2f3640; */
 }
 .icon_header {
   margin-top: 5px;

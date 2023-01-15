@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import type { Album } from "@/models";
+  import type { Album } from "@/models";
 
-const props = defineProps<{
-  album: Album;
-}>();
+  const props = defineProps<{
+    album: Album;
+  }>();
 </script>
 <template>
   <div class="one-album">

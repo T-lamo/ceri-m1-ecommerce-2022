@@ -13,7 +13,6 @@
         },
         value: {
             type: String,
-            // default: '',
         },
         type: {
             type: String,
@@ -42,7 +41,6 @@
         initialValue: props.value,
     });
 
-    console.log(meta)
 </script>
 <template>
 <div class="form-floating mb-3 py-2">
@@ -58,9 +56,7 @@
       :class="{'is-invalid':!!errorMessage, 'is-valid':meta.valid}"
     />
     <label :for="name">{{ label }}</label>
-    <!-- <p class="pt-2" v-show="errorMessage || meta.valid">
-      {{ errorMessage || successMessage }}
-    </p> -->
+
         <div class="valid-feedback">
             Looks good! {{ successMessage}}
         </div>

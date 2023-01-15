@@ -1,24 +1,24 @@
 <script lang="ts" setup>
     import { defineProps, onMounted, ref } from 'vue';
-    import { read_promos , read_artists, read_one_album, read_albums,update_cart_item, 
-      create_cart_item, read_cart_items_by_sessionid} from '@/services/crud';
+    import { read_promos , read_artists, read_one_album, 
+      create_cart_item} from '@/services/crud';
     import { Artist, CartItem, Promo, type Album } from '../../models';
     import { storeToRefs } from 'pinia';
     import { useAppStore } from '@/stores';
     import { toast_function } from '@/services/crud';
     
-    const user_from_localstorage = localStorage.getItem("userId")
-    const user_obj = JSON.parse(user_from_localstorage!)
     const isLoggedIn_from_localstorage = Boolean(localStorage.getItem("isLoggedIn"))
     const props = defineProps<{
         item:Album,
         promo:boolean,
     }>()
 
+    // get an image from its src image
     const getImage = (imagePath:string) => {
         return (imagePath);
     }
 
+    // get stores 
     const { list_promo , list_artist, list_cart_item, current_shopping_session} = storeToRefs(useAppStore())
    
     onMounted(async () => {
@@ -32,6 +32,7 @@
     
     })
     
+    // check if an album is a promotion
     const chek_if_exist_in_promo = () => {
       let res = false;
       list_promo.value.forEach((element) => {
@@ -42,6 +43,7 @@
       return res
     }
 
+    // return if an article if a promotion
     const return_promo = () => {
         let my_selected_promo:Promo = new Promo;
         if (chek_if_exist_in_promo()) {
@@ -56,6 +58,7 @@
 
     }
 
+    // check corresponding artist object from id artist
     const check_me_artist = () => {
         let my_selected_artist = new Artist;
         list_artist.value.forEach((element) => {
@@ -66,6 +69,7 @@
         return my_selected_artist
     }
 
+    // check if a cart exist
     const check_existence_cart_item = ((shopping_session_id:number, album_id:number) => {
       let found = false
       list_cart_item.value.forEach(async (element:CartItem) => {

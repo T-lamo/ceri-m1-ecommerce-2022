@@ -1,92 +1,82 @@
 <script lang="ts" setup>
-import { Form } from "vee-validate";
-import * as Yup from "yup";
-import InputField from "../auth/InputField.vue";
-import { storeToRefs } from "pinia";
-import { useAppStore } from "@/stores";
-import { PaymentDetail } from "@/models";
-import {
-  read_lastone_order_detail_byuserid,
-  create_payment_detail,
-  toast_function,
-} from "../../services/crud";
-import Swal from "sweetalert2";
+  import { Form } from "vee-validate";
+  import * as Yup from "yup";
+  import InputField from "../auth/InputField.vue";
+  import { storeToRefs } from "pinia";
+  import { useAppStore } from "@/stores";
+  import { PaymentDetail } from "@/models";
+  import {
+    read_lastone_order_detail_byuserid,
+    create_payment_detail,
+  } from "../../services/crud";
+  import Swal from "sweetalert2";
 
-const {
-  list_cart_item,
-  current_user,
-  total_price,
-  current_order_detail,
-  current_payement,
-} = storeToRefs(useAppStore());
+  const {
+    list_cart_item,
+    current_user,
+    total_price,
+    current_order_detail,
+    current_payement,
+  } = storeToRefs(useAppStore());
 
-/** on invalid submit button */
-const onInvalidSubmit = () => {};
-/** on add paiement */
-const onAddPaiement = async (values: any) => {
-  // get last order to get id order to add in payment detail
-  let response_read_last_order_byuserid =
-    await read_lastone_order_detail_byuserid(current_user.value?.id!);
+  /** on invalid submit button */
+  const onInvalidSubmit = () => {};
+  /** on add paiement */
+  const onAddPaiement = async (values: any) => {
+    // get last order to get id order to add in payment detail
+    let response_read_last_order_byuserid =
+      await read_lastone_order_detail_byuserid(current_user.value?.id!);
 
-  console.log("last order: ");
-  console.log(response_read_last_order_byuserid);
 
-  //paiement detail
-  let my_paiement = new PaymentDetail({
-    amount: total_price.value,
-    status: "payé",
-    // order_detail_id: current_order_detail.value?.id,
-    created_date: new Date(),
-  });
-  // add current payment detail
-  current_payement.value = my_paiement;
-  console.log("current payment: ");
-  console.log(current_payement.value);
-  // create paiement details
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You will save payement details",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, pay it!",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      Swal.fire(
-        "Payed!",
-        "Your order of " + total_price.value + " has been paid!",
-        "success"
-      );
-      // create payement detail
-      let res = (await create_payment_detail(my_paiement)) as PaymentDetail;
+    //paiement detail
+    let my_paiement = new PaymentDetail({
+      amount: total_price.value,
+      status: "payé",
+      created_date: new Date(),
+    });
+    // add current payment detail
+    current_payement.value = my_paiement;
+   
+    // create paiement details
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will save payement details",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, pay it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "Payed!",
+          "Your order of " + total_price.value + " has been paid!",
+          "success"
+        );
+        // create payement detail
+        let res = (await create_payment_detail(my_paiement)) as PaymentDetail;
 
-      console.log("create a payement");
 
-      // update order detail ????
-      current_order_detail.value!.payment_status = true;
+        // update order detail ????
+        current_order_detail.value!.payment_status = true;
 
-      console.log("current order detail: ");
-      console.log(current_order_detail.value);
-      // delete list_cart_item
-      for (let i = 0; i < list_cart_item.value.length + 1; i++) {
-        list_cart_item.value.pop();
+        // delete list_cart_item
+        for (let i = 0; i < list_cart_item.value.length + 1; i++) {
+          list_cart_item.value.pop();
+        }
+
       }
+    });
+  };
 
-      console.log("after pop: ");
-      console.log(list_cart_item.value);
-    }
+  /** generate input validation for Paiement */
+  const schema_paiement = Yup.object().shape({
+    account_holder: Yup.string().required(),
+    provider: Yup.string().required(),
+    credit_card_number: Yup.string().required().min(16),
+    expiration_date: Yup.string().required(),
+    cvv: Yup.number().required().min(3),
   });
-};
-
-/** generate input validation for Paiement */
-const schema_paiement = Yup.object().shape({
-  account_holder: Yup.string().required(),
-  provider: Yup.string().required(),
-  credit_card_number: Yup.string().required().min(16),
-  expiration_date: Yup.string().required(),
-  cvv: Yup.number().required().min(3),
-});
 </script>
 
 <template>

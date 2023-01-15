@@ -1,67 +1,67 @@
 <script lang="ts" setup>
-import { useAppStore } from "@/stores";
-import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
-import { read_albums, read_promos } from "@/services/crud";
-import { Album, type Promo } from "@/models";
+  import { useAppStore } from "@/stores";
+  import { storeToRefs } from "pinia";
+  import { onMounted } from "vue";
+  import { read_albums, read_promos } from "@/services/crud";
+  import { Album, type Promo } from "@/models";
 
-const user_from_localstorage = localStorage.getItem("userId");
-const user_obj = JSON.parse(user_from_localstorage!);
+  const user_from_localstorage = localStorage.getItem("userId");
+  const user_obj = JSON.parse(user_from_localstorage!);
 
-const { list_promo, list_album } = storeToRefs(useAppStore());
+  const { list_promo, list_album } = storeToRefs(useAppStore());
 
-onMounted(async () => {
-  list_promo.value = (await read_promos()) as Promo[];
-  list_album.value = (await read_albums()) as Album[];
-});
-
-const check_me_album = (id_album: number) => {
-  let my_selected_album = new Album();
-  list_album.value.forEach((element: Album) => {
-    if (element.id == id_album) {
-      my_selected_album = element;
-    }
+  onMounted(async () => {
+    list_promo.value = (await read_promos()) as Promo[];
+    list_album.value = (await read_albums()) as Album[];
   });
-  return my_selected_album;
-};
 
-const getImage = (imagePath: string) => {
-  return imagePath;
-};
+  const check_me_album = (id_album: number) => {
+    let my_selected_album = new Album();
+    list_album.value.forEach((element: Album) => {
+      if (element.id == id_album) {
+        my_selected_album = element;
+      }
+    });
+    return my_selected_album;
+  };
 
-/** handle dates **/
+  const getImage = (imagePath: string) => {
+    return imagePath;
+  };
 
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+  /** handle dates **/
 
-const getMonthName = (month: number): string => {
-  return monthNames[month];
-};
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
-const handleDate = (stringdate: string): string => {
-  const date = new Date(stringdate);
+  const getMonthName = (month: number): string => {
+    return monthNames[month];
+  };
 
-  return (
-    "" +
-    date.getDate() +
-    " " +
-    getMonthName(date.getMonth()) +
-    " " +
-    date.getFullYear()
-  );
-};
+  const handleDate = (stringdate: string): string => {
+    const date = new Date(stringdate);
+
+    return (
+      "" +
+      date.getDate() +
+      " " +
+      getMonthName(date.getMonth()) +
+      " " +
+      date.getFullYear()
+    );
+  };
 </script>
 <template>
   <div v-if="user_obj.is_admin == false">
@@ -82,7 +82,7 @@ const handleDate = (stringdate: string): string => {
             class="d-block w-100"
           />
           <div class="carousel-caption">
-            <!--d-none d-md-block-->
+        
             <h1>{{ check_me_album(item.album_id).title }}</h1>
             <button class="btn btn-secondary ancient_price">
               $ {{ check_me_album(item.album_id).price }}

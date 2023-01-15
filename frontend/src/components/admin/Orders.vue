@@ -1,124 +1,111 @@
 <script lang="ts" setup>
-import { useAppStore } from "@/stores";
-import { storeToRefs } from "pinia";
-import {
-  read_order_details,
-  read_users,
-  read_order_items_by_orderdetail_id,
-  read_albums,
-  update_order_detail,
-} from "@/services/crud";
-import { onMounted, ref } from "vue";
-import { Album, type OrderDetail, type User, OrderItem } from "@/models";
+  import { useAppStore } from "@/stores";
+  import { storeToRefs } from "pinia";
+  import {
+    read_order_details,
+    read_users,
+    read_order_items_by_orderdetail_id,
+    read_albums,
+    update_order_detail,
+  } from "@/services/crud";
+  import { onMounted, ref } from "vue";
+  import { Album, type OrderDetail, type User, OrderItem } from "@/models";
 
-let choose_me_edit_or_show = ref(true);
-let chosen_order_items = ref<OrderItem[]>();
-let chosen_order_detail = ref<OrderDetail>();
+  let choose_me_edit_or_show = ref(true);
+  let chosen_order_items = ref<OrderItem[]>();
+  let chosen_order_detail = ref<OrderDetail>();
 
-const { list_order_detail, list_user, list_album } = storeToRefs(useAppStore());
+  const { list_order_detail, list_user, list_album } = storeToRefs(useAppStore());
 
-const get_order_details = async () => {
-  let list_order_details = await read_order_details();
-  list_order_detail.value = list_order_details as OrderDetail[];
-  console.log(list_order_detail.value);
-};
+  const get_order_details = async () => {
+    let list_order_details = await read_order_details();
+    list_order_detail.value = list_order_details as OrderDetail[];
+    
+  };
 
-const read_all_albums = async () => {
-  list_album.value = (await read_albums()) as Album[];
-};
-// fill list_user store to users in db
-const get_user_detail = async () => {
-  list_user.value = (await read_users()) as User[];
-  // console.log("list user: ")
-  // console.log(list_user.value)
-};
-onMounted(() => {
-  read_all_albums();
-  get_order_details();
-  get_user_detail();
-});
-// return name of user by id_user
-
-const get_name_user = (id_user: number): string => {
-  let fullname = "";
-  list_user.value.forEach((element) => {
-    if (element.id == id_user) {
-      fullname = element.firstname + " " + element.username;
-    }
+  const read_all_albums = async () => {
+    list_album.value = (await read_albums()) as Album[];
+  };
+  // fill list_user store to users in db
+  const get_user_detail = async () => {
+    list_user.value = (await read_users()) as User[];
+   
+  };
+  onMounted(() => {
+    read_all_albums();
+    get_order_details();
+    get_user_detail();
   });
+  // return name of user by id_user
 
-  return fullname;
-};
+  const get_name_user = (id_user: number): string => {
+    let fullname = "";
+    list_user.value.forEach((element) => {
+      if (element.id == id_user) {
+        fullname = element.firstname + " " + element.username;
+      }
+    });
 
-// display infos
-const display_info = async (order_detail: OrderDetail) => {
-  choose_me_edit_or_show.value = true;
-  chosen_order_detail.value = order_detail;
-  // console.log("id order: ",order_detail.id)
-  let orders_items = await read_order_items_by_orderdetail_id(order_detail.id!);
-  // orders_items.forEach(element => {
-  //     chosen_order_items.value!.push(element)
-  // });
-  chosen_order_items.value! = orders_items;
-  // chosen_order_items.value = orders_items
-  // console.log('corresponding order items: ')
-  // console.log(chosen_order_items.value)
-  // return orders_items
-};
+    return fullname;
+  };
 
-// get image source
-const getImage = (imagePath: string) => {
-  return imagePath;
-};
+  // display infos
+  const display_info = async (order_detail: OrderDetail) => {
+    choose_me_edit_or_show.value = true;
+    chosen_order_detail.value = order_detail;
+    let orders_items = await read_order_items_by_orderdetail_id(order_detail.id!);
+    
+    chosen_order_items.value! = orders_items;
+  
+  };
 
-// check me album
-const check_me_album = (id_album: number) => {
-  let my_selected_album = new Album();
-  list_album.value.forEach((element: Album) => {
-    if (element.id == id_album) {
-      my_selected_album = element;
-    }
-  });
-  // console.log(my_selected_album)
-  return my_selected_album;
-};
-// reactive values to update
-const comment_status = ref("");
-const checked_delivery_status = ref(false);
-const checked_payment_status = ref(false);
-const checked_send_status = ref(false);
+  // get image source
+  const getImage = (imagePath: string) => {
+    return imagePath;
+  };
 
-// click button edit order details
-const edit_order_details = (order_detail: OrderDetail) => {
-  chosen_order_detail.value = order_detail;
-  checked_delivery_status.value = order_detail.delivery_status;
-  checked_payment_status.value = order_detail.payment_status;
-  checked_send_status.value = order_detail.send_status;
-  choose_me_edit_or_show.value = false;
-  comment_status.value = order_detail.orders_status;
-};
+  // check me album
+  const check_me_album = (id_album: number) => {
+    let my_selected_album = new Album();
+    list_album.value.forEach((element: Album) => {
+      if (element.id == id_album) {
+        my_selected_album = element;
+      }
+    });
+    return my_selected_album;
+  };
+  // reactive values to update
+  const comment_status = ref("");
+  const checked_delivery_status = ref(false);
+  const checked_payment_status = ref(false);
+  const checked_send_status = ref(false);
 
-//update an order detail
-const onUpdateOrderDetail = async () => {
-  console.log("update values: ");
-  console.log("comments: ", comment_status.value);
-  // chosen_order_detail.value?.orders_status = comment_status.value
-  console.log("delivery_status: ", checked_delivery_status.value);
-  console.log("payment_status: ", checked_payment_status.value);
-  let res = await update_order_detail({
-    id: chosen_order_detail.value?.id,
-    created_date: new Date(),
-    delivery_status: checked_delivery_status.value,
-    payment_status: checked_payment_status.value,
-    orders_status: comment_status.value,
-    send_status: checked_send_status.value,
-    total: chosen_order_detail.value?.total!,
-    user_id: chosen_order_detail.value?.user_id!,
-  })
-    .then((res) => console.log("update successfull"))
-    .catch((error) => console.log(error));
-  // update order_detail
-  get_order_details();
+  // click button edit order details
+  const edit_order_details = (order_detail: OrderDetail) => {
+    chosen_order_detail.value = order_detail;
+    checked_delivery_status.value = order_detail.delivery_status;
+    checked_payment_status.value = order_detail.payment_status;
+    checked_send_status.value = order_detail.send_status;
+    choose_me_edit_or_show.value = false;
+    comment_status.value = order_detail.orders_status;
+  };
+
+  //update an order detail
+  const onUpdateOrderDetail = async () => {
+    let res = await update_order_detail({
+      id: chosen_order_detail.value?.id,
+      created_date: new Date(),
+      delivery_status: checked_delivery_status.value,
+      payment_status: checked_payment_status.value,
+      orders_status: comment_status.value,
+      send_status: checked_send_status.value,
+      total: chosen_order_detail.value?.total!,
+      user_id: chosen_order_detail.value?.user_id!,
+    })
+      .then((res) => console.log("update successfull"))
+      .catch((error) => console.log(error));
+    // update order_detail
+    get_order_details();
 };
 </script>
 
@@ -290,7 +277,6 @@ const onUpdateOrderDetail = async () => {
                 class="form-control"
                 v-model="comment_status"
               />
-              <!-- <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div> -->
             </div>
             <div class="mb-3 form-check">
               <input
@@ -299,7 +285,6 @@ const onUpdateOrderDetail = async () => {
                 id="exampleCheck2"
                 v-model="checked_payment_status"
               />
-              <!--="chosen_order_detail?.payment_status"-->
               <label class="form-check-label" for="exampleCheck2">Paid</label>
             </div>
             <div class="mb-3 form-check">
@@ -309,7 +294,6 @@ const onUpdateOrderDetail = async () => {
                 id="exampleCheck1"
                 v-model="checked_send_status"
               />
-              <!-- :checked="chosen_order_detail?.delivery_status" -->
               <label class="form-check-label" for="exampleCheck1">Sent</label>
             </div>
             <div class="mb-3 form-check">
@@ -319,7 +303,6 @@ const onUpdateOrderDetail = async () => {
                 id="exampleCheck1"
                 v-model="checked_delivery_status"
               />
-              <!-- :checked="chosen_order_detail?.delivery_status" -->
               <label class="form-check-label" for="exampleCheck1"
                 >Delivered</label
               >
@@ -330,7 +313,6 @@ const onUpdateOrderDetail = async () => {
                 type="submit"
                 @click="onUpdateOrderDetail"
               >
-                <!--@click="addUser()"-->
                 Update
               </button>
             </div>
@@ -338,7 +320,6 @@ const onUpdateOrderDetail = async () => {
         </div>
       </div>
 
-      <!-- edit my order detail-->
     </div>
   </div>
 </template>

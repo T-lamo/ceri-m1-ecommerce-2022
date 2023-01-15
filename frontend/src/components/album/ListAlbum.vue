@@ -10,7 +10,7 @@
         list_album.value = (await read_albums()).map((res:any) => {
             return res;
         })
-        // console.log("here list: ",list_album.value)
+        
     })
   
 

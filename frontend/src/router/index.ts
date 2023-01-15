@@ -6,7 +6,6 @@ import Panier_Multistep from '../components/panier/Panier_Multistep.vue'
 import OneArticle from '../components/album/OneArticle.vue'
 import OneAlbumDetail from '@/components/album/OneAlbumDetail.vue'
 import Promo from '../components/promo/Promo.vue'
-import Charts from '@/components/admin/Charts.vue'
 import Customers from '@/components/admin/Customers.vue'
 import Orders from '@/components/admin/Orders.vue'
 import Albums from '@/components/admin/Albums.vue'
@@ -15,7 +14,6 @@ import Category from '@/components/admin/Category.vue'
 import ListArtist from '@/components/artist/ListArtist.vue'
 import ListAlbum from '@/components/album/ListAlbum.vue'
 import ListCategory from '@/components/category/ListCategory.vue'
-import { Chart } from 'chart.js'
 
 
 const UserInfo = {
@@ -123,13 +121,6 @@ const router = createRouter({
           name: "admin_cat",
           components: {
             cat_name: Category,
-          },
-        },
-        {
-          path: "admin_charts",
-          name: "admin_charts",
-          components: {
-            charts_name: Charts,
           },
         },
       ],
