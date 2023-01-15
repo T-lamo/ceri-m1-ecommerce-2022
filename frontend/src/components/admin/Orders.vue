@@ -14,7 +14,6 @@
     const get_order_details = async () => {
         let list_order_details = await read_order_details()
         list_order_detail.value =  list_order_details as OrderDetail[]
-        console.log(list_order_detail.value)
     }
 
     const read_all_albums = async() => {
@@ -23,8 +22,7 @@
     // fill list_user store to users in db
     const get_user_detail = async () => {
         list_user.value = await read_users() as User[]
-        // console.log("list user: ")
-        // console.log(list_user.value)
+   
     }
     onMounted(() => {
         read_all_albums()
@@ -48,16 +46,10 @@
     const display_info = async (order_detail:OrderDetail) => {
         choose_me_edit_or_show.value = true
         chosen_order_detail.value= order_detail
-        // console.log("id order: ",order_detail.id)
         let orders_items = await read_order_items_by_orderdetail_id(order_detail.id!)
-        // orders_items.forEach(element => {
-        //     chosen_order_items.value!.push(element)
-        // });
+      
         chosen_order_items.value! = orders_items
-        // chosen_order_items.value = orders_items
-        // console.log('corresponding order items: ')
-        // console.log(chosen_order_items.value)
-        // return orders_items
+   
     }
 
      // get image source
@@ -73,7 +65,7 @@
                 my_selected_album = element
             }
         })
-        // console.log(my_selected_album)
+      
         return my_selected_album
     }
     // reactive values to update
@@ -96,11 +88,6 @@
 
     //update an order detail
     const onUpdateOrderDetail = async () => {
-        console.log("update values: ")
-        console.log("comments: ",comment_status.value)
-        // chosen_order_detail.value?.orders_status = comment_status.value
-        console.log("delivery_status: ",checked_delivery_status.value)
-        console.log("payment_status: ",checked_payment_status.value)
         let res = await update_order_detail({
             "id": chosen_order_detail.value?.id,
             "created_date": new Date(),

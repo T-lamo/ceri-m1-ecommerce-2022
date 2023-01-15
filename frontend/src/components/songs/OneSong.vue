@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-    import { onMounted } from 'vue'
-    import { read_songs , read_one_album} from '../../services/crud'
     import type { Song } from '../../models'
     
     const props = defineProps<{

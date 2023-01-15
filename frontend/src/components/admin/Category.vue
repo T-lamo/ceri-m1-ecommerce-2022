@@ -6,7 +6,6 @@
     import type { Category } from '@/models';
 
     let show = ref(false)
-    let title_edit_or_add = ref("")
     let title_update_or_add =ref("")
     let chosen_cat = ref<Category>()
     let id_choose = ref(0)

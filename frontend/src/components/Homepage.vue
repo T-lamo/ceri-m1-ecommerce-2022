@@ -1,89 +1,78 @@
 <script lang="ts" setup>
-import { useAppStore } from "@/stores";
-import { storeToRefs } from "pinia";
+  import { useAppStore } from "@/stores";
+  import { storeToRefs } from "pinia";
 
-import { onMounted, ref, watch } from "vue";
-import { read_albums, read_promos } from "@/services/crud";
-import { Album, type Promo } from "@/models";
-import SearchComponent from "@/components/search/SearchComponent.vue";
-import DarkScreen from "@/components/common/DarkScreen.vue";
-import { RouterLink } from "vue-router";
-import type { IAlbum } from "@/interfaces";
+  import { onMounted, ref, watch } from "vue";
+  import { read_albums, read_promos } from "@/services/crud";
+  import { Album, type Promo } from "@/models";
+  import SearchComponent from "@/components/search/SearchComponent.vue";
+  import { RouterLink } from "vue-router";
 
-const user_from_localstorage = localStorage.getItem("userId");
-const user_obj = JSON.parse(user_from_localstorage!);
+  const user_from_localstorage = localStorage.getItem("userId");
+  
 
-const { list_promo, list_album, isAdminStore } = storeToRefs(useAppStore());
-let is_data_search_items = ref<Boolean>(false);
-const { searchItems } = storeToRefs(useAppStore());
-watch(searchItems, (newVal, oldVal) => {
-  console.log(newVal.values);
-  const arr: any[] = Object.entries(newVal).map((value) => value);
-  if (arr.length > 0) {
-    is_data_search_items.value = true;
-  } else {
-    is_data_search_items.value = false;
-  }
-
-  // newVal.map((data) => arr.push(data));
-  console.log("is data search items", is_data_search_items.value);
-
-  console.log("search item home", newVal);
-});
-onMounted(async () => {
-  list_promo.value = (await read_promos()) as Promo[];
-  list_album.value = (await read_albums()) as Album[];
-  // console.log("search item", searchItems.value);
-  // searchItems.value.push(new Album());
-});
-
-const check_me_album = (id_album: number) => {
-  let my_selected_album = new Album();
-  list_album.value.forEach((element: Album) => {
-    if (element.id == id_album) {
-      my_selected_album = element;
+  const { list_promo, list_album, isAdminStore } = storeToRefs(useAppStore());
+  let is_data_search_items = ref<Boolean>(false);
+  const { searchItems } = storeToRefs(useAppStore());
+  watch(searchItems, (newVal, oldVal) => {
+    console.log(newVal.values);
+    const arr: any[] = Object.entries(newVal).map((value) => value);
+    if (arr.length > 0) {
+      is_data_search_items.value = true;
+    } else {
+      is_data_search_items.value = false;
     }
+
   });
-  return my_selected_album;
-};
+  onMounted(async () => {
+    list_promo.value = (await read_promos()) as Promo[];
+    list_album.value = (await read_albums()) as Album[];
+   
+  });
 
-const getImage = (imagePath: string) => {
-  return imagePath;
-};
+  const check_me_album = (id_album: number) => {
+    let my_selected_album = new Album();
+    list_album.value.forEach((element: Album) => {
+      if (element.id == id_album) {
+        my_selected_album = element;
+      }
+    });
+    return my_selected_album;
+  };
 
-/** handle dates **/
+  /** handle dates **/
 
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
-const getMonthName = (month: number): string => {
-  return monthNames[month];
-};
+  const getMonthName = (month: number): string => {
+    return monthNames[month];
+  };
 
-const handleDate = (stringdate: string): string => {
-  const date = new Date(stringdate);
+  const handleDate = (stringdate: string): string => {
+    const date = new Date(stringdate);
 
-  return (
-    "" +
-    date.getDate() +
-    " " +
-    getMonthName(date.getMonth()) +
-    " " +
-    date.getFullYear()
-  );
-};
+    return (
+      "" +
+      date.getDate() +
+      " " +
+      getMonthName(date.getMonth()) +
+      " " +
+      date.getFullYear()
+    );
+  };
 </script>
 <template>
   <div v-if="isAdminStore == false">
@@ -284,9 +273,7 @@ const handleDate = (stringdate: string): string => {
     <SearchComponent />
     {{ is_data_search_items }}
   </div>
-  <!-- <div>
-    <DarkScreen :v-if="isElementInSearchItem" />
-  </div> -->
+ 
 </template>
 <style scoped>
 

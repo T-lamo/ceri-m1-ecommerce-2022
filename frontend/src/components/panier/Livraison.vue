@@ -1,91 +1,87 @@
 <script lang="ts" setup>
-import * as Yup from "yup";
-import { Form } from "vee-validate";
-import InputField from "../auth/InputField.vue";
-import { useAppStore } from "@/stores";
-import { storeToRefs } from "pinia";
-import { UserAddress } from "@/models";
+  import * as Yup from "yup";
+  import { Form } from "vee-validate";
+  import InputField from "../auth/InputField.vue";
+  import { useAppStore } from "@/stores";
+  import { storeToRefs } from "pinia";
+  import { UserAddress } from "@/models";
 
-const { shipping_chosen, current_user } = storeToRefs(useAppStore());
+  const { shipping_chosen, current_user } = storeToRefs(useAppStore());
 
-/** */
-const onAddAdress = (values: any) => {
-  shipping_chosen.value = new UserAddress({
-    adress_line1: values.adress1,
-    adress_line2: "",
-    city: values.city,
-    country: values.country,
-    created_date: new Date(),
-    mobile: values.phone_number,
-    user_id: current_user.value?.id,
+  // add address for shipping
+  const onAddAdress = (values: any) => {
+    shipping_chosen.value = new UserAddress({
+      adress_line1: values.adress1,
+      adress_line2: "",
+      city: values.city,
+      country: values.country,
+      created_date: new Date(),
+      mobile: values.phone_number,
+      user_id: current_user.value?.id,
+    });
+  };
+
+  // add relay point
+  const onAddRelaypoint = (values: any) => {
+    shipping_chosen.value = new UserAddress({
+      adress_line1: values.adress_relay_point,
+      adress_line2: "",
+      city: values.city,
+      country: values.country,
+      created_date: new Date(),
+      mobile: values.phone_number,
+      user_id: current_user.value?.id,
+    });
+  };
+
+  // add deposit address
+  const onAddDeposit = (values: any) => {
+    shipping_chosen.value = new UserAddress({
+      adress_line1: values.adress_deposit,
+      adress_line2: "",
+      city: values.city,
+      country: values.country,
+      created_date: new Date(),
+      mobile: values.phone_number,
+      user_id: current_user.value?.id,
+    });
+  };
+
+  // on invalid submit 
+  const onInvalidSubmit = () => {
+    const submitBtn = document.querySelector(".auth-btn");
+    submitBtn!.classList.add("invalid");
+    setTimeout(() => {
+      submitBtn!.classList.remove("invalid");
+    }, 1000);
+  };
+
+  // generate input validation for Home section 
+  const schema_home = Yup.object().shape({
+    country: Yup.string().required(),
+    adress1: Yup.string().required(),
+    city: Yup.string().required(),
+    postal_code: Yup.number().required().min(5),
+    phone_number: Yup.number().min(9),
   });
-  console.log("on add address");
-  console.log(shipping_chosen.value);
-};
 
-const onAddRelaypoint = (values: any) => {
-  shipping_chosen.value = new UserAddress({
-    adress_line1: values.adress_relay_point,
-    adress_line2: "",
-    city: values.city,
-    country: values.country,
-    created_date: new Date(),
-    mobile: values.phone_number,
-    user_id: current_user.value?.id,
+  // generate input validation for relay point 
+  const schema_relaypoint = Yup.object().shape({
+    country: Yup.string().required(),
+    city: Yup.string().required(),
+    postal_code: Yup.number().required().min(5),
+    adress_relay_point: Yup.string().required(),
+    phone_number: Yup.number().min(9),
   });
-  console.log("on add relay point adress");
-  console.log(shipping_chosen.value);
-};
-const onAddDeposit = (values: any) => {
-  shipping_chosen.value = new UserAddress({
-    adress_line1: values.adress_deposit,
-    adress_line2: "",
-    city: values.city,
-    country: values.country,
-    created_date: new Date(),
-    mobile: values.phone_number,
-    user_id: current_user.value?.id,
+
+  //  generate input validation for deposit office 
+  const schema_deposit = Yup.object().shape({
+    country: Yup.string().required(),
+    city: Yup.string().required(),
+    adress_deposit: Yup.string().required(),
+    postal_code: Yup.number().required(),
+    phone_number: Yup.number().min(9),
   });
-  console.log("on add deposit address");
-  console.log(shipping_chosen.value);
-};
-
-/** on invalid submit */
-const onInvalidSubmit = () => {
-  console.log("invalid button me");
-  const submitBtn = document.querySelector(".auth-btn");
-  submitBtn!.classList.add("invalid");
-  setTimeout(() => {
-    submitBtn!.classList.remove("invalid");
-  }, 1000);
-};
-
-/** generate input validation for Home section */
-const schema_home = Yup.object().shape({
-  country: Yup.string().required(),
-  adress1: Yup.string().required(),
-  city: Yup.string().required(),
-  postal_code: Yup.number().required().min(5),
-  phone_number: Yup.number().min(9),
-});
-
-/** generate input validation for relay point */
-const schema_relaypoint = Yup.object().shape({
-  country: Yup.string().required(),
-  city: Yup.string().required(),
-  postal_code: Yup.number().required().min(5),
-  adress_relay_point: Yup.string().required(),
-  phone_number: Yup.number().min(9),
-});
-
-/**  generate input validation for deposit office */
-const schema_deposit = Yup.object().shape({
-  country: Yup.string().required(),
-  city: Yup.string().required(),
-  adress_deposit: Yup.string().required(),
-  postal_code: Yup.number().required(),
-  phone_number: Yup.number().min(9),
-});
 </script>
 
 <template>

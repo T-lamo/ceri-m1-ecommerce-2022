@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-    import { defineProps } from 'vue';
     import { onMounted } from 'vue'
     import { read_songs , read_one_album, read_albums} from '../../services/crud'
     import  { Album, type Song } from '../../models'
@@ -15,10 +14,12 @@
         list_album.value = await read_albums() as Album[]
     })
 
+    // routing
     const route = useRoute()
     const value = route.params.id
     let id_router:number = parseInt(value[0])
 
+    // read one album
     const readOneAlbum = ():Album => {
         let res = new Album
         list_album.value.forEach((element) => {
@@ -28,6 +29,7 @@
         return res
     }
     
+    // return corresponding songs for selected album
     const returnSongsOneAlbum = (): Array<Song> => {
         let res:Array<Song> = []
         list_song.value.forEach((element) => {

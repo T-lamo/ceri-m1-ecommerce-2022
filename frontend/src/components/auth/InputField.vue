@@ -58,9 +58,6 @@
       :class="{'is-invalid':!!errorMessage, 'is-valid':meta.valid}"
     />
     <label :for="name">{{ label }}</label>
-    <!-- <p class="pt-2" v-show="errorMessage || meta.valid">
-      {{ errorMessage || successMessage }}
-    </p> -->
         <div class="valid-feedback">
             Looks good! {{ successMessage}}
         </div>

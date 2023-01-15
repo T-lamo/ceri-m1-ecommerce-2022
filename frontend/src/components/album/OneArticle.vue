@@ -1,140 +1,133 @@
 <script lang="ts" setup>
-import { defineProps, onMounted, ref } from "vue";
-import {
-  read_promos,
-  read_artists,
-  read_one_album,
-  read_albums,
-  update_cart_item,
-  create_cart_item,
-  read_cart_items_by_sessionid,
-} from "@/services/crud";
-import { Artist, CartItem, Promo, type Album } from "../../models";
-import { storeToRefs } from "pinia";
-import { useAppStore } from "@/stores";
-import { toast_function } from "@/services/crud";
+  import { defineProps, onMounted, ref } from "vue";
+  import {
+    read_promos,
+    read_artists,
+    read_one_album,
+    create_cart_item,
+  } from "@/services/crud";
+  import { Artist, CartItem, Promo, type Album } from "../../models";
+  import { storeToRefs } from "pinia";
+  import { useAppStore } from "@/stores";
+  import { toast_function } from "@/services/crud";
 
-const user_from_localstorage = localStorage.getItem("userId");
-const user_obj = JSON.parse(user_from_localstorage!);
-const isLoggedIn_from_localstorage = Boolean(
-  localStorage.getItem("isLoggedIn")
-);
-const props = defineProps<{
-  item: Album;
-  promo: boolean;
-}>();
+  const isLoggedIn_from_localstorage = Boolean(
+    localStorage.getItem("isLoggedIn")
+  );
+  const props = defineProps<{
+    item: Album;
+    promo: boolean;
+  }>();
 
-const getImage = (imagePath: string) => {
-  return imagePath;
-};
+  const getImage = (imagePath: string) => {
+    return imagePath;
+  };
 
-const { list_promo, list_artist, list_cart_item, current_shopping_session } =
-  storeToRefs(useAppStore());
+  const { list_promo, list_artist, list_cart_item, current_shopping_session } =
+    storeToRefs(useAppStore());
 
-onMounted(async () => {
-  list_promo.value = (await read_promos()).map((res: any) => {
-    return res;
+  onMounted(async () => {
+    list_promo.value = (await read_promos()).map((res: any) => {
+      return res;
+    });
+    list_artist.value = (await read_artists()).map((res: any) => {
+      return res;
+    });
   });
-  list_artist.value = (await read_artists()).map((res: any) => {
-    return res;
-  });
-});
 
-const chek_if_exist_in_promo = () => {
-  let res = false;
-  list_promo.value.forEach((element) => {
-    if (element.album_id == props.item.id) {
-      res = true;
-    }
-  });
-  return res;
-};
-
-const return_promo = () => {
-  let my_selected_promo: Promo = new Promo();
-  if (chek_if_exist_in_promo()) {
+  // check if an article is a promotion
+  const chek_if_exist_in_promo = () => {
+    let res = false;
     list_promo.value.forEach((element) => {
       if (element.album_id == props.item.id) {
-        my_selected_promo = element; /** Select the last promo id */
+        res = true;
       }
     });
-  }
+    return res;
+  };
 
-  return my_selected_promo;
-};
-
-const check_me_artist = () => {
-  let my_selected_artist = new Artist();
-  list_artist.value.forEach((element) => {
-    if (element.id == props.item.artist_id) {
-      my_selected_artist = element;
-    }
-  });
-  return my_selected_artist;
-};
-
-const check_existence_cart_item = (
-  shopping_session_id: number,
-  album_id: number
-) => {
-  let found = false;
-  list_cart_item.value.forEach(async (element: CartItem) => {
-    if (
-      shopping_session_id == element.shopping_session_id &&
-      album_id == element.album_id
-    ) {
-      // update cart item to db
-
-      // update cart item in store
-      element.qty += 1;
-      element.created_date = new Date();
-      found = true;
-    }
-  });
-  return found;
-};
-
-const add_me_to_cart = async (id_album: number) => {
-  // if loggedd in
-  if (isLoggedIn_from_localstorage == true) {
-    let my_article;
-    /** specify whether it is an article added?=1 added to favory lists?=0 */
-    let res = await read_one_album(id_album)
-      .then((res) => (my_article = res))
-      .catch((error) => console.log(error));
-
-    // only if cart item does not in cart item
-    if (
-      check_existence_cart_item(current_shopping_session.value?.id!, id_album)
-    ) {
-      // console.log();
-    } else {
-      // create a new cart item
-      let one_cart_item = new CartItem({
-        qty: 1,
-        album_id: id_album,
-        shopping_session_id: current_shopping_session.value?.id!,
-        created_date: new Date(),
+  // return list of promo
+  const return_promo = () => {
+    let my_selected_promo: Promo = new Promo();
+    if (chek_if_exist_in_promo()) {
+      list_promo.value.forEach((element) => {
+        if (element.album_id == props.item.id) {
+          my_selected_promo = element; /** Select the last promo id */
+        }
       });
+    }
 
-      // create a cart item to shopping session in db
-      let response_create_a_cart_item = await create_cart_item(one_cart_item)
-        .then((res) => console.log("cart item created successfully"))
+    return my_selected_promo;
+  };
+
+  // check corresponding artist from an id
+  const check_me_artist = () => {
+    let my_selected_artist = new Artist();
+    list_artist.value.forEach((element) => {
+      if (element.id == props.item.artist_id) {
+        my_selected_artist = element;
+      }
+    });
+    return my_selected_artist;
+  };
+
+  // check if a cart exists
+  const check_existence_cart_item = (
+    shopping_session_id: number,
+    album_id: number
+  ) => {
+    let found = false;
+    list_cart_item.value.forEach(async (element: CartItem) => {
+      if (
+        shopping_session_id == element.shopping_session_id &&
+        album_id == element.album_id
+      ) {
+        // update cart item in store
+        element.qty += 1;
+        element.created_date = new Date();
+        found = true;
+      }
+    });
+    return found;
+  };
+
+  // add a selected album to cart
+  const add_me_to_cart = async (id_album: number) => {
+    // if loggedd in
+    if (isLoggedIn_from_localstorage == true) {
+      let my_article;
+      /** specify whether it is an article added?=1 added to favory lists?=0 */
+      let res = await read_one_album(id_album)
+        .then((res) => (my_article = res))
         .catch((error) => console.log(error));
 
-      // add to list_cart_item selected cart item
-      list_cart_item.value.push(one_cart_item);
+      // only if cart item does not in cart item
+      if (
+        check_existence_cart_item(current_shopping_session.value?.id!, id_album)
+      ) {
+        
+      } else {
+        // create a new cart item
+        let one_cart_item = new CartItem({
+          qty: 1,
+          album_id: id_album,
+          shopping_session_id: current_shopping_session.value?.id!,
+          created_date: new Date(),
+        });
+
+        // create a cart item to shopping session in db
+        let response_create_a_cart_item = await create_cart_item(one_cart_item)
+          .then((res) => console.log("cart item created successfully"))
+          .catch((error) => console.log(error));
+
+        // add to list_cart_item selected cart item
+        list_cart_item.value.push(one_cart_item);
+      }
+
+      toast_function("Article successfully add to cart!", "success");
+    } else {
+      toast_function("Please login", "error");
     }
-
-    console.log("list cart items for ");
-    list_cart_item.value.forEach((element) => {
-      console.log(element);
-    });
-
-    toast_function("Article successfully add to cart!", "success");
-  } else {
-    toast_function("Please login", "error");
-  }
 };
 </script>
 <template>

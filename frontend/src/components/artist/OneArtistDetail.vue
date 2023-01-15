@@ -1,9 +1,11 @@
 <script lang="ts" setup>
     import { defineProps } from 'vue';
     import type { Artist } from '../../models';
+
     const props = defineProps<{
         item:Artist,
     }>()
+    
     const getImage = (imagePath:string) => {
     return (imagePath);
 }

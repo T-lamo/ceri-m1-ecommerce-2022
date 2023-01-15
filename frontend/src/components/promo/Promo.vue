@@ -1,13 +1,10 @@
 <script lang="ts" setup>
-    import { read_promos, read_one_album , read_one_artist, read_albums} from '@/services/crud';
+    import { read_promos, read_albums} from '@/services/crud';
     import { storeToRefs } from 'pinia';
     import { useAppStore } from '@/stores';
-    import { onMounted , ref,onBeforeMount} from 'vue';
-    import { Carousel, Navigation, Slide } from 'vue3-carousel';
+    import { onMounted } from 'vue';
     import 'vue3-carousel/dist/carousel.css';
     import type { Album, Promo } from '../../models';
-    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-    import { RouterLink } from 'vue-router';
     import OneArticle from '../album/OneArticle.vue';
         
     const { list_promo, list_album } = storeToRefs(useAppStore())
@@ -23,6 +20,8 @@
     })
 
     let today:Date = new Date()
+
+    // read promotions for album
     const album_promo = () => {
         let last_product_promo =list_promo.value.reduce<Promo[]>((acc: Promo[], curr: Promo)=> {
             let find_album: Promo[] = acc.filter((v)=> v.album_id == curr.album_id);
@@ -58,7 +57,6 @@
         <hr class="dropdown-divider">
         
                 <div class="row mx-auto"> 
-                   <!-- <p>{{}}</p> -->
                     <OneArticle 
                         v-for="item in album_promo()" :key="item.id"
                         :item = item

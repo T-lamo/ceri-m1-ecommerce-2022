@@ -62,6 +62,7 @@
     let description = ref("")
     let category_id = ref(0)
 
+    // click edit button
     const onCLickEdit = (item:Album) => {
         id_choose.value = 1
         chosen_album.value = item
@@ -87,9 +88,9 @@
 
     }
 
+    // add a new album
     const onCLickAdd = () => {
         id_choose.value = 2
-        // chosen_album.value = item
         display_edit.value = true
         display_list_song.value =false
         title_edit_or_add.value = 'Add an album'
@@ -105,6 +106,7 @@
         category_id.value = 1
     }
 
+    // update selected album
     const onUpdateAddAlbum = async () => {
         if (id_choose.value == 1 ) {
             let res = await update_album({
@@ -128,7 +130,6 @@
             
         } 
         else {
-            console.log("create a new album ")
             let res = await create_album({
                 "artist_id" : artist_id.value,
                 "category_id": category_id.value,
@@ -144,7 +145,6 @@
                 toast_function("Successfully new album added","success")
             )
             .catch(error => 
-                // toast_function("Failed to add new album ","error")
                 console.log(error)
             )
             
@@ -154,6 +154,7 @@
 
     }
 
+    // delete selected album
     const onDeleteAlbum = (id_album:number) => {
         Swal.fire({
             title:'Are you sure ?',
